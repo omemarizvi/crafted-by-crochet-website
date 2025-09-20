@@ -146,9 +146,6 @@ class HomePageManager {
     }
 
     createProductCard(product) {
-        const stockClass = product.stock === 0 ? 'out-of-stock' : 'in-stock';
-        const stockText = product.stock === 0 ? 'Out of Stock' : `${product.stock} available`;
-        
         console.log('Creating product card for:', product.name, 'ID:', product.id);
         
         return `
@@ -160,7 +157,6 @@ class HomePageManager {
                     <div class="product-name">${product.name}</div>
                     <div class="product-price">Rs ${product.price.toFixed(2)}</div>
                     <div class="product-category">${this.formatCategory(product.category)}</div>
-                    <div class="product-stock ${stockClass}">${stockText}</div>
                 </div>
             </div>
         `;
@@ -208,6 +204,9 @@ class HomePageManager {
             }
             if (modalDescription) modalDescription.textContent = product.description;
 
+            // Set up quantity selector
+            this.initQuantitySelector();
+
             // Set up buttons
             if (addToCartBtn) {
                 addToCartBtn.onclick = () => this.addToCart(product);
@@ -236,14 +235,45 @@ class HomePageManager {
         }
     }
 
+    initQuantitySelector() {
+        const quantityInput = document.getElementById('quantityInput');
+        const decreaseBtn = document.getElementById('quantityDecrease');
+        const increaseBtn = document.getElementById('quantityIncrease');
+        
+        if (quantityInput) {
+            quantityInput.value = 1; // Reset to 1 when modal opens
+        }
+        
+        if (decreaseBtn) {
+            decreaseBtn.onclick = () => {
+                const currentValue = parseInt(quantityInput.value) || 1;
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            };
+        }
+        
+        if (increaseBtn) {
+            increaseBtn.onclick = () => {
+                const currentValue = parseInt(quantityInput.value) || 1;
+                if (currentValue < 10) {
+                    quantityInput.value = currentValue + 1;
+                }
+            };
+        }
+    }
+
     addToCart(product) {
         console.log('Add to cart clicked for product:', product);
         console.log('Shopping cart available:', !!window.shoppingCart);
         
+        const quantityInput = document.getElementById('quantityInput');
+        const quantity = parseInt(quantityInput?.value) || 1;
+        
         if (window.shoppingCart) {
-            window.shoppingCart.addItem(product);
+            window.shoppingCart.addItem(product, quantity);
             this.closeProductModal();
-            console.log('Item added to cart successfully');
+            console.log(`Added ${quantity} of ${product.name} to cart successfully`);
         } else {
             console.error('Shopping cart not available!');
         }

@@ -997,3 +997,67 @@ to {
         font-size: 1.2rem;
     }
 }
+
+/* Quantity Selector Styles */
+.quantity-selector {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-selector label {
+    font-weight: 600;
+    color: #2C1810;
+    font-size: 1rem;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #8B5A8C;
+    background: #fff;
+    color: #8B5A8C;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background: #8B5A8C;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.quantity-btn:active {
+    transform: scale(0.95);
+}
+
+#quantityInput {
+    width: 60px;
+    height: 35px;
+    text-align: center;
+    border: 2px solid #8B5A8C;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2C1810;
+    background: #fff;
+}
+
+#quantityInput:focus {
+    outline: none;
+    border-color: #D4A5A5;
+    box-shadow: 0 0 0 3px rgba(139, 90, 140, 0.1);
+}

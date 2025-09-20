@@ -71,6 +71,14 @@
                     <div class="product-category" id="modalCategory"></div>
                     <div class="product-stock" id="modalStock"></div>
                     <div class="product-description" id="modalDescription"></div>
+                    <div class="quantity-selector">
+                        <label for="quantityInput">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button type="button" id="quantityDecrease" class="quantity-btn">-</button>
+                            <input type="number" id="quantityInput" value="1" min="1" max="10">
+                            <button type="button" id="quantityIncrease" class="quantity-btn">+</button>
+                        </div>
+                    </div>
                     <div class="product-actions">
                         <button class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
                         <button class="btn btn-secondary" id="contactSellerBtn">Contact Seller</button>
