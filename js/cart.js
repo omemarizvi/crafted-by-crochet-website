@@ -7,21 +7,26 @@ class ShoppingCart {
 
     // Add item to cart
     addItem(product, quantity = 1) {
+        console.log('Adding item to cart:', product, 'quantity:', quantity);
         const existingItem = this.items.find(item => item.id === product.id);
         
         if (existingItem) {
             existingItem.quantity += quantity;
+            console.log('Updated existing item quantity to:', existingItem.quantity);
         } else {
-            this.items.push({
+            const newItem = {
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 image: product.image,
                 category: product.category,
                 quantity: quantity
-            });
+            };
+            this.items.push(newItem);
+            console.log('Added new item to cart:', newItem);
         }
         
+        console.log('Cart items after add:', this.items);
         this.saveCart();
         this.updateCartDisplay();
         this.showToast(`${product.name} added to cart!`);
@@ -219,8 +224,13 @@ class ShoppingCart {
     // Update cart display
     updateCartDisplay() {
         const cartCount = document.getElementById('cartCount');
+        const totalItems = this.getTotalItems();
+        console.log('Updating cart display - total items:', totalItems, 'cart count element:', !!cartCount);
+        
         if (cartCount) {
-            cartCount.textContent = this.getTotalItems();
+            cartCount.textContent = totalItems;
+        } else {
+            console.error('Cart count element not found!');
         }
     }
 
@@ -261,6 +271,15 @@ class CartModal {
         this.cartTotal = document.getElementById('cartTotal');
         this.totalAmount = document.getElementById('totalAmount');
         this.checkoutBtn = document.getElementById('checkoutBtn');
+        
+        console.log('CartModal elements found:', {
+            modal: !!this.modal,
+            cartItems: !!this.cartItems,
+            cartEmpty: !!this.cartEmpty,
+            cartTotal: !!this.cartTotal,
+            totalAmount: !!this.totalAmount,
+            checkoutBtn: !!this.checkoutBtn
+        });
         
         this.initEventListeners();
     }
@@ -310,15 +329,21 @@ class CartModal {
 
     updateCartDisplay() {
         const items = window.shoppingCart.getItems();
+        console.log('CartModal updateCartDisplay called with items:', items);
+        console.log('CartModal elements available:', {
+            cartEmpty: !!this.cartEmpty,
+            cartItems: !!this.cartItems,
+            cartTotal: !!this.cartTotal
+        });
         
         if (items.length === 0) {
-            this.cartEmpty.style.display = 'block';
-            this.cartItems.style.display = 'none';
-            this.cartTotal.style.display = 'none';
+            if (this.cartEmpty) this.cartEmpty.style.display = 'block';
+            if (this.cartItems) this.cartItems.style.display = 'none';
+            if (this.cartTotal) this.cartTotal.style.display = 'none';
         } else {
-            this.cartEmpty.style.display = 'none';
-            this.cartItems.style.display = 'block';
-            this.cartTotal.style.display = 'block';
+            if (this.cartEmpty) this.cartEmpty.style.display = 'none';
+            if (this.cartItems) this.cartItems.style.display = 'block';
+            if (this.cartTotal) this.cartTotal.style.display = 'block';
             
             // Always re-render and attach event listeners
             this.renderCartItems(items);
