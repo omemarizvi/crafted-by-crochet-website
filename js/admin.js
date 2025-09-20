@@ -460,11 +460,11 @@ class AdminManager {
                         <div class="order-item">
                             <span class="item-name">${item.name}</span>
                             <span class="item-quantity">Qty: ${item.quantity}</span>
-                            <span class="item-total">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <span class="item-total">Rs ${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                     `).join('')}
                 </div>
-                <div class="order-total">Total: $${order.total.toFixed(2)}</div>
+                <div class="order-total">Total: Rs ${order.total.toFixed(2)}</div>
                 ${order.transferImage && order.transferImage !== 'Not provided' ? `
                     <div class="order-screenshot">
                         <strong>Payment Screenshot:</strong>

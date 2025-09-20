@@ -617,7 +617,7 @@ This order was placed through the Crafted by Crochet website.`;
         try {
             // Prepare data for Google Sheets
             const itemsList = orderData.items.map(item => 
-                `${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+                `${item.name} (Qty: ${item.quantity}) - Rs ${(item.price * item.quantity).toFixed(2)}`
             ).join('; ');
 
             const sheetData = {

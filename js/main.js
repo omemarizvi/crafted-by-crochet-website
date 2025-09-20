@@ -200,7 +200,7 @@ class HomePageManager {
             // Set product details
             if (modalImage) modalImage.src = product.image;
             if (modalTitle) modalTitle.textContent = product.name;
-            if (modalPrice) modalPrice.textContent = `$${product.price.toFixed(2)}`;
+            if (modalPrice) modalPrice.textContent = `Rs ${product.price.toFixed(2)}`;
             if (modalCategory) modalCategory.textContent = this.formatCategory(product.category);
             if (modalStock) {
                 modalStock.textContent = product.stock === 0 ? 'Out of Stock' : `${product.stock} available`;
