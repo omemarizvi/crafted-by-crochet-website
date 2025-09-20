@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Crafted by Crochet</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <h1>🧶 Crafted by Crochet</h1>
+            <h2>Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login</button>
+        </form>
+    </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div class="admin-dashboard" id="adminDashboard" style="display: none;">
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="container">
+            <h1>🧶 Crafted by Crochet - Admin Dashboard</h1>
+            <div class="admin-actions">
+                <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Analytics Section -->
+    <section class="analytics-section">
+        <div class="container">
+            <div class="analytics-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalItems">0</h3>
+                        <p>Total Items</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalOrders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="popularCategory">-</h3>
+                        <p>Popular Category</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="actions-section">
+        <div class="container">
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="addItemBtn">
+                    <i class="fas fa-plus"></i>
+                    Add New Item
+                </button>
+                <button class="btn btn-secondary" id="viewOrdersBtn">
+                    <i class="fas fa-list"></i>
+                    View Orders
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Items Management -->
+    <section class="items-section">
+        <div class="container">
+            <h2>Manage Items</h2>
+            <div class="items-grid" id="itemsGrid">
+                <!-- Items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders Section -->
+    <section class="orders-section" id="ordersSection" style="display: none;">
+        <div class="container">
+            <h2>Recent Orders</h2>
+            <div class="orders-list" id="ordersList">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Add/Edit Item Modal -->
+<div class="modal" id="itemModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New Item</h2>
+            <span class="close" id="closeItemModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="itemForm">
+                <div class="form-group">
+                    <label for="itemName">Item Name *</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemCategory">Category *</label>
+                    <select id="itemCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="flowers">Flowers</option>
+                        <option value="keychains">Keychains</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="stuffed-toys">Stuffed Toys</option>
+                        <option value="jewellery">Jewellery</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemPrice">Price *</label>
+                    <input type="number" id="itemPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemStock">Stock Quantity *</label>
+                    <input type="number" id="itemStock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description *</label>
+            <textarea id="itemDescription" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="itemImage">Upload Image *</label>
+            <input type="file" id="itemImage" accept="image/*" required>
+            <div class="image-preview" id="itemImagePreview" style="display: none;">
+                <img id="previewItemImg" src="" alt="Item preview">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Item</button>
+            <button type="button" class="btn btn-secondary" id="cancelItemBtn">Cancel</button>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+
+<!-- Success Message -->
+<div class="toast" id="toast">
+    <div class="toast-content">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/products.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

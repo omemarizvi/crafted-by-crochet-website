@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Script Test</title>
+</head>
+<body>
+    <h1>Google Script Test</h1>
+    <button onclick="testScript()">Test Google Script</button>
+    <div id="result"></div>
+
+    <script>
+        async function testScript() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwNxq_r42oOhf8vQet0Sf1O_v9N0YuyPdrnVofu-Om3tiedcVKoCIzceGYEruMwtXYpmw/exec';
+            
+            try {
+                // Test with simple parameters
+                const testUrl = `${scriptUrl}?timestamp=${new Date().toISOString()}&orderId=TEST123&customerName=Test&customerEmail=test@test.com&customerPhone=123&shippingAddress=Test&items=Test Item&totalAmount=10.00&paymentMethod=Test&transferScreenshot=No&status=Pending`;
+                
+                console.log('Testing URL:', testUrl);
+                
+                const response = await fetch(testUrl, {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+                
+                resultDiv.innerHTML = '<p style="color: green;">Test request sent! Check your Google Sheet for a new row.</p>';
+                console.log('Test completed');
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Test failed:', error);
+            }
+        }
+    </script>
+</body>
+</html>
