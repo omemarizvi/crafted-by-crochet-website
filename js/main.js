@@ -237,9 +237,13 @@ class HomePageManager {
     }
 
     addToCart(product) {
+        console.log('Add to cart clicked for product:', product);
+        console.log('Shopping cart available:', !!window.shoppingCart);
+        
         if (window.shoppingCart) {
             window.shoppingCart.addItem(product);
             this.closeProductModal();
+            console.log('Item added to cart successfully');
         } else {
             console.error('Shopping cart not available!');
         }
@@ -267,7 +271,13 @@ class HomePageManager {
     }
 
     openCart() {
-        window.cartModal.open();
+        console.log('Cart icon clicked');
+        console.log('Cart modal available:', !!window.cartModal);
+        if (window.cartModal) {
+            window.cartModal.open();
+        } else {
+            console.error('Cart modal not available!');
+        }
     }
 
     initContactModal() {
@@ -345,9 +355,18 @@ document.addEventListener('DOMContentLoaded', function() {
     window.homePageManager.initProductModal();
     window.homePageManager.initContactModal();
     window.productModal.init();
-    window.cartModal.init();
-    window.checkoutModal.init();
+    
+    // Initialize cart modals if they exist
+    if (window.cartModal) {
+        window.cartModal.init();
+    }
+    if (window.checkoutModal) {
+        window.checkoutModal.init();
+    }
+    
     console.log('DIY Crafts Marketplace loaded successfully!');
+    console.log('Cart modal available:', !!window.cartModal);
+    console.log('Shopping cart available:', !!window.shoppingCart);
 });
 
 // Refresh products when page becomes visible (user returns from admin panel)
