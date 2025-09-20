@@ -63,9 +63,9 @@ class HomePageManager {
         }
     }
 
-    loadProducts() {
-        // Always load fresh products from localStorage to reflect admin changes
-        window.productManager.loadProductsFromStorage();
+    async loadProducts() {
+        // Wait for products to load from Google Sheets
+        await window.productManager.loadProductsFromGoogleSheets();
         this.products = window.productManager.getAllProducts();
         this.filterProducts(); // Use filterProducts to ensure proper filtering
     }
@@ -408,19 +408,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Refresh products when page becomes visible (user returns from admin panel)
-document.addEventListener('visibilitychange', function() {
+document.addEventListener('visibilitychange', async function() {
     if (!document.hidden) {
         // Page is now visible, refresh products to show any admin changes
-        window.homePageManager.loadProducts();
+        await window.homePageManager.loadProducts();
     }
 });
 
 // Also refresh when window gains focus
-window.addEventListener('focus', function() {
-    window.homePageManager.loadProducts();
+window.addEventListener('focus', async function() {
+    await window.homePageManager.loadProducts();
 });
 
 // Listen for admin data changes
-window.addEventListener('adminDataChanged', function() {
-    window.homePageManager.loadProducts();
+window.addEventListener('adminDataChanged', async function() {
+    await window.homePageManager.loadProducts();
 });

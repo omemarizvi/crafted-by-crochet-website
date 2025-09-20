@@ -324,26 +324,38 @@ class AdminManager {
 
         if (this.editingItem) {
             // Update existing item
-            const updated = window.productManager.updateProduct(this.editingItem.id, formData);
-            if (updated) {
-                this.showToast('Item updated successfully!');
-                this.closeItemModal();
-                this.loadItems();
-                this.updateAnalytics();
-                // Notify main page to refresh (if it exists)
-                this.notifyMainPageRefresh();
-            }
+            window.productManager.updateProduct(this.editingItem.id, formData)
+                .then(updated => {
+                    if (updated) {
+                        this.showToast('Item updated successfully!');
+                        this.closeItemModal();
+                        this.loadItems();
+                        this.updateAnalytics();
+                        // Notify main page to refresh (if it exists)
+                        this.notifyMainPageRefresh();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating item:', error);
+                    this.showToast('Error updating item. Please try again.');
+                });
         } else {
             // Add new item
-            const newItem = window.productManager.addProduct(formData);
-            if (newItem) {
-                this.showToast('Item added successfully!');
-                this.closeItemModal();
-                this.loadItems();
-                this.updateAnalytics();
-                // Notify main page to refresh (if it exists)
-                this.notifyMainPageRefresh();
-            }
+            window.productManager.addProduct(formData)
+                .then(newItem => {
+                    if (newItem) {
+                        this.showToast('Item added successfully!');
+                        this.closeItemModal();
+                        this.loadItems();
+                        this.updateAnalytics();
+                        // Notify main page to refresh (if it exists)
+                        this.notifyMainPageRefresh();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error adding item:', error);
+                    this.showToast('Error adding item. Please try again.');
+                });
         }
     }
 
@@ -358,13 +370,19 @@ class AdminManager {
 
     deleteItem(itemId) {
         if (confirm('Are you sure you want to delete this item?')) {
-            const deleted = window.productManager.deleteProduct(itemId);
-            if (deleted) {
-                this.showToast('Item deleted successfully!');
-                this.loadItems();
-                this.updateAnalytics();
-                this.notifyMainPageRefresh();
-            }
+            window.productManager.deleteProduct(itemId)
+                .then(deleted => {
+                    if (deleted) {
+                        this.showToast('Item deleted successfully!');
+                        this.loadItems();
+                        this.updateAnalytics();
+                        this.notifyMainPageRefresh();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting item:', error);
+                    this.showToast('Error deleting item. Please try again.');
+                });
         }
     }
 
@@ -372,13 +390,19 @@ class AdminManager {
         const product = window.productManager.getProductById(itemId);
         if (product) {
             const newStock = product.stock > 0 ? 0 : 1;
-            const updated = window.productManager.updateProduct(itemId, { stock: newStock });
-            if (updated) {
-                this.showToast(`Item marked as ${newStock > 0 ? 'available' : 'sold'}!`);
-                this.loadItems();
-                this.updateAnalytics();
-                this.notifyMainPageRefresh();
-            }
+            window.productManager.updateProduct(itemId, { stock: newStock })
+                .then(updated => {
+                    if (updated) {
+                        this.showToast(`Item marked as ${newStock > 0 ? 'available' : 'sold'}!`);
+                        this.loadItems();
+                        this.updateAnalytics();
+                        this.notifyMainPageRefresh();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating stock:', error);
+                    this.showToast('Error updating stock. Please try again.');
+                });
         }
     }
 
