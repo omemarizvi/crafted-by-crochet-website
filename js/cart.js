@@ -998,6 +998,23 @@ window.checkoutModal = new CheckoutModal();
 
 // Initialize cart on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Cart.js DOM loaded, initializing...');
+    
+    // Initialize cart modal
+    if (window.cartModal) {
+        console.log('Initializing cart modal from cart.js...');
+        window.cartModal.init();
+    }
+    
+    // Initialize checkout modal
+    if (window.checkoutModal) {
+        console.log('Initializing checkout modal from cart.js...');
+        window.checkoutModal.init();
+    }
+    
     // Cart is already initialized in the ShoppingCart constructor
     window.shoppingCart.updateCartDisplay();
+    
+    console.log('Cart modal after init:', window.cartModal);
+    console.log('Cart modal methods:', Object.getOwnPropertyNames(window.cartModal || {}));
 });

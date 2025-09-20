@@ -355,18 +355,15 @@ window.productModal = new ProductModal();
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    
     // Initialize modals after DOM is ready
     window.homePageManager.initProductModal();
     window.homePageManager.initContactModal();
     window.productModal.init();
     
-    // Initialize cart modals if they exist
-    if (window.cartModal) {
-        window.cartModal.init();
-    }
-    if (window.checkoutModal) {
-        window.checkoutModal.init();
-    }
+    // Cart modals are initialized in cart.js
+    console.log('Cart modals will be initialized by cart.js');
     
     console.log('DIY Crafts Marketplace loaded successfully!');
     console.log('Cart modal available:', !!window.cartModal);
