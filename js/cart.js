@@ -732,4 +732,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cart is already initialized in the ShoppingCart constructor
     window.shoppingCart.updateCartDisplay();
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => {
+            const product = {
+                id: Date.now(), // or better: use actual product ID from products.js
+                name: document.getElementById('modalTitle').textContent,
+                price: parseFloat(document.getElementById('modalPrice').textContent.replace('Rs ', '')),
+                image: document.getElementById('modalImage').src,
+                category: document.getElementById('modalCategory').textContent
+            };
+            const quantity = parseInt(document.getElementById('quantityInput').value) || 1;
+            shoppingCart.addItem(product, quantity);
+
+            // Close modal after adding
+            document.getElementById('productModal').style.display = 'none';
+        });
+    }
+
 });
