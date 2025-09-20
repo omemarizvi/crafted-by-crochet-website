@@ -96,9 +96,9 @@ class AdminManager {
         if (adminDashboard) adminDashboard.style.display = 'none';
     }
 
-    loadDashboard() {
-        // Ensure products are loaded from storage
-        window.productManager.loadProductsFromStorage();
+    async loadDashboard() {
+        // Ensure products are loaded from Firebase database
+        await window.productManager.loadProducts();
         this.updateAnalytics();
         this.loadItems();
         this.createTestOrderIfNeeded();
@@ -157,6 +157,7 @@ class AdminManager {
         const itemsGrid = document.getElementById('itemsGrid');
         if (itemsGrid) {
             const products = window.productManager.getAllProducts();
+            console.log('Loading items in admin panel:', products.length, 'products');
             itemsGrid.innerHTML = products.map(product => this.createItemCard(product)).join('');
         }
     }
@@ -325,9 +326,11 @@ class AdminManager {
 
         if (this.editingItem) {
             // Update existing item
+            console.log('Updating item in admin panel:', this.editingItem.id, formData);
             window.productManager.updateProduct(this.editingItem.id, formData)
                 .then(updated => {
                     if (updated) {
+                        console.log('Item updated successfully in Firebase');
                         this.showToast('Item updated successfully!');
                         this.closeItemModal();
                         this.loadItems();
@@ -342,9 +345,11 @@ class AdminManager {
                 });
         } else {
             // Add new item
+            console.log('Adding new item in admin panel:', formData);
             window.productManager.addProduct(formData)
                 .then(newItem => {
                     if (newItem) {
+                        console.log('Item added successfully to Firebase:', newItem);
                         this.showToast('Item added successfully!');
                         this.closeItemModal();
                         this.loadItems();
@@ -544,27 +549,15 @@ class AdminManager {
 window.adminManager = new AdminManager();
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Clear any sample data that might exist
-    const existingProducts = JSON.parse(localStorage.getItem('diyCraftsProducts') || '[]');
-    const hasSampleData = existingProducts.some(product => 
-        product.image.includes('placeholder') || 
-        product.name.includes('Crochet Flower Bouquet') ||
-        product.name.includes('Crochet Keychain Set') ||
-        product.name.includes('Sample') ||
-        product.name.includes('Test') ||
-        product.description.includes('sample') ||
-        product.description.includes('test')
-    );
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('Admin Dashboard initializing...');
     
-    if (hasSampleData) {
-        localStorage.removeItem('diyCraftsProducts');
-        window.productManager.products = [];
-        window.productManager.saveProducts();
-        console.log('Sample data cleared from admin panel');
-    } else {
-        // Load products from storage if no sample data
-        window.productManager.loadProductsFromStorage();
+    // Load products from Firebase database
+    try {
+        await window.productManager.loadProducts();
+        console.log('Products loaded from Firebase for admin panel');
+    } catch (error) {
+        console.error('Error loading products for admin panel:', error);
     }
     
     // Load items in admin panel if user is already logged in
