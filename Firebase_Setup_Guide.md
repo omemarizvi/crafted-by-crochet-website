@@ -9,19 +9,14 @@
 
 ## Step 2: Enable Required Services
 
-### A. Firestore Database (for product data)
+### A. Firestore Database (for product data and images)
 1. In your Firebase project, go to "Firestore Database"
 2. Click "Create database"
 3. Choose "Start in test mode" (we'll secure it later)
 4. Select a location close to your users (e.g., us-central1)
 5. Click "Done"
 
-### B. Firebase Storage (for images)
-1. Go to "Storage" in the left sidebar
-2. Click "Get started"
-3. Choose "Start in test mode"
-4. Select the same location as Firestore
-5. Click "Done"
+**Note**: We're using Firestore to store both product data AND images (as base64 strings) to work with the free Spark plan. No Firebase Storage setup needed!
 
 ## Step 3: Get Firebase Configuration
 1. Go to Project Settings (gear icon)
@@ -61,28 +56,18 @@ service cloud.firestore {
     // Allow read access to products for all users
     match /products/{productId} {
       allow read: if true;
-      allow write: if request.auth != null; // Only authenticated users can write
+      allow write: if true; // Allow all writes for now (you can secure this later)
     }
-  }
-}
-```
-
-### Storage Rules
-1. Go to "Storage" → "Rules"
-2. Replace the default rules with:
-
-```javascript
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    // Allow read access to all images
-    match /product-images/{allPaths=**} {
+    // Allow read access to carts for all users
+    match /carts/{cartId} {
       allow read: if true;
-      allow write: if request.auth != null; // Only authenticated users can upload
+      allow write: if true; // Allow all writes for now (you can secure this later)
     }
   }
 }
 ```
+
+**Note**: No Storage rules needed since we're not using Firebase Storage!
 
 ## Step 6: Test the Setup
 1. Open your website

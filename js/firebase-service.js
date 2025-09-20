@@ -10,16 +10,11 @@ import {
   orderBy,
   where
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { 
-  ref, 
-  uploadBytes, 
-  getDownloadURL 
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+// Removed Firebase Storage imports - using Firestore for images instead
 
 class FirebaseService {
     constructor() {
         this.db = window.firebase.db;
-        this.storage = window.firebase.storage;
         this.productsCollection = 'products';
         this.cartsCollection = 'carts';
         this.sessionId = this.getOrCreateSessionId();
@@ -35,27 +30,32 @@ class FirebaseService {
         return sessionId;
     }
 
-  // Upload image to Firebase Storage
-  async uploadImage(file, productId) {
-    try {
-      const fileName = `product-${productId}-${Date.now()}.${file.name.split('.').pop()}`;
-      const storageRef = ref(this.storage, `product-images/${fileName}`);
-      
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      
-      console.log('Image uploaded successfully:', downloadURL);
-      return downloadURL;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error;
-    }
+  // Convert image file to base64 string for Firestore storage
+  async convertImageToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        console.log('Image converted to base64 successfully');
+        resolve(reader.result);
+      };
+      reader.onerror = (error) => {
+        console.error('Error converting image to base64:', error);
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   // Add new product
   async addProduct(productData) {
     try {
       console.log('Adding product to Firebase:', productData);
+      
+      // Convert image file to base64 if provided
+      let imageData = productData.image;
+      if (productData.imageFile) {
+        imageData = await this.convertImageToBase64(productData.imageFile);
+      }
       
       // Add product to Firestore
       const docRef = await addDoc(collection(this.db, this.productsCollection), {
@@ -64,7 +64,7 @@ class FirebaseService {
         price: productData.price,
         stock: productData.stock,
         description: productData.description,
-        image: productData.image, // This will be the Firebase Storage URL
+        image: imageData, // This will be the base64 string
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
@@ -72,7 +72,8 @@ class FirebaseService {
       console.log('Product added with ID:', docRef.id);
       return {
         id: docRef.id,
-        ...productData
+        ...productData,
+        image: imageData
       };
     } catch (error) {
       console.error('Error adding product:', error);
@@ -109,14 +110,21 @@ class FirebaseService {
     try {
       console.log('Updating product in Firebase:', productId, productData);
       
+      // Convert image file to base64 if provided
+      let imageData = productData.image;
+      if (productData.imageFile) {
+        imageData = await this.convertImageToBase64(productData.imageFile);
+      }
+      
       const productRef = doc(this.db, this.productsCollection, productId);
       await updateDoc(productRef, {
         ...productData,
+        image: imageData,
         updatedAt: new Date().toISOString()
       });
 
       console.log('Product updated successfully');
-      return { id: productId, ...productData };
+      return { id: productId, ...productData, image: imageData };
     } catch (error) {
       console.error('Error updating product:', error);
       throw error;

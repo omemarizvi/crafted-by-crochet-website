@@ -74,19 +74,8 @@ class ProductManager {
             try {
                 console.log('Adding new product to Firebase:', productData);
                 
-                // Upload image to Firebase Storage if it's a file
-                let imageUrl = productData.image;
-                if (productData.imageFile) {
-                    // Generate a temporary ID for the product
-                    const tempId = this.getNextId();
-                    imageUrl = await window.firebaseService.uploadImage(productData.imageFile, tempId);
-                }
-                
-                // Add product to Firebase
-                const newProduct = await window.firebaseService.addProduct({
-                    ...productData,
-                    image: imageUrl
-                });
+                // Add product to Firebase (image will be converted to base64)
+                const newProduct = await window.firebaseService.addProduct(productData);
                 
                 this.products.push(newProduct);
                 this.saveProducts(); // Save to localStorage as backup
@@ -122,17 +111,8 @@ class ProductManager {
             try {
                 console.log('Updating product in Firebase:', id, productData);
                 
-                // Upload new image to Firebase Storage if it's a file
-                let imageUrl = productData.image;
-                if (productData.imageFile) {
-                    imageUrl = await window.firebaseService.uploadImage(productData.imageFile, id);
-                }
-                
-                // Update product in Firebase
-                const updatedProduct = await window.firebaseService.updateProduct(id, {
-                    ...productData,
-                    image: imageUrl
-                });
+                // Update product in Firebase (image will be converted to base64)
+                const updatedProduct = await window.firebaseService.updateProduct(id, productData);
                 
                 const index = this.products.findIndex(product => product.id === id);
                 if (index !== -1) {

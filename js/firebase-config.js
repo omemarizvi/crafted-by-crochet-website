@@ -1,19 +1,18 @@
 // Firebase Configuration
-// Replace this with your actual Firebase config from the Firebase Console
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "your-api-key-here",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  apiKey: "AIzaSyA_9k2e6vfL7vsDQKWCkkLQkgxZGHhq9AU",
+  authDomain: "crafted-by-crochet.firebaseapp.com",
+  projectId: "crafted-by-crochet",
+  storageBucket: "crafted-by-crochet.firebasestorage.app",
+  messagingSenderId: "95807589273",
+  appId: "1:95807589273:web:e5582bc1aeb000b986a108",
+  measurementId: "G-JD0XZWXH7X"
 };
 
 // Initialize Firebase
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -21,14 +20,10 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firestore
 const db = getFirestore(app);
 
-// Initialize Storage
-const storage = getStorage(app);
-
 // Make Firebase available globally
 window.firebase = {
   app,
-  db,
-  storage
+  db
 };
 
 console.log('Firebase initialized successfully!');
