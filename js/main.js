@@ -237,8 +237,12 @@ class HomePageManager {
     }
 
     addToCart(product) {
-        window.shoppingCart.addItem(product);
-        this.closeProductModal();
+        if (window.shoppingCart) {
+            window.shoppingCart.addItem(product);
+            this.closeProductModal();
+        } else {
+            console.error('Shopping cart not available!');
+        }
     }
 
     contactSeller(product) {
