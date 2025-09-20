@@ -103,27 +103,8 @@ class AdminManager {
     }
 
     createTestOrderIfNeeded() {
-        // Create a test order if no orders exist
-        const existingOrders = localStorage.getItem('diyCraftsOrders');
-        if (!existingOrders || JSON.parse(existingOrders).length === 0) {
-            const testOrder = {
-                id: Date.now(),
-                customerName: 'Test Customer',
-                customerEmail: 'test@example.com',
-                customerPhone: '+1 (555) 123-4567',
-                shippingAddress: '123 Test Street, Test City, TC 12345',
-                items: [
-                    { name: 'Crochet Flower Bouquet', price: 28.99, quantity: 1 },
-                    { name: 'Crochet Keychain Set', price: 15.50, quantity: 2 }
-                ],
-                total: 59.99,
-                date: new Date().toISOString().split('T')[0],
-                status: 'pending',
-                transferImage: 'Not provided'
-            };
-            localStorage.setItem('diyCraftsOrders', JSON.stringify([testOrder]));
-            console.log('Test order created');
-        }
+        // No longer create test orders with sample data
+        // Orders will only be created when customers place real orders
     }
 
     updateAnalytics() {
@@ -514,6 +495,25 @@ window.adminManager = new AdminManager();
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear any sample data that might exist
+    const existingProducts = JSON.parse(localStorage.getItem('diyCraftsProducts') || '[]');
+    const hasSampleData = existingProducts.some(product => 
+        product.image.includes('placeholder') || 
+        product.name.includes('Crochet Flower Bouquet') ||
+        product.name.includes('Crochet Keychain Set') ||
+        product.name.includes('Sample') ||
+        product.name.includes('Test') ||
+        product.description.includes('sample') ||
+        product.description.includes('test')
+    );
+    
+    if (hasSampleData) {
+        localStorage.removeItem('diyCraftsProducts');
+        window.productManager.products = [];
+        window.productManager.saveProducts();
+        console.log('Sample data cleared from admin panel');
+    }
+    
     // Admin manager is already initialized in its constructor
     console.log('Admin Dashboard loaded successfully!');
 });

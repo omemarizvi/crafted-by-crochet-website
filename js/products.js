@@ -124,12 +124,44 @@ window.productManager = new ProductManager();
 
 // Initialize products on page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Load products from storage if available
-    window.productManager.loadProductsFromStorage();
+    // Clear any existing sample data from localStorage
+    const existingProducts = JSON.parse(localStorage.getItem('diyCraftsProducts') || '[]');
     
-    // If no products in storage, use default sample products
-    if (window.productManager.getAllProducts().length === 0) {
-        window.productManager.products = window.productManager.loadProducts();
+    // Check if there are old sample products (with placeholder images or specific names)
+    const hasSampleData = existingProducts.some(product => 
+        product.image.includes('placeholder') || 
+        product.name.includes('Crochet Flower Bouquet') ||
+        product.name.includes('Crochet Keychain Set') ||
+        product.name.includes('Sample') ||
+        product.name.includes('Test') ||
+        product.description.includes('sample') ||
+        product.description.includes('test')
+    );
+    
+    if (hasSampleData) {
+        // Clear the old sample data
+        localStorage.removeItem('diyCraftsProducts');
+        window.productManager.products = [];
         window.productManager.saveProducts();
+        console.log('Sample data cleared from products');
+    } else {
+        // Load products from storage if available
+        window.productManager.loadProductsFromStorage();
+    }
+    
+    // Also clear any sample orders that might contain sample product names
+    const existingOrders = JSON.parse(localStorage.getItem('diyCraftsOrders') || '[]');
+    const hasSampleOrders = existingOrders.some(order => 
+        order.items.some(item => 
+            item.name.includes('Crochet Flower Bouquet') ||
+            item.name.includes('Crochet Keychain Set') ||
+            item.name.includes('Sample') ||
+            item.name.includes('Test')
+        )
+    );
+    
+    if (hasSampleOrders) {
+        localStorage.removeItem('diyCraftsOrders');
+        console.log('Sample orders cleared');
     }
 });
