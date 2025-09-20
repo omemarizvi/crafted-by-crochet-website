@@ -3,30 +3,26 @@ class ProductManager {
     constructor() {
         this.products = [];
         this.categories = ['all', 'flowers', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
-        this.googleScriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // Replace with your actual URL
-        this.loadProductsFromGoogleSheets();
+        this.useFirebase = true; // Set to true when Firebase is configured
+        this.loadProducts();
     }
 
-    // Load products from Google Sheets
-    async loadProductsFromGoogleSheets() {
-        try {
-            console.log('Loading products from Google Sheets...');
-            const response = await fetch(this.googleScriptUrl);
-            const data = await response.json();
-            
-            if (data.success && data.products) {
-                this.products = data.products;
-                console.log('Products loaded from Google Sheets:', this.products.length);
+    // Load products from Firebase or fallback to localStorage
+    async loadProducts() {
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Loading products from Firebase...');
+                this.products = await window.firebaseService.getProducts();
+                console.log('Products loaded from Firebase:', this.products.length);
                 // Also save to localStorage as backup
                 this.saveProducts();
-            } else {
-                console.error('Failed to load products from Google Sheets:', data.error);
+            } catch (error) {
+                console.error('Error loading products from Firebase:', error);
                 // Fallback to localStorage
                 this.products = this.loadProductsFromLocalStorage();
             }
-        } catch (error) {
-            console.error('Error loading products from Google Sheets:', error);
-            // Fallback to localStorage
+        } else {
+            console.log('Firebase not available, loading from localStorage...');
             this.products = this.loadProductsFromLocalStorage();
         }
     }
@@ -74,39 +70,35 @@ class ProductManager {
 
     // Add new product
     async addProduct(productData) {
-        try {
-            console.log('Adding new product to Google Sheets:', productData);
-            
-            const response = await fetch(this.googleScriptUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'add',
-                    ...productData
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                const newProduct = {
-                    id: result.id,
-                    ...productData
-                };
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Adding new product to Firebase:', productData);
+                
+                // Upload image to Firebase Storage if it's a file
+                let imageUrl = productData.image;
+                if (productData.imageFile) {
+                    // Generate a temporary ID for the product
+                    const tempId = this.getNextId();
+                    imageUrl = await window.firebaseService.uploadImage(productData.imageFile, tempId);
+                }
+                
+                // Add product to Firebase
+                const newProduct = await window.firebaseService.addProduct({
+                    ...productData,
+                    image: imageUrl
+                });
+                
                 this.products.push(newProduct);
                 this.saveProducts(); // Save to localStorage as backup
-                console.log('Product added successfully:', newProduct);
+                console.log('Product added successfully to Firebase:', newProduct);
                 return newProduct;
-            } else {
-                console.error('Failed to add product to Google Sheets:', result.error);
+            } catch (error) {
+                console.error('Error adding product to Firebase:', error);
                 // Fallback to localStorage
                 return this.addProductToLocalStorage(productData);
             }
-        } catch (error) {
-            console.error('Error adding product to Google Sheets:', error);
-            // Fallback to localStorage
+        } else {
+            console.log('Firebase not available, adding to localStorage...');
             return this.addProductToLocalStorage(productData);
         }
     }
@@ -126,39 +118,36 @@ class ProductManager {
 
     // Update product
     async updateProduct(id, productData) {
-        try {
-            console.log('Updating product in Google Sheets:', id, productData);
-            
-            const response = await fetch(this.googleScriptUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'update',
-                    id: parseInt(id),
-                    ...productData
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                const index = this.products.findIndex(product => product.id === parseInt(id));
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Updating product in Firebase:', id, productData);
+                
+                // Upload new image to Firebase Storage if it's a file
+                let imageUrl = productData.image;
+                if (productData.imageFile) {
+                    imageUrl = await window.firebaseService.uploadImage(productData.imageFile, id);
+                }
+                
+                // Update product in Firebase
+                const updatedProduct = await window.firebaseService.updateProduct(id, {
+                    ...productData,
+                    image: imageUrl
+                });
+                
+                const index = this.products.findIndex(product => product.id === id);
                 if (index !== -1) {
-                    this.products[index] = { ...this.products[index], ...productData };
+                    this.products[index] = { ...this.products[index], ...updatedProduct };
                     this.saveProducts(); // Save to localStorage as backup
-                    console.log('Product updated successfully:', this.products[index]);
+                    console.log('Product updated successfully in Firebase:', this.products[index]);
                     return this.products[index];
                 }
-            } else {
-                console.error('Failed to update product in Google Sheets:', result.error);
+            } catch (error) {
+                console.error('Error updating product in Firebase:', error);
                 // Fallback to localStorage
                 return this.updateProductInLocalStorage(id, productData);
             }
-        } catch (error) {
-            console.error('Error updating product in Google Sheets:', error);
-            // Fallback to localStorage
+        } else {
+            console.log('Firebase not available, updating in localStorage...');
             return this.updateProductInLocalStorage(id, productData);
         }
     }
@@ -176,38 +165,26 @@ class ProductManager {
 
     // Delete product
     async deleteProduct(id) {
-        try {
-            console.log('Deleting product from Google Sheets:', id);
-            
-            const response = await fetch(this.googleScriptUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'delete',
-                    id: parseInt(id)
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                const index = this.products.findIndex(product => product.id === parseInt(id));
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Deleting product from Firebase:', id);
+                
+                await window.firebaseService.deleteProduct(id);
+                
+                const index = this.products.findIndex(product => product.id === id);
                 if (index !== -1) {
                     const deletedProduct = this.products.splice(index, 1)[0];
                     this.saveProducts(); // Save to localStorage as backup
-                    console.log('Product deleted successfully');
+                    console.log('Product deleted successfully from Firebase');
                     return deletedProduct;
                 }
-            } else {
-                console.error('Failed to delete product from Google Sheets:', result.error);
+            } catch (error) {
+                console.error('Error deleting product from Firebase:', error);
                 // Fallback to localStorage
                 return this.deleteProductFromLocalStorage(id);
             }
-        } catch (error) {
-            console.error('Error deleting product from Google Sheets:', error);
-            // Fallback to localStorage
+        } else {
+            console.log('Firebase not available, deleting from localStorage...');
             return this.deleteProductFromLocalStorage(id);
         }
     }

@@ -317,7 +317,8 @@ class AdminManager {
             price: parseFloat(price),
             stock: parseInt(stock),
             description: description,
-            image: imageData
+            image: imageData,
+            imageFile: imageFile // Pass the file for Firebase upload
         };
         
         console.log('Form data being submitted:', formData);
