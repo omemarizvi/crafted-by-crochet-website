@@ -186,9 +186,9 @@ class HomePageManager {
         const modalTitle = document.getElementById('modalTitle');
         const modalPrice = document.getElementById('modalPrice');
         const modalCategory = document.getElementById('modalCategory');
-        const modalStock = document.getElementById('modalStock');
         const modalDescription = document.getElementById('modalDescription');
         const addToCartBtn = document.getElementById('addToCartBtn');
+        const customOrderBtn = document.getElementById('customOrderBtn');
         const contactSellerBtn = document.getElementById('contactSellerBtn');
 
         console.log('Modal element found:', modal);
@@ -198,10 +198,6 @@ class HomePageManager {
             if (modalTitle) modalTitle.textContent = product.name;
             if (modalPrice) modalPrice.textContent = `Rs ${product.price.toFixed(2)}`;
             if (modalCategory) modalCategory.textContent = this.formatCategory(product.category);
-            if (modalStock) {
-                modalStock.textContent = product.stock === 0 ? 'Out of Stock' : `${product.stock} available`;
-                modalStock.className = `product-stock ${product.stock === 0 ? 'out-of-stock' : 'in-stock'}`;
-            }
             if (modalDescription) modalDescription.textContent = product.description;
 
             // Set up quantity selector
@@ -210,8 +206,10 @@ class HomePageManager {
             // Set up buttons
             if (addToCartBtn) {
                 addToCartBtn.onclick = () => this.addToCart(product);
-                addToCartBtn.disabled = product.stock === 0;
-                addToCartBtn.textContent = product.stock === 0 ? 'Out of Stock' : 'Add to Cart';
+            }
+
+            if (customOrderBtn) {
+                customOrderBtn.onclick = () => this.showCustomOrderModal(product);
             }
 
             if (contactSellerBtn) {
@@ -277,6 +275,14 @@ class HomePageManager {
         } else {
             console.error('Shopping cart not available!');
         }
+    }
+
+    showCustomOrderModal(product) {
+        // Close product modal first
+        this.closeProductModal();
+        
+        // Show contact modal for custom orders
+        this.showContactModal(product);
     }
 
     contactSeller(product) {

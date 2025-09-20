@@ -678,6 +678,18 @@ to {
     transform: translateY(-2px);
 }
 
+.btn-outline {
+    background: transparent;
+    color: #8B5A8C;
+    border: 2px solid #8B5A8C;
+}
+
+.btn-outline:hover {
+    background: #8B5A8C;
+    color: white;
+    transform: translateY(-2px);
+}
+
 .btn-full {
     width: 100%;
 }
