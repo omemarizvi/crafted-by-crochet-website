@@ -1,8 +1,9 @@
 // Shopping Cart Management
 class ShoppingCart {
     constructor() {
-        this.items = this.loadCart();
-        this.updateCartDisplay();
+        this.items = [];
+        this.useFirebase = true; // Set to true when Firebase is configured
+        this.loadCart();
     }
 
     // Add item to cart
@@ -27,9 +28,10 @@ class ShoppingCart {
         }
         
         console.log('Cart items after add:', this.items);
-        this.saveCart();
-        this.updateCartDisplay();
-        this.showToast(`${product.name} added to cart!`);
+        this.saveCart().then(() => {
+            this.updateCartDisplay();
+            this.showToast(`${product.name} added to cart!`);
+        });
     }
 
     // Remove item from cart
@@ -37,13 +39,14 @@ class ShoppingCart {
         const index = this.items.findIndex(item => item.id === productId);
         if (index !== -1) {
             const removedItem = this.items.splice(index, 1)[0];
-            this.saveCart();
-            this.updateCartDisplay(); // Re-render for removal
-            // Also update the cart modal if it's open
-            if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
-                window.cartModal.updateCartDisplay();
-            }
-            this.showToast(`${removedItem.name} removed from cart!`);
+            this.saveCart().then(() => {
+                this.updateCartDisplay(); // Re-render for removal
+                // Also update the cart modal if it's open
+                if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
+                    window.cartModal.updateCartDisplay();
+                }
+                this.showToast(`${removedItem.name} removed from cart!`);
+            });
             return removedItem;
         }
         return null;
@@ -57,13 +60,14 @@ class ShoppingCart {
                 this.removeItem(productId);
             } else {
                 item.quantity = quantity;
-                this.saveCart();
-                this.updateCartDisplay();
-                // Also update the cart modal if it's open
-                if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
-                    window.cartModal.updateCartDisplay();
-                }
-                this.showToast(`${item.name} quantity updated to ${quantity}`);
+                this.saveCart().then(() => {
+                    this.updateCartDisplay();
+                    // Also update the cart modal if it's open
+                    if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
+                        window.cartModal.updateCartDisplay();
+                    }
+                    this.showToast(`${item.name} quantity updated to ${quantity}`);
+                });
             }
         }
     }
@@ -102,8 +106,26 @@ class ShoppingCart {
         return this.items.length === 0;
     }
 
-    // Save cart to localStorage with error handling
-    saveCart() {
+    // Save cart to Firebase or localStorage
+    async saveCart() {
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Saving cart to Firebase...');
+                await window.firebaseService.saveCart(this.items);
+                console.log('Cart saved to Firebase successfully');
+            } catch (error) {
+                console.error('Error saving cart to Firebase:', error);
+                // Fallback to localStorage
+                this.saveCartToLocalStorage();
+            }
+        } else {
+            console.log('Firebase not available, saving to localStorage...');
+            this.saveCartToLocalStorage();
+        }
+    }
+
+    // Save cart to localStorage as fallback
+    saveCartToLocalStorage() {
         try {
             // Clean up old data first
             this.cleanupOldData();
@@ -128,14 +150,36 @@ class ShoppingCart {
         }
     }
 
-    // Load cart from localStorage
-    loadCart() {
+    // Load cart from Firebase or localStorage
+    async loadCart() {
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Loading cart from Firebase...');
+                this.items = await window.firebaseService.getCart();
+                console.log('Cart loaded from Firebase:', this.items);
+                this.updateCartDisplay();
+            } catch (error) {
+                console.error('Error loading cart from Firebase:', error);
+                // Fallback to localStorage
+                this.loadCartFromLocalStorage();
+            }
+        } else {
+            console.log('Firebase not available, loading from localStorage...');
+            this.loadCartFromLocalStorage();
+        }
+    }
+
+    // Load cart from localStorage as fallback
+    loadCartFromLocalStorage() {
         try {
             const stored = localStorage.getItem('diyCraftsCart');
-            return stored ? JSON.parse(stored) : [];
+            this.items = stored ? JSON.parse(stored) : [];
+            console.log('Cart loaded from localStorage:', this.items);
+            this.updateCartDisplay();
         } catch (error) {
-            console.error('Error loading cart:', error);
-            return [];
+            console.error('Error loading cart from localStorage:', error);
+            this.items = [];
+            this.updateCartDisplay();
         }
     }
 
@@ -158,14 +202,33 @@ class ShoppingCart {
     }
 
     // Clear cart data
-    clearCart() {
+    async clearCart() {
         this.items = [];
+        
+        if (this.useFirebase && window.firebaseService) {
+            try {
+                console.log('Clearing cart from Firebase...');
+                await window.firebaseService.clearCart();
+                console.log('Cart cleared from Firebase successfully');
+            } catch (error) {
+                console.error('Error clearing cart from Firebase:', error);
+                // Fallback to localStorage
+                this.clearCartFromLocalStorage();
+            }
+        } else {
+            this.clearCartFromLocalStorage();
+        }
+        
+        this.updateCartDisplay();
+    }
+
+    // Clear cart from localStorage as fallback
+    clearCartFromLocalStorage() {
         try {
             localStorage.removeItem('diyCraftsCart');
         } catch (error) {
-            console.error('Error clearing cart:', error);
+            console.error('Error clearing cart from localStorage:', error);
         }
-        this.updateCartDisplay();
     }
 
     // Clear all localStorage data (emergency cleanup)
@@ -176,8 +239,7 @@ class ShoppingCart {
                 localStorage.removeItem(key);
             });
             console.log('All localStorage data cleared');
-            this.items = [];
-            this.updateCartDisplay();
+            this.clearCart();
         } catch (error) {
             console.error('Error clearing all data:', error);
         }
