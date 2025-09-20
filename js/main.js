@@ -273,10 +273,14 @@ class HomePageManager {
     openCart() {
         console.log('Cart icon clicked');
         console.log('Cart modal available:', !!window.cartModal);
-        if (window.cartModal) {
+        console.log('Cart modal object:', window.cartModal);
+        console.log('Cart modal open method:', typeof window.cartModal?.open);
+        
+        if (window.cartModal && typeof window.cartModal.open === 'function') {
             window.cartModal.open();
         } else {
-            console.error('Cart modal not available!');
+            console.error('Cart modal not available or open method not found!');
+            console.log('Available methods:', Object.getOwnPropertyNames(window.cartModal || {}));
         }
     }
 

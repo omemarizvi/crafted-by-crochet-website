@@ -147,6 +147,7 @@ class CartModal {
     }
 
     init() {
+        console.log('Initializing cart modal...');
         this.modal = document.getElementById('cartModal');
         this.cartItems = document.getElementById('cartItems');
         this.cartEmpty = document.getElementById('cartEmpty');
@@ -154,7 +155,17 @@ class CartModal {
         this.totalAmount = document.getElementById('totalAmount');
         this.checkoutBtn = document.getElementById('checkoutBtn');
         
+        console.log('Cart modal elements found:', {
+            modal: !!this.modal,
+            cartItems: !!this.cartItems,
+            cartEmpty: !!this.cartEmpty,
+            cartTotal: !!this.cartTotal,
+            totalAmount: !!this.totalAmount,
+            checkoutBtn: !!this.checkoutBtn
+        });
+        
         this.initEventListeners();
+        console.log('Cart modal initialized successfully');
     }
 
     initEventListeners() {
