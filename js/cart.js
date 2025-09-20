@@ -722,10 +722,14 @@ This order was placed through the Crafted by Crochet website.`;
 
 // Create global instances
 window.cartModal = new CartModal();
-window.checkoutModal = new CheckoutModal();
 
 // Initialize cart on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize cart modal
+    if (window.cartModal) {
+        window.cartModal.init();
+    }
+    
     // Cart is already initialized in the ShoppingCart constructor
     window.shoppingCart.updateCartDisplay();
 });
