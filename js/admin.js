@@ -97,6 +97,8 @@ class AdminManager {
     }
 
     loadDashboard() {
+        // Ensure products are loaded from storage
+        window.productManager.loadProductsFromStorage();
         this.updateAnalytics();
         this.loadItems();
         this.createTestOrderIfNeeded();
@@ -286,6 +288,9 @@ class AdminManager {
         
         if (imageFile) {
             imageData = await this.convertImageToBase64(imageFile);
+        } else if (this.editingItem && this.editingItem.image) {
+            // Keep existing image if no new image is uploaded during edit
+            imageData = this.editingItem.image;
         }
         
         const formData = {
@@ -296,6 +301,8 @@ class AdminManager {
             description: document.getElementById('itemDescription').value,
             image: imageData
         };
+        
+        console.log('Form data being submitted:', formData);
 
         if (this.editingItem) {
             // Update existing item
@@ -512,6 +519,9 @@ document.addEventListener('DOMContentLoaded', function() {
         window.productManager.products = [];
         window.productManager.saveProducts();
         console.log('Sample data cleared from admin panel');
+    } else {
+        // Load products from storage if no sample data
+        window.productManager.loadProductsFromStorage();
     }
     
     // Admin manager is already initialized in its constructor

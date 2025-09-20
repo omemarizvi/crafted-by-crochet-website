@@ -5,8 +5,12 @@ class ProductManager {
         this.categories = ['all', 'flowers', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
     }
 
-    // Sample products data - Empty array to start fresh
+    // Load products from localStorage or return empty array
     loadProducts() {
+        const stored = localStorage.getItem('diyCraftsProducts');
+        if (stored) {
+            return JSON.parse(stored);
+        }
         return [];
     }
 
@@ -43,8 +47,10 @@ class ProductManager {
             id: this.getNextId(),
             ...productData
         };
+        console.log('Adding new product:', newProduct);
         this.products.push(newProduct);
         this.saveProducts();
+        console.log('Products after adding:', this.products);
         return newProduct;
     }
 
