@@ -282,6 +282,7 @@ class AdminManager {
 
     async handleItemSubmit(e) {
         e.preventDefault();
+        console.log('Form submit triggered');
         
         const imageFile = document.getElementById('itemImage').files[0];
         let imageData = null;
@@ -293,12 +294,29 @@ class AdminManager {
             imageData = this.editingItem.image;
         }
         
+        // Validate required fields
+        const name = document.getElementById('itemName').value.trim();
+        const category = document.getElementById('itemCategory').value;
+        const price = document.getElementById('itemPrice').value;
+        const stock = document.getElementById('itemStock').value;
+        const description = document.getElementById('itemDescription').value.trim();
+        
+        if (!name || !category || !price || !stock || !description) {
+            this.showToast('Please fill in all required fields');
+            return;
+        }
+        
+        if (!imageData && !this.editingItem) {
+            this.showToast('Please select an image for the item');
+            return;
+        }
+        
         const formData = {
-            name: document.getElementById('itemName').value,
-            category: document.getElementById('itemCategory').value,
-            price: parseFloat(document.getElementById('itemPrice').value),
-            stock: parseInt(document.getElementById('itemStock').value),
-            description: document.getElementById('itemDescription').value,
+            name: name,
+            category: category,
+            price: parseFloat(price),
+            stock: parseInt(stock),
+            description: description,
             image: imageData
         };
         
@@ -522,6 +540,12 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         // Load products from storage if no sample data
         window.productManager.loadProductsFromStorage();
+    }
+    
+    // Load items in admin panel if user is already logged in
+    if (window.adminManager.isLoggedIn) {
+        window.adminManager.loadItems();
+        window.adminManager.updateAnalytics();
     }
     
     // Admin manager is already initialized in its constructor
