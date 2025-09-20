@@ -158,7 +158,7 @@ class HomePageManager {
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
-                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-price">Rs ${product.price.toFixed(2)}</div>
                     <div class="product-category">${this.formatCategory(product.category)}</div>
                     <div class="product-stock ${stockClass}">${stockText}</div>
                 </div>

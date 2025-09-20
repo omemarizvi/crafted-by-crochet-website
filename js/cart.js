@@ -226,7 +226,7 @@ class CartModal {
                     <img src="${item.image}" alt="${item.name}" class="cart-item-image">
                     <div class="cart-item-details">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                            <div class="cart-item-price">Rs ${item.price.toFixed(2)}</div>
                     </div>
                     <div class="cart-item-controls">
                         <button class="quantity-btn decrease-btn" data-item-id="${item.id}">-</button>
@@ -544,7 +544,7 @@ Please send this information to craftedbycrochet@gmail.com
 
     createEmailBody(orderData) {
         const itemsList = orderData.items.map(item => 
-            `- ${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+            `- ${item.name} (Qty: ${item.quantity}) - Rs ${(item.price * item.quantity).toFixed(2)}`
         ).join('\n');
         
         return `New Order Details:
@@ -718,6 +718,267 @@ This order was placed through the Crafted by Crochet website.`;
         return false;
     }
 
+}
+
+// Checkout Modal Management
+class CheckoutModal {
+    constructor() {
+        this.modal = document.getElementById('checkoutModal');
+        this.form = document.getElementById('checkoutForm');
+        this.checkoutTotal = document.getElementById('checkoutTotal');
+        
+        this.initEventListeners();
+    }
+
+    initEventListeners() {
+        // Close modal
+        const closeBtn = document.getElementById('closeCheckoutModal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.close());
+        }
+
+        // Close on outside click
+        if (this.modal) {
+            this.modal.addEventListener('click', (e) => {
+                if (e.target === this.modal) {
+                    this.close();
+                }
+            });
+        }
+
+        // Form submission
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        // Image preview
+        const imageInput = document.getElementById('transferImage');
+        if (imageInput) {
+            imageInput.addEventListener('change', (e) => this.handleImagePreview(e));
+        }
+    }
+
+    open() {
+        if (this.modal) {
+            this.updateTotal();
+            this.modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    close() {
+        if (this.modal) {
+            this.modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    updateTotal() {
+        if (this.checkoutTotal) {
+            this.checkoutTotal.textContent = window.shoppingCart.getTotalPrice().toFixed(2);
+        }
+    }
+
+    handleImagePreview(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        
+        const formData = {
+            name: document.getElementById('customerName').value,
+            email: document.getElementById('customerEmail').value,
+            phone: document.getElementById('customerPhone').value,
+            address: document.getElementById('shippingAddress').value,
+            items: window.shoppingCart.getItems(),
+            total: window.shoppingCart.getTotalPrice(),
+            transferImage: document.getElementById('transferImage').files[0]
+        };
+
+        this.submitOrder(formData);
+    }
+
+    async submitOrder(orderData) {
+        // Generate unique order ID
+        const orderId = Date.now();
+        orderData.id = orderId;
+        
+        // Save order to localStorage for analytics
+        this.saveOrderToStorage(orderData);
+        
+        // Send order to Google Sheets
+        this.sendOrderToGoogleSheets(orderData);
+        
+        // Show success message
+        window.shoppingCart.showToast('Order placed successfully! We will contact you soon at ' + orderData.email);
+        
+        // Clear the cart
+        window.shoppingCart.clearCart();
+        
+        // Close the checkout modal
+        this.close();
+        
+        // Notify admin that new order was placed
+        window.dispatchEvent(new CustomEvent('newOrderPlaced'));
+    }
+
+    saveOrderToStorage(orderData) {
+        let orders = JSON.parse(localStorage.getItem('diyCraftsOrders') || '[]');
+        
+        // Create new order object
+        const newOrder = {
+            id: orderData.id,
+            name: orderData.name,
+            email: orderData.email,
+            phone: orderData.phone,
+            address: orderData.address,
+            items: orderData.items,
+            total: orderData.total,
+            transferImage: null, // Will be updated below if image exists
+            timestamp: new Date().toISOString()
+        };
+        
+        // Add order to the list
+        orders.push(newOrder);
+        
+        // Save to localStorage
+        localStorage.setItem('diyCraftsOrders', JSON.stringify(orders));
+        
+        // If there's an image, convert it to base64 and update the order
+        if (orderData.transferImage) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageData = e.target.result;
+                // Update the order with image data
+                const orderIndex = orders.findIndex(order => order.id === newOrder.id);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].transferImage = imageData;
+                    localStorage.setItem('diyCraftsOrders', JSON.stringify(orders));
+                }
+            };
+            reader.readAsDataURL(orderData.transferImage);
+        }
+    }
+
+    async sendOrderToGoogleSheets(orderData) {
+        console.log('=== SENDING ORDER TO GOOGLE SHEETS ===');
+        console.log('Order data:', orderData);
+        
+        try {
+            const itemsList = orderData.items.map(item => 
+                `${item.name} (Qty: ${item.quantity}) - Rs ${(item.price * item.quantity).toFixed(2)}`
+            ).join('; ');
+
+            const sheetData = {
+                timestamp: new Date().toISOString(),
+                orderId: orderData.id,
+                customerName: orderData.name,
+                customerEmail: orderData.email,
+                customerPhone: orderData.phone,
+                shippingAddress: orderData.address,
+                items: itemsList,
+                totalAmount: orderData.total.toFixed(2),
+                paymentMethod: 'Bank Transfer or PayPal',
+                transferScreenshot: orderData.transferImage ? 'Yes' : 'No',
+                status: 'Pending'
+            };
+
+            console.log('Prepared sheet data:', sheetData);
+
+            const success = await this.tryMultipleMethods(sheetData);
+            
+            if (success) {
+                console.log('✅ Order sent successfully to Google Sheets');
+                window.shoppingCart.showToast('Order sent to Google Sheets successfully!');
+            } else {
+                console.log('❌ All methods failed');
+                throw new Error('All methods failed');
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to send to Google Sheets:', error);
+            window.shoppingCart.showToast('Order saved locally but failed to send to Google Sheets. Please check your setup.');
+        }
+    }
+
+    async tryMultipleMethods(sheetData) {
+        console.log('=== TRYING MULTIPLE METHODS ===');
+        
+        // Method 1: Try Google Apps Script (primary method)
+        try {
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYhbbPdhL7vxEnNsUXd2-YeJYUwQ7pB06k1mzbmWTnSWnLrZDNLmPH_Uy86CvhEpeAtw/exec';
+            console.log('Google Script URL:', GOOGLE_SCRIPT_URL);
+            
+            if (GOOGLE_SCRIPT_URL.includes('YOUR_ACTUAL_SCRIPT_ID_HERE')) {
+                console.log('❌ Google Script not configured - URL still contains placeholder');
+                throw new Error('Google Script not configured');
+            }
+            
+            console.log('✅ Google Script URL looks valid, attempting to send data...');
+            console.log('Sheet data being sent:', sheetData);
+            
+            // Use GET method with URL parameters to avoid CORS issues
+            const params = new URLSearchParams();
+            Object.keys(sheetData).forEach(key => {
+                params.append(key, sheetData[key]);
+            });
+            
+            const fullUrl = `${GOOGLE_SCRIPT_URL}?${params.toString()}`;
+            console.log('Full URL being called:', fullUrl);
+            
+            const response = await fetch(fullUrl, {
+                method: 'GET',
+                mode: 'no-cors'
+            });
+            
+            console.log('✅ Google Sheets GET request completed');
+            console.log('Response status:', response.status);
+            console.log('Response type:', response.type);
+            return true;
+            
+        } catch (error) {
+            console.log('❌ Google Script GET method failed:', error);
+        }
+
+        // Method 2: Try POST with different approach (fallback, less reliable for GAS)
+        try {
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYhbbPdhL7vxEnNsUXd2-YeJYUwQ7pB06k1mzbmWTnSWnLrZDNLmPH_Uy86CvhEpeAtw/exec';
+            if (!GOOGLE_SCRIPT_URL.includes('YOUR_ACTUAL_SCRIPT_ID_HERE')) {
+                console.log('Trying POST method...');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(sheetData)
+                });
+                
+                console.log('✅ Google Sheets POST request completed');
+                return true;
+            }
+        } catch (error) {
+            console.log('❌ Google Script POST method failed:', error);
+        }
+
+        console.log('❌ All methods failed');
+        return false;
+    }
 }
 
 // Create global instances

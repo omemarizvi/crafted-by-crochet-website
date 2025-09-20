@@ -190,7 +190,7 @@ class AdminManager {
                 <div class="item-info">
                     <div class="item-name">${product.name}</div>
                     <div class="item-category">${this.formatCategory(product.category)}</div>
-                    <div class="item-price">$${product.price.toFixed(2)}</div>
+                    <div class="item-price">Rs ${product.price.toFixed(2)}</div>
                     <div class="item-stock ${stockClass}">${stockText}</div>
                     <div class="item-description">${product.description}</div>
                     <div class="item-actions">
@@ -243,6 +243,14 @@ class AdminManager {
         document.getElementById('itemPrice').value = product.price;
         document.getElementById('itemStock').value = product.stock;
         document.getElementById('itemDescription').value = product.description;
+        
+        // Handle image display for editing
+        if (product.image) {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            previewImg.src = product.image;
+            preview.style.display = 'block';
+        }
     }
 
     initItemForm() {
@@ -255,17 +263,57 @@ class AdminManager {
         if (cancelBtn) {
             cancelBtn.addEventListener('click', () => this.closeItemModal());
         }
+
+        // Image preview functionality
+        const imageInput = document.getElementById('itemImage');
+        if (imageInput) {
+            imageInput.addEventListener('change', (e) => this.handleImagePreview(e));
+        }
     }
 
-    handleItemSubmit(e) {
+    handleImagePreview(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    convertImageToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async handleItemSubmit(e) {
         e.preventDefault();
+        
+        const imageFile = document.getElementById('itemImage').files[0];
+        let imageData = null;
+        
+        if (imageFile) {
+            imageData = await this.convertImageToBase64(imageFile);
+        }
         
         const formData = {
             name: document.getElementById('itemName').value,
             category: document.getElementById('itemCategory').value,
             price: parseFloat(document.getElementById('itemPrice').value),
             stock: parseInt(document.getElementById('itemStock').value),
-            description: document.getElementById('itemDescription').value
+            description: document.getElementById('itemDescription').value,
+            image: imageData
         };
 
         if (this.editingItem) {
