@@ -97,15 +97,123 @@ class ShoppingCart {
         return this.items.length === 0;
     }
 
-    // Save cart to localStorage
+    // Save cart to localStorage with error handling
     saveCart() {
-        localStorage.setItem('diyCraftsCart', JSON.stringify(this.items));
+        try {
+            // Clean up old data first
+            this.cleanupOldData();
+            
+            const cartData = JSON.stringify(this.items);
+            
+            // Check if data is too large (localStorage limit is usually 5-10MB)
+            if (cartData.length > 2 * 1024 * 1024) { // 2MB limit
+                console.warn('Cart data is too large, clearing old data');
+                this.clearCart();
+                return;
+            }
+            
+            localStorage.setItem('diyCraftsCart', cartData);
+        } catch (error) {
+            if (error.name === 'QuotaExceededError') {
+                console.warn('localStorage quota exceeded, clearing cart data');
+                this.clearCart();
+            } else {
+                console.error('Error saving cart:', error);
+            }
+        }
     }
 
     // Load cart from localStorage
     loadCart() {
-        const stored = localStorage.getItem('diyCraftsCart');
-        return stored ? JSON.parse(stored) : [];
+        try {
+            const stored = localStorage.getItem('diyCraftsCart');
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Error loading cart:', error);
+            return [];
+        }
+    }
+
+    // Clean up old data to free up localStorage space
+    cleanupOldData() {
+        try {
+            // Clear old product data that might be taking up space
+            const keysToCheck = ['diyCraftsProducts', 'diyCraftsOrders'];
+            
+            keysToCheck.forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data && data.length > 1024 * 1024) { // If data is larger than 1MB
+                    console.log(`Clearing large ${key} data to free up space`);
+                    localStorage.removeItem(key);
+                }
+            });
+        } catch (error) {
+            console.error('Error during cleanup:', error);
+        }
+    }
+
+    // Clear cart data
+    clearCart() {
+        this.items = [];
+        try {
+            localStorage.removeItem('diyCraftsCart');
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+        }
+        this.updateCartDisplay();
+    }
+
+    // Clear all localStorage data (emergency cleanup)
+    clearAllData() {
+        try {
+            const keysToRemove = ['diyCraftsCart', 'diyCraftsProducts', 'diyCraftsOrders', 'adminLoggedIn'];
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            console.log('All localStorage data cleared');
+            this.items = [];
+            this.updateCartDisplay();
+        } catch (error) {
+            console.error('Error clearing all data:', error);
+        }
+    }
+
+    // Get localStorage usage info
+    getStorageInfo() {
+        let totalSize = 0;
+        const info = {};
+        
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                const size = localStorage.getItem(key).length;
+                totalSize += size;
+                info[key] = size;
+            }
+        }
+        
+        return {
+            totalSize: totalSize,
+            totalSizeMB: (totalSize / (1024 * 1024)).toFixed(2),
+            details: info
+        };
+    }
+
+    // Get full product data for display
+    getFullProductData(cartItem) {
+        // Try to get full product data from the current products
+        if (window.productManager) {
+            const fullProduct = window.productManager.getProductById(cartItem.id);
+            if (fullProduct) {
+                return {
+                    ...cartItem,
+                    category: fullProduct.category,
+                    description: fullProduct.description,
+                    stock: fullProduct.stock
+                };
+            }
+        }
+        // Fallback to cart item data if full product not available
+        return cartItem;
     }
 
     // Update cart display
@@ -732,6 +840,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cart is already initialized in the ShoppingCart constructor
     window.shoppingCart.updateCartDisplay();
+    
+    // Add debugging commands to console
+    window.debugCart = {
+        clearCart: () => window.shoppingCart.clearCart(),
+        clearAllData: () => window.shoppingCart.clearAllData(),
+        getStorageInfo: () => window.shoppingCart.getStorageInfo(),
+        getCartItems: () => window.shoppingCart.items
+    };
+    
+    console.log('Cart debugging commands available:');
+    console.log('- debugCart.clearCart() - Clear cart only');
+    console.log('- debugCart.clearAllData() - Clear all localStorage data');
+    console.log('- debugCart.getStorageInfo() - Get storage usage info');
+    console.log('- debugCart.getCartItems() - Get current cart items');
+    
     const addToCartBtn = document.getElementById('addToCartBtn');
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
