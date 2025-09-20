@@ -27,6 +27,12 @@ class HomePageManager {
         if (cartBtn) {
             cartBtn.addEventListener('click', () => this.openCart());
         }
+
+        // Custom Order button
+        const customOrderBtn = document.getElementById('customOrderBtn');
+        if (customOrderBtn) {
+            customOrderBtn.addEventListener('click', () => this.showCustomOrderModal());
+        }
     }
 
     initProductModal() {
@@ -188,7 +194,6 @@ class HomePageManager {
         const modalCategory = document.getElementById('modalCategory');
         const modalDescription = document.getElementById('modalDescription');
         const addToCartBtn = document.getElementById('addToCartBtn');
-        const customOrderBtn = document.getElementById('customOrderBtn');
         const contactSellerBtn = document.getElementById('contactSellerBtn');
 
         console.log('Modal element found:', modal);
@@ -206,10 +211,6 @@ class HomePageManager {
             // Set up buttons
             if (addToCartBtn) {
                 addToCartBtn.onclick = () => this.addToCart(product);
-            }
-
-            if (customOrderBtn) {
-                customOrderBtn.onclick = () => this.showCustomOrderModal(product);
             }
 
             if (contactSellerBtn) {
@@ -277,24 +278,24 @@ class HomePageManager {
         }
     }
 
-    showCustomOrderModal(product) {
-        // Close product modal first
-        this.closeProductModal();
-        
+    showCustomOrderModal() {
         // Show contact modal for custom orders
-        this.showContactModal(product);
+        this.showContactModal();
     }
 
     contactSeller(product) {
         // Show contact modal
-        this.showContactModal(product);
+        this.showContactModal();
     }
 
-    showContactModal(product) {
+    showContactModal() {
         const modal = document.getElementById('contactModal');
         if (modal) {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
+            console.log('Contact modal should now be visible');
+        } else {
+            console.error('Contact modal not found!');
         }
     }
 
