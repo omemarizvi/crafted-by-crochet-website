@@ -97,20 +97,87 @@ class FirebaseService {
         return sessionId;
     }
 
+  // Compress image to reduce file size
+  compressImage(file, maxWidth = 800, maxHeight = 600, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+        
+        // Set canvas dimensions
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        
+        console.log(`Image compressed from ${file.size} bytes to ${compressedDataUrl.length} characters`);
+        resolve(compressedDataUrl);
+      };
+      
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
   // Convert image file to base64 string for Firestore storage
   async convertImageToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        console.log('Image converted to base64 successfully');
-        resolve(reader.result);
-      };
-      reader.onerror = (error) => {
-        console.error('Error converting image to base64:', error);
-        reject(error);
-      };
-      reader.readAsDataURL(file);
-    });
+    try {
+      // Firebase has a 1MB limit for document fields
+      const maxSize = 1048487; // 1MB in bytes
+      
+      // Try different compression levels
+      let compressedImage;
+      let quality = 0.7;
+      let maxWidth = 800;
+      let maxHeight = 600;
+      
+      do {
+        compressedImage = await this.compressImage(file, maxWidth, maxHeight, quality);
+        
+        // Check if the Base64 string is within Firebase limits
+        if (compressedImage.length <= maxSize) {
+          console.log(`Image compressed successfully to ${compressedImage.length} characters`);
+          break;
+        }
+        
+        // If still too large, reduce quality and size
+        quality *= 0.8;
+        maxWidth *= 0.8;
+        maxHeight *= 0.8;
+        
+        console.log(`Image still too large (${compressedImage.length} chars), reducing quality to ${quality} and size to ${maxWidth}x${maxHeight}`);
+        
+        // Prevent infinite loop
+        if (quality < 0.1 || maxWidth < 200) {
+          console.warn('Image could not be compressed enough for Firebase, using lowest quality');
+          break;
+        }
+        
+      } while (compressedImage.length > maxSize && quality > 0.1);
+      
+      return compressedImage;
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      throw error;
+    }
   }
 
   // Add new product
