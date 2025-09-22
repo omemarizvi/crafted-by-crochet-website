@@ -352,6 +352,10 @@ class CartModal {
     }
 
     setupCheckoutForm() {
+        // Only set up event listeners once
+        if (this.checkoutFormSetup) return;
+        this.checkoutFormSetup = true;
+
         const checkoutForm = document.getElementById('checkoutForm');
         const closeBtn = document.getElementById('closeCheckoutModal');
         
@@ -380,11 +384,11 @@ class CartModal {
         
         if (transferImage && imagePreview && previewImg) {
             transferImage.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                    previewImg.src = e.target.result;
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImg.src = e.target.result;
                         imagePreview.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
@@ -395,6 +399,17 @@ class CartModal {
 
     async handleCheckoutSubmit(e) {
         e.preventDefault();
+        
+        // Prevent multiple submissions
+        const placeOrderBtn = document.querySelector('#checkoutForm button[type="submit"]');
+        if (placeOrderBtn && placeOrderBtn.disabled) {
+            console.log('Order already being processed, ignoring duplicate submission');
+            return;
+        }
+        
+        if (placeOrderBtn) {
+            placeOrderBtn.disabled = true;
+        }
         
         // Get form data
         const formData = {
@@ -411,15 +426,23 @@ class CartModal {
             return;
         }
 
+        // Generate order ID
+        const orderId = Date.now().toString();
+        
         // Convert image to base64
         let imageBase64 = null;
         if (formData.transferImage) {
             try {
                 imageBase64 = await this.convertImageToBase64(formData.transferImage);
                 console.log('Payment screenshot converted to base64');
+                
+                // Store payment screenshot in localStorage as backup
+                localStorage.setItem(`payment_screenshot_${orderId}`, imageBase64);
+                console.log('Payment screenshot stored in localStorage with ID:', orderId);
             } catch (error) {
                 console.error('Error converting image to base64:', error);
                 alert('Error processing payment screenshot. Please try again.');
+                if (placeOrderBtn) placeOrderBtn.disabled = false;
                 return;
             }
         }
@@ -430,7 +453,8 @@ class CartModal {
             items: this.shoppingCart.items,
             total: this.shoppingCart.getTotal(),
             timestamp: new Date().toISOString(),
-            paymentScreenshot: imageBase64
+            paymentScreenshot: imageBase64,
+            orderId: orderId
         };
 
         // Send order email
@@ -439,6 +463,9 @@ class CartModal {
         // Clear cart and close modals
         this.shoppingCart.clearCart();
         this.closeCheckoutModal();
+        
+        // Re-enable the button
+        if (placeOrderBtn) placeOrderBtn.disabled = false;
     }
 
     convertImageToBase64(file) {
@@ -452,9 +479,10 @@ class CartModal {
 
     async sendOrderEmail(orderData) {
         try {
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            const originalText = checkoutBtn ? checkoutBtn.textContent : 'Processing...';
-            if (checkoutBtn) checkoutBtn.textContent = 'Processing Order...';
+            // Get the Place Order button from checkout modal
+            const placeOrderBtn = document.querySelector('#checkoutForm button[type="submit"]');
+            const originalText = placeOrderBtn ? placeOrderBtn.textContent : 'Processing...';
+            if (placeOrderBtn) placeOrderBtn.textContent = 'Processing Order...';
 
             const orderSummary = orderData.items.map(item => 
                 `${item.name} x${item.quantity} - Rs ${item.price.toFixed(2)}`
@@ -478,12 +506,19 @@ ORDER TIME: ${new Date().toLocaleString()}
 
 PAYMENT: Transfer screenshot attached`;
 
-            // Add payment screenshot if available
+            // Add payment screenshot information
             if (orderData.paymentScreenshot) {
                 emailContent += `
 
 PAYMENT SCREENSHOT:
-The customer has uploaded a payment screenshot. Please check the email attachment or contact the customer directly to verify payment.
+✅ Payment screenshot has been uploaded by the customer.
+
+Order ID: ${orderData.orderId}
+
+To view the payment proof:
+1. Contact the customer directly at: ${orderData.customer.email}
+2. Ask them to share the payment screenshot again
+3. Reference this Order ID: ${orderData.orderId}
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
@@ -517,8 +552,7 @@ DIY Crafts Website`;
                         customer_name: orderData.customer.name,
                         customer_email: orderData.customer.email,
                         customer_phone: orderData.customer.phone,
-                        customer_address: orderData.customer.address,
-                        payment_screenshot: orderData.paymentScreenshot || 'No screenshot provided'
+                        customer_address: orderData.customer.address
                     };
 
                     // Debug: Log template parameters
@@ -543,7 +577,7 @@ DIY Crafts Website`;
             // Fallback if EmailJS fails
             alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
 
-            if (checkoutBtn) checkoutBtn.textContent = originalText;
+            if (placeOrderBtn) placeOrderBtn.textContent = originalText;
             
         } catch (error) {
             console.error('Error sending order email:', error);
