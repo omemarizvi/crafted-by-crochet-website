@@ -48,6 +48,13 @@ body {
     gap: 0.3rem;
 }
 
+.logo-img-wrapper {
+    background: transparent;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+}
+
 .logo-icon {
     font-size: 2.5rem;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
@@ -64,6 +71,7 @@ body {
     max-width: 30px !important;
     object-fit: contain;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+    background: transparent !important;
 }
 
 .header-actions {
