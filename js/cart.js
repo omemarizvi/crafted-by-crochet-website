@@ -195,6 +195,7 @@ class CartModal {
 
     open() {
         if (this.modal) {
+            console.log('Opening cart modal, shopping cart items:', this.shoppingCart ? this.shoppingCart.items.length : 0);
             this.updateCartDisplay();
             this.modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -206,6 +207,14 @@ class CartModal {
             if (checkoutBtn) {
                 console.log('Checkout button display:', checkoutBtn.style.display);
                 console.log('Checkout button visibility:', checkoutBtn.style.visibility);
+                console.log('Checkout button parent:', checkoutBtn.parentElement);
+            }
+            
+            // Debug: Check cart total section
+            const cartTotal = document.getElementById('cartTotal');
+            console.log('Cart total section found:', !!cartTotal);
+            if (cartTotal) {
+                console.log('Cart total innerHTML:', cartTotal.innerHTML);
             }
         }
     }
@@ -219,6 +228,7 @@ class CartModal {
     }
 
     updateCartDisplay() {
+        console.log('=== updateCartDisplay called ===');
         const cartItems = document.getElementById('cartItems');
         const cartTotal = document.getElementById('cartTotal');
         const cartEmpty = document.getElementById('cartEmpty');
