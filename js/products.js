@@ -4,6 +4,12 @@ class ProductManager {
         this.products = [];
         this.categories = ['all', 'flowers', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
         this.useFirebase = true; // Set to true when Firebase is configured
+        
+        // Initialize with default products immediately
+        this.products = this.getDefaultProducts();
+        console.log('Products initialized with defaults:', this.products.length);
+        
+        // Then try to load from database
         this.loadProducts();
     }
 
@@ -38,14 +44,16 @@ class ProductManager {
         
         // Final fallback to localStorage
         console.log('Loading products from localStorage...');
-        this.products = this.loadProductsFromLocalStorage();
+        const storedProducts = this.loadProductsFromLocalStorage();
         
-        // If no products found anywhere, use default products
-        if (this.products.length === 0) {
-            console.log('No products found, using default products');
-            this.products = this.getDefaultProducts();
+        // If no products found anywhere, keep default products
+        if (storedProducts.length === 0) {
+            console.log('No products found in storage, keeping default products');
             // Save default products to localStorage
             this.saveProducts();
+        } else {
+            console.log('Found products in localStorage, replacing defaults');
+            this.products = storedProducts;
         }
     }
 
