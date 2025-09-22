@@ -19,7 +19,7 @@ class ProductManager {
                 category: 'flowers',
                 price: 1000,
                 stock: 0, // Made to order
-                image: 'images/products/rose.jpg'
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmY2NjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5Sb3NlPC90ZXh0Pjwvc3ZnPg=='
             },
             {
                 id: 2,
@@ -27,7 +27,7 @@ class ProductManager {
                 category: 'keychains',
                 price: 500,
                 stock: 0,
-                image: 'images/products/sunflower-keychain.jpg'
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZmYwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxMnB4Ij5TdW5mbG93ZXIgS2V5Y2hhaW48L3RleHQ+PC9zdmc+'
             },
             {
                 id: 3,
@@ -35,7 +35,7 @@ class ProductManager {
                 category: 'flowers',
                 price: 1500,
                 stock: 0,
-                image: 'images/products/sunflower-pot.jpg'
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZmYwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxMnB4Ij5TdW5mbG93ZXIgUG90PC90ZXh0Pjwvc3ZnPg=='
             }
         ];
     }
@@ -120,9 +120,9 @@ class ProductManager {
         this.products.push(newProduct);
         
         try {
-            this.saveProducts();
-            console.log('Products after adding:', this.products);
-            return newProduct;
+        this.saveProducts();
+        console.log('Products after adding:', this.products);
+        return newProduct;
         } catch (error) {
             if (error.name === 'QuotaExceededError') {
                 console.error('LocalStorage quota exceeded. Clearing old data and retrying...');

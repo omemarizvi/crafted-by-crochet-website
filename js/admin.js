@@ -134,10 +134,18 @@ class AdminManager {
     }
 
     getPopularCategory(products) {
+        if (!products || products.length === 0) {
+            return 'No products';
+        }
+        
         const categoryCounts = {};
         products.forEach(product => {
             categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
         });
+        
+        if (Object.keys(categoryCounts).length === 0) {
+            return 'No categories';
+        }
         
         const popular = Object.keys(categoryCounts).reduce((a, b) => 
             categoryCounts[a] > categoryCounts[b] ? a : b
