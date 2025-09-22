@@ -33,22 +33,26 @@ function initializeFirebase() {
             } else {
                 // Initialize Firebase
                 console.log('Initializing Firebase with config:', firebaseConfig);
-                firebase.initializeApp(firebaseConfig);
+                const app = firebase.initializeApp(firebaseConfig);
+                console.log('Firebase app initialized:', app);
                 
                 // Initialize Firestore
                 const db = firebase.firestore();
+                console.log('Firestore database initialized:', db);
                 
                 // Make Firebase available globally
                 window.firebase = {
-                    app: firebase.app(),
+                    app: app,
                     db: db,
                     auth: firebase.auth(),
                     storage: firebase.storage()
                 };
                 
                 console.log('Firebase initialized successfully!');
+                console.log('window.firebase object:', window.firebase);
                 console.log('Firebase app:', window.firebase.app);
                 console.log('Firestore database:', window.firebase.db);
+                console.log('Database type:', typeof window.firebase.db);
                 return true;
             }
         } else {

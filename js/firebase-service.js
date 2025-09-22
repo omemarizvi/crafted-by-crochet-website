@@ -22,11 +22,40 @@ class FirebaseService {
             console.log(`Firebase Service: Attempt ${attempts + 1}/${maxAttempts}`);
             console.log('Firebase object available:', typeof window.firebase !== 'undefined');
             console.log('Firebase.db available:', window.firebase && window.firebase.db ? 'Yes' : 'No');
+            console.log('Global firebase available:', typeof firebase !== 'undefined');
             
+            // Try multiple ways to get the database
+            let db = null;
+            
+            // Method 1: Check window.firebase.db
             if (window.firebase && window.firebase.db) {
-                this.db = window.firebase.db;
+                db = window.firebase.db;
+                console.log('Found database via window.firebase.db');
+            }
+            // Method 2: Try to get it directly from global firebase
+            else if (typeof firebase !== 'undefined' && firebase.firestore) {
+                try {
+                    db = firebase.firestore();
+                    console.log('Found database via firebase.firestore()');
+                    // Also set window.firebase if it's not set
+                    if (!window.firebase) {
+                        window.firebase = {
+                            app: firebase.app(),
+                            db: db,
+                            auth: firebase.auth(),
+                            storage: firebase.storage()
+                        };
+                    }
+                } catch (error) {
+                    console.log('Error getting firestore directly:', error);
+                }
+            }
+            
+            if (db) {
+                this.db = db;
                 this.initialized = true;
                 console.log('Firebase Service initialized successfully!');
+                console.log('Database object:', this.db);
                 break;
             }
             
