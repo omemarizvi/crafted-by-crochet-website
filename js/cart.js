@@ -325,15 +325,27 @@ class CartModal {
                     const templateParams = {
                         to_email: 'craftedbycrochet@gmail.com',
                         subject: `New Order - ${new Date().toLocaleDateString()}`,
+                        message: `New Order Received!
+
+Order Details:
+${orderSummary}
+
+Total: Rs ${orderData.total.toFixed(2)}
+
+Order Time: ${new Date().toLocaleString()}
+
+Please contact the customer to confirm the order and arrange delivery.`,
                         order_details: orderSummary,
                         total_amount: `Rs ${orderData.total.toFixed(2)}`,
-                        order_time: new Date().toLocaleString()
+                        order_time: new Date().toLocaleString(),
+                        customer_name: 'Website Customer'
                     };
 
                     await emailjs.send('service_59mtpje', 'template_q1scjwp', templateParams);
                     console.log('Order email sent successfully');
                 } catch (emailError) {
-                    console.log('EmailJS not configured, using fallback method');
+                    console.error('EmailJS error details:', emailError);
+                    console.log('EmailJS failed, using fallback method');
                 }
             }
 
