@@ -341,7 +341,7 @@ Please contact the customer to confirm the order and arrange delivery.`,
                         customer_name: 'Website Customer'
                     };
 
-                    await emailjs.send('service_59mtpje', 'template_q1scjwp', templateParams);
+                    await emailjs.send('service_59mtpje', 'template_g6rxkwq', templateParams);
                     console.log('Order email sent successfully');
                 } catch (emailError) {
                     console.error('EmailJS error details:', emailError);
