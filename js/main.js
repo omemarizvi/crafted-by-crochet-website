@@ -151,6 +151,18 @@ class HomePageManager {
     attachProductCardListeners() {
         const productCards = document.querySelectorAll('.product-card');
         productCards.forEach(card => {
+            // Handle clicking on product image
+            const productImage = card.querySelector('.product-image');
+            if (productImage) {
+                productImage.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const productName = productImage.dataset.productName;
+                    const productImageSrc = productImage.dataset.productImage;
+                    this.openProductImageModal(productName, productImageSrc);
+                });
+            }
+            
+            // Handle clicking on the rest of the card
             card.addEventListener('click', (e) => {
                 e.preventDefault();
                 const productId = parseInt(card.dataset.productId);
@@ -165,8 +177,8 @@ class HomePageManager {
         
         return `
             <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image" onclick="event.stopPropagation(); window.homePageManager.openProductImageModal('${product.name}', '${product.image}')">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48rect width="200" height="200" fill="#f0f0f0"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#999">No Image</text></svg>'" style="cursor: pointer;">
+                <div class="product-image" data-product-name="${product.name}" data-product-image="${product.image}">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48rect width=\"200\" height=\"200\" fill=\"#f0f0f0\"/><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" fill=\"#999\">No Image</text></svg>'" style="cursor: pointer;">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
