@@ -108,15 +108,35 @@ async function initializeFirebase() {
 }
 
 // Auto-initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
+function autoInitializeFirebase() {
     console.log('DOM Content Loaded - starting Firebase auto-initialization...');
     // Wait a bit for Firebase scripts to load
     setTimeout(async () => {
         console.log('Auto-initializing Firebase...');
         await initializeFirebase();
     }, 100);
-});
+}
+
+// Try multiple ways to initialize
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoInitializeFirebase);
+} else {
+    // DOM is already loaded
+    console.log('DOM already loaded, initializing Firebase immediately...');
+    autoInitializeFirebase();
+}
 
 // Also make the function globally available
 window.initializeFirebase = initializeFirebase;
 console.log('Firebase config script loaded, initializeFirebase function available:', typeof window.initializeFirebase);
+
+// Add a simple test function
+window.testFirebaseInit = async function() {
+    console.log('=== MANUAL FIREBASE TEST ===');
+    console.log('Testing Firebase initialization manually...');
+    const result = await initializeFirebase();
+    console.log('Firebase initialization result:', result);
+    console.log('Firebase apps count after test:', typeof firebase !== 'undefined' && firebase.apps ? firebase.apps.length : 'N/A');
+    console.log('window.firebase.db available:', window.firebase && window.firebase.db ? 'Yes' : 'No');
+    return result;
+};
