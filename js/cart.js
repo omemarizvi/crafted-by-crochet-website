@@ -1,4 +1,5 @@
 // Shopping Cart Management
+// Version: 2024-01-15-fixed-place-order-button
 class ShoppingCart {
     constructor() {
         this.items = [];
@@ -403,12 +404,14 @@ class CartModal {
         }
         
         // Get form data
+        console.log('Getting form data...');
         const formData = {
             name: document.getElementById('customerName').value,
             email: document.getElementById('customerEmail').value,
             phone: document.getElementById('customerPhone').value,
             address: document.getElementById('shippingAddress').value
         };
+        console.log('Form data collected:', formData);
 
         // Validate form
         if (!formData.name || !formData.email || !formData.phone || !formData.address) {
