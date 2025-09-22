@@ -322,7 +322,7 @@ class AdminManager {
             price: parseFloat(price),
             stock: parseInt(stock),
             image: imageData,
-            imageFile: imageFile // Pass the file for Firebase upload
+            imageFile: imageFile
         };
         
         console.log('Form data being submitted:', formData);
@@ -333,7 +333,7 @@ class AdminManager {
             window.productManager.updateProduct(this.editingItem.id, formData)
                 .then(updated => {
                     if (updated) {
-                        console.log('Item updated successfully in Firebase');
+                        console.log('Item updated successfully');
                         this.showToast('Item updated successfully!');
                         this.closeItemModal();
                         this.loadItems();
@@ -352,7 +352,7 @@ class AdminManager {
             window.productManager.addProduct(formData)
                 .then(newItem => {
                     if (newItem) {
-                        console.log('Item added successfully to Firebase:', newItem);
+                        console.log('Item added successfully:', newItem);
                         this.showToast('Item added successfully!');
                         this.closeItemModal();
                         this.loadItems();

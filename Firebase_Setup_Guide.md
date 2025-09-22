@@ -16,7 +16,7 @@
 4. Select a location close to your users (e.g., us-central1)
 5. Click "Done"
 
-**Note**: We're using Firestore to store both product data AND images (as base64 strings) to work with the free Spark plan. No Firebase Storage setup needed!
+**Note**: We're using Firestore to store both product data AND images (as base64  strings) to work with the free Spark plan. No Firebase Storage setup needed!
 
 ## Step 3: Get Firebase Configuration
 1. Go to Project Settings (gear icon)
