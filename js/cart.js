@@ -217,7 +217,10 @@ class CartModal {
 
         if (!this.shoppingCart || !this.shoppingCart.items.length) {
             if (cartItems) cartItems.innerHTML = '';
-            if (cartTotal) cartTotal.textContent = 'Rs 0.00';
+            if (cartTotal) {
+                const totalAmount = cartTotal.querySelector('#totalAmount');
+                if (totalAmount) totalAmount.textContent = '0.00';
+            }
             if (cartEmpty) cartEmpty.style.display = 'block';
             return;
         }
@@ -245,7 +248,8 @@ class CartModal {
         }
 
         if (cartTotal) {
-            cartTotal.textContent = `Rs ${this.shoppingCart.getTotal().toFixed(2)}`;
+            const totalAmount = cartTotal.querySelector('#totalAmount');
+            if (totalAmount) totalAmount.textContent = this.shoppingCart.getTotal().toFixed(2);
         }
     }
 
@@ -280,7 +284,7 @@ class CartModal {
             if (typeof emailjs !== 'undefined') {
                 try {
                     // Initialize EmailJS (you'll need to replace with your actual public key)
-                    emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');
+                    emailjs.init('J-A4XDkOM-wayz2AS');
                     
                     const templateParams = {
                         to_email: 'craftedbycrochet@gmail.com',
@@ -290,7 +294,7 @@ class CartModal {
                         order_time: new Date().toLocaleString()
                     };
 
-                    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+                    await emailjs.send('service_59mtpje', 'template_q1scjwp', templateParams);
                     console.log('Order email sent successfully');
                 } catch (emailError) {
                     console.log('EmailJS not configured, using fallback method');
