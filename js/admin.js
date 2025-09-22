@@ -646,7 +646,7 @@ class AdminManager {
     }
 
     // Manual Firebase initialization function
-    async initializeFirebase() {
+    async initializeFirebaseAdmin() {
         try {
             console.log('=== MANUAL FIREBASE INITIALIZATION ===');
             
@@ -699,6 +699,7 @@ class AdminManager {
             
             // First, try to initialize Firebase configuration
             if (typeof window.initializeFirebase === 'function') {
+                // Call the original Firebase config function directly to avoid circular reference
                 const result = await window.initializeFirebase();
                 if (result) {
                     console.log('Firebase configuration initialized successfully');
@@ -743,11 +744,11 @@ console.log('Admin manager created:', !!window.adminManager);
 // Make debug functions globally accessible
 console.log('Creating global functions...');
 window.checkDatabaseContents = () => window.adminManager.checkDatabaseContents();
-window.initializeFirebase = () => window.adminManager.initializeFirebase();
+window.initializeFirebaseAdmin = () => window.adminManager.initializeFirebaseAdmin();
 window.testFirebaseDirect = () => window.adminManager.testFirebaseDirect();
 console.log('Global functions created:', {
     checkDatabaseContents: typeof window.checkDatabaseContents,
-    initializeFirebase: typeof window.initializeFirebase,
+    initializeFirebaseAdmin: typeof window.initializeFirebaseAdmin,
     testFirebaseDirect: typeof window.testFirebaseDirect
 });
 
