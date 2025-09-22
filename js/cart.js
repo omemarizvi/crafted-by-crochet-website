@@ -469,6 +469,7 @@ DIY Crafts Website`;
                     
                     const templateParams = {
                         to_email: 'craftedbycrochet@gmail.com',
+                        reply_to: orderData.customer.email,
                         subject: `New Order - ${orderData.customer.name} - ${new Date().toLocaleDateString()}`,
                         message: emailContent,
                         order_details: orderSummary,
@@ -480,7 +481,13 @@ DIY Crafts Website`;
                         customer_address: orderData.customer.address
                     };
 
-                    await emailjs.send('service_59mtpje', 'template_g6rxkwq', templateParams);
+                    // Debug: Log template parameters
+                    console.log('EmailJS Template Parameters:', templateParams);
+                    console.log('Service ID: service_59mtpje');
+                    console.log('Template ID: template_g6rxkwq');
+                    
+                    // Try with user ID for better compatibility
+                    await emailjs.send('service_59mtpje', 'template_g6rxkwq', templateParams, 'J-A4XDkOM-wayz2AS');
                     console.log('Order email sent successfully');
                     
                     // Show success message with customer name
