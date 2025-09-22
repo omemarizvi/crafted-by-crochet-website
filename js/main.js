@@ -29,6 +29,7 @@ class HomePageManager {
         }
 
         // Product image modal
+        console.log('About to initialize product image modal...');
         this.initProductImageModal();
 
         // Custom Order button
@@ -153,12 +154,28 @@ class HomePageManager {
         console.log('Found product cards:', productCards.length);
         
         productCards.forEach((card, index) => {
-            // Handle clicking on product image
+            // Handle clicking on product image - add listener to both container and img
             const productImage = card.querySelector('.product-image');
-            if (productImage) {
+            const imgElement = card.querySelector('.product-image img');
+            
+            if (productImage && imgElement) {
                 console.log(`Adding image click listener to card ${index}`);
+                
+                // Add listener to the img element directly
+                imgElement.addEventListener('click', (e) => {
+                    console.log('IMG ELEMENT CLICKED!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productName = productImage.dataset.productName;
+                    const productImageSrc = productImage.dataset.productImage;
+                    console.log('Product data:', { productName, productImageSrc });
+                    this.openProductImageModal(productName, productImageSrc);
+                    return false;
+                });
+                
+                // Also add listener to the container as backup
                 productImage.addEventListener('click', (e) => {
-                    console.log('Product image clicked!');
+                    console.log('PRODUCT IMAGE CONTAINER CLICKED!');
                     e.preventDefault();
                     e.stopPropagation();
                     const productName = productImage.dataset.productName;
@@ -168,13 +185,13 @@ class HomePageManager {
                     return false;
                 });
             } else {
-                console.log(`No product image found for card ${index}`);
+                console.log(`No product image found for card ${index}`, { productImage: !!productImage, imgElement: !!imgElement });
             }
             
             // Handle clicking on the rest of the card (but not the image)
             card.addEventListener('click', (e) => {
-                // Check if the click was on the image container
-                if (e.target.closest('.product-image')) {
+                // Check if the click was on the image container or img
+                if (e.target.closest('.product-image') || e.target.tagName === 'IMG') {
                     console.log('Click was on image, ignoring card click');
                     return;
                 }
