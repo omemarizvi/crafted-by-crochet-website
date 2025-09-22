@@ -150,16 +150,23 @@ class HomePageManager {
 
     attachProductCardListeners() {
         const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
+        console.log('Found product cards:', productCards.length);
+        
+        productCards.forEach((card, index) => {
             // Handle clicking on product image
             const productImage = card.querySelector('.product-image');
             if (productImage) {
+                console.log(`Adding image click listener to card ${index}`);
                 productImage.addEventListener('click', (e) => {
+                    console.log('Product image clicked!');
                     e.stopPropagation();
                     const productName = productImage.dataset.productName;
                     const productImageSrc = productImage.dataset.productImage;
+                    console.log('Product data:', { productName, productImageSrc });
                     this.openProductImageModal(productName, productImageSrc);
                 });
+            } else {
+                console.log(`No product image found for card ${index}`);
             }
             
             // Handle clicking on the rest of the card
@@ -178,7 +185,7 @@ class HomePageManager {
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image" data-product-name="${product.name}" data-product-image="${product.image}">
-                    <img src="${product.image}" alt="${product.name}" style="cursor: pointer;">
+                    <img src="${product.image}" alt="${product.name}">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
@@ -372,11 +379,15 @@ class HomePageManager {
 
     // Initialize product image modal
     initProductImageModal() {
+        console.log('Initializing product image modal...');
         const closeBtn = document.getElementById('closeProductImageModal');
         const modal = document.getElementById('productImageModal');
         
+        console.log('Modal elements found:', { closeBtn: !!closeBtn, modal: !!modal });
+        
         if (closeBtn) {
             closeBtn.addEventListener('click', () => this.closeProductImageModal());
+            console.log('Close button listener added');
         }
         
         if (modal) {
@@ -385,6 +396,7 @@ class HomePageManager {
                     this.closeProductImageModal();
                 }
             });
+            console.log('Modal click listener added');
         }
     }
 
