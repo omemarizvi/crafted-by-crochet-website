@@ -435,6 +435,9 @@ body {
     display: flex;
     flex-direction: row;
     gap: 2rem;
+    margin: 0 auto;
+    position: relative;
+    top: 2vh;
 }
 
 .product-modal-image {
@@ -489,6 +492,7 @@ body {
         flex-direction: column;
         width: 95vw;
         max-height: 95vh;
+        top: 2.5vh;
     }
     
     .product-modal-image {
@@ -506,6 +510,12 @@ body {
     
     .product-modal-price {
         font-size: 1.2rem !important;
+    }
+    
+    .close {
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 1.8rem;
     }
 }
 
@@ -552,6 +562,12 @@ to {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s ease;
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    z-index: 10;
+    padding: 0.5rem;
+    line-height: 1;
 }
 
 .close:hover {
@@ -560,6 +576,7 @@ to {
 
 .modal-body {
     padding: 1.5rem;
+    padding-top: 4rem;
     flex: 1;
     overflow-y: auto;
     display: flex;
