@@ -488,69 +488,8 @@ class CartModal {
                 `${item.name} x${item.quantity} - Rs ${item.price.toFixed(2)}`
             ).join('\n');
 
-            // Create detailed email content with customer details
-            let emailContent;
-            
-            if (orderData.paymentScreenshot) {
-                // Create HTML email with embedded image
-                emailContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .header { background-color: #8B5A8C; color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; }
-        .section { margin-bottom: 20px; }
-        .screenshot { max-width: 100%; height: auto; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; }
-        .order-id { background-color: #f0f0f0; padding: 10px; border-radius: 5px; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>🛍️ New Order Received!</h1>
-    </div>
-    
-    <div class="content">
-        <div class="section">
-            <h2>CUSTOMER DETAILS:</h2>
-            <p><strong>Name:</strong> ${orderData.customer.name}</p>
-            <p><strong>Email:</strong> ${orderData.customer.email}</p>
-            <p><strong>Phone:</strong> ${orderData.customer.phone}</p>
-            <p><strong>Address:</strong> ${orderData.customer.address}</p>
-        </div>
-        
-        <div class="section">
-            <h2>ORDER DETAILS:</h2>
-            <p>${orderSummary.replace(/\n/g, '<br>')}</p>
-        </div>
-        
-        <div class="section">
-            <h2>TOTAL AMOUNT:</h2>
-            <p><strong>Rs ${orderData.total.toFixed(2)}</strong></p>
-        </div>
-        
-        <div class="section">
-            <h2>ORDER TIME:</h2>
-            <p>${new Date().toLocaleString()}</p>
-        </div>
-        
-        <div class="section">
-            <h2>PAYMENT SCREENSHOT:</h2>
-            <p>✅ Payment screenshot attached below:</p>
-            <div class="order-id">Order ID: ${orderData.orderId}</div>
-            <img src="${orderData.paymentScreenshot}" alt="Payment Screenshot" class="screenshot">
-        </div>
-        
-        <hr>
-        <p>Please contact the customer to confirm the order and arrange delivery.</p>
-        <p><strong>Best regards,<br>DIY Crafts Website</strong></p>
-    </div>
-</body>
-</html>`;
-            } else {
-                // Fallback plain text email
-                emailContent = `New Order Received! 🛍️
+            // Create simple email content to avoid corruption issues
+            const emailContent = `New Order Received! 🛍️
 
 CUSTOMER DETAILS:
 Name: ${orderData.customer.name}
@@ -565,14 +504,24 @@ TOTAL AMOUNT: Rs ${orderData.total.toFixed(2)}
 
 ORDER TIME: ${new Date().toLocaleString()}
 
-PAYMENT: No screenshot provided
+PAYMENT: Transfer screenshot uploaded
+
+Order ID: ${orderData.orderId}
+
+PAYMENT SCREENSHOT:
+✅ Payment screenshot has been uploaded by the customer.
+The image is stored in the system with Order ID: ${orderData.orderId}
+
+To view the payment screenshot:
+1. Contact the customer at: ${orderData.customer.email}
+2. Reference Order ID: ${orderData.orderId}
+3. Ask them to share the payment screenshot again
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
 
 Best regards,
 DIY Crafts Website`;
-            }
 
             // Try to send email using EmailJS
             if (typeof emailjs !== 'undefined') {
@@ -585,7 +534,6 @@ DIY Crafts Website`;
                         reply_to: orderData.customer.email,
                         subject: `New Order - ${orderData.customer.name} - ${new Date().toLocaleDateString()}`,
                         message: emailContent,
-                        html_content: emailContent, // For HTML emails
                         order_details: orderSummary,
                         total_amount: `Rs ${orderData.total.toFixed(2)}`,
                         order_time: new Date().toLocaleString(),
@@ -593,8 +541,7 @@ DIY Crafts Website`;
                         customer_email: orderData.customer.email,
                         customer_phone: orderData.customer.phone,
                         customer_address: orderData.customer.address,
-                        order_id: orderData.orderId,
-                        payment_screenshot: orderData.paymentScreenshot || ''
+                        order_id: orderData.orderId
                     };
 
                     // Debug: Log template parameters
