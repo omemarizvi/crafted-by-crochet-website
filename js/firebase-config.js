@@ -15,7 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase (this will be called after Firebase scripts are loaded)
 async function initializeFirebase() {
     try {
-        console.log('=== FIREBASE INITIALIZATION ===');
+        console.log('=== FIREBASE INITIALIZATION FUNCTION CALLED ===');
         console.log('Attempting to initialize Firebase...');
         console.log('Firebase object available:', typeof firebase !== 'undefined');
         
@@ -109,8 +109,10 @@ async function initializeFirebase() {
 
 // Auto-initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM Content Loaded - starting Firebase auto-initialization...');
     // Wait a bit for Firebase scripts to load
     setTimeout(async () => {
+        console.log('Auto-initializing Firebase...');
         await initializeFirebase();
     }, 100);
 });

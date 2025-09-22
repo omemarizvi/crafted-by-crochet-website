@@ -607,6 +607,44 @@ class AdminManager {
         }
     }
 
+    // Simple Firebase test function
+    async testFirebaseDirect() {
+        try {
+            console.log('=== DIRECT FIREBASE TEST ===');
+            this.showToast('Testing Firebase directly...');
+            
+            // Test 1: Check if Firebase is available
+            console.log('Firebase available:', typeof firebase !== 'undefined');
+            if (typeof firebase === 'undefined') {
+                this.showToast('Firebase SDK not loaded!', 'error');
+                return;
+            }
+            
+            // Test 2: Check if initializeFirebase function is available
+            console.log('initializeFirebase function available:', typeof window.initializeFirebase);
+            if (typeof window.initializeFirebase !== 'function') {
+                this.showToast('initializeFirebase function not found!', 'error');
+                return;
+            }
+            
+            // Test 3: Call the function directly
+            console.log('Calling initializeFirebase function directly...');
+            const result = await window.initializeFirebase();
+            
+            if (result) {
+                this.showToast('Firebase test successful!', 'success');
+                console.log('Firebase test completed successfully');
+            } else {
+                this.showToast('Firebase test failed!', 'error');
+                console.log('Firebase test failed');
+            }
+            
+        } catch (error) {
+            console.error('Error in direct Firebase test:', error);
+            this.showToast('Firebase test error: ' + error.message, 'error');
+        }
+    }
+
     // Manual Firebase initialization function
     async initializeFirebase() {
         try {
@@ -703,6 +741,7 @@ window.adminManager = new AdminManager();
 // Make debug functions globally accessible
 window.checkDatabaseContents = () => window.adminManager.checkDatabaseContents();
 window.initializeFirebase = () => window.adminManager.initializeFirebase();
+window.testFirebaseDirect = () => window.adminManager.testFirebaseDirect();
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async function() {
