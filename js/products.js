@@ -35,6 +35,14 @@ class ProductManager {
                 price: 1500,
                 stock: 0,
                 image: 'images/products/sunflower-pot.jpg'
+            },
+            {
+                id: 4,
+                name: 'Sunflower',
+                category: 'flowers',
+                price: 1000,
+                stock: 0,
+                image: 'images/products/sunflower.jpg'
             }
         ];
     }
