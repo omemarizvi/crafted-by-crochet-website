@@ -393,7 +393,7 @@ class CartModal {
         }
     }
 
-    handleCheckoutSubmit(e) {
+    async handleCheckoutSubmit(e) {
         e.preventDefault();
         
         // Get form data
@@ -411,12 +411,26 @@ class CartModal {
             return;
         }
 
+        // Convert image to base64
+        let imageBase64 = null;
+        if (formData.transferImage) {
+            try {
+                imageBase64 = await this.convertImageToBase64(formData.transferImage);
+                console.log('Payment screenshot converted to base64');
+            } catch (error) {
+                console.error('Error converting image to base64:', error);
+                alert('Error processing payment screenshot. Please try again.');
+                return;
+            }
+        }
+
         // Create order data
         const orderData = {
             customer: formData,
             items: this.shoppingCart.items,
             total: this.shoppingCart.getTotal(),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            paymentScreenshot: imageBase64
         };
 
         // Send order email
@@ -425,6 +439,15 @@ class CartModal {
         // Clear cart and close modals
         this.shoppingCart.clearCart();
         this.closeCheckoutModal();
+    }
+
+    convertImageToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     }
 
     async sendOrderEmail(orderData) {
@@ -438,7 +461,7 @@ class CartModal {
             ).join('\n');
 
             // Create detailed email content with customer details
-            const emailContent = `New Order Received! 🛍️
+            let emailContent = `New Order Received! 🛍️
 
 CUSTOMER DETAILS:
 Name: ${orderData.customer.name}
@@ -453,13 +476,29 @@ TOTAL AMOUNT: Rs ${orderData.total.toFixed(2)}
 
 ORDER TIME: ${new Date().toLocaleString()}
 
-PAYMENT: Transfer screenshot uploaded
+PAYMENT: Transfer screenshot attached`;
+
+            // Add payment screenshot if available
+            if (orderData.paymentScreenshot) {
+                emailContent += `
+
+PAYMENT SCREENSHOT:
+${orderData.paymentScreenshot}
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
 
 Best regards,
 DIY Crafts Website`;
+            } else {
+                emailContent += `
+
+---
+Please contact the customer to confirm the order and arrange delivery.
+
+Best regards,
+DIY Crafts Website`;
+            }
 
             // Try to send email using EmailJS
             if (typeof emailjs !== 'undefined') {
@@ -478,7 +517,8 @@ DIY Crafts Website`;
                         customer_name: orderData.customer.name,
                         customer_email: orderData.customer.email,
                         customer_phone: orderData.customer.phone,
-                        customer_address: orderData.customer.address
+                        customer_address: orderData.customer.address,
+                        payment_screenshot: orderData.paymentScreenshot || 'No screenshot provided'
                     };
 
                     // Debug: Log template parameters
@@ -491,7 +531,7 @@ DIY Crafts Website`;
                     console.log('Order email sent successfully');
                     
                     // Show success message with customer name
-                    alert(`Order submitted successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\n✅ Email notification sent to craftedbycrochet@gmail.com\n\nYou will receive a confirmation email shortly.`);
+                    alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\n✅ Email notification sent to craftedbycrochet@gmail.com\n\nYou will receive a confirmation email shortly.`);
                     return; // Exit early on success
                     
                 } catch (emailError) {
@@ -501,7 +541,7 @@ DIY Crafts Website`;
             }
 
             // Fallback if EmailJS fails
-            alert(`Order submitted successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
+            alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
 
             if (checkoutBtn) checkoutBtn.textContent = originalText;
 

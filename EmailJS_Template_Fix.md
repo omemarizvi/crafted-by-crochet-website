@@ -43,7 +43,10 @@ TOTAL AMOUNT: {{total_amount}}
 
 ORDER TIME: {{order_time}}
 
-PAYMENT: Transfer screenshot uploaded
+PAYMENT: Transfer screenshot attached
+
+PAYMENT SCREENSHOT:
+{{payment_screenshot}}
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
@@ -61,6 +64,7 @@ Make sure these variables are defined in your template:
 - `{{order_details}}`
 - `{{total_amount}}`
 - `{{order_time}}`
+- `{{payment_screenshot}}` (Base64 encoded image)
 
 ### 5. Save the Template
 Click "Save" after making changes.
