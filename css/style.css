@@ -310,14 +310,18 @@ body {
 
 .product-image {
     position: relative;
-    height: 250px;
+    height: 280px;
     overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .product-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
@@ -905,6 +909,10 @@ to {
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1rem;
+    }
+    
+    .product-image {
+        height: 220px;
     }
     
     .category-filters {
