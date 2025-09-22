@@ -734,6 +734,39 @@ to {
     color: #8B5A8C;
 }
 
+.payment-form-link {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.payment-upload-btn {
+    display: inline-block;
+    background: #8B5A8C;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    transition: background-color 0.3s ease;
+}
+
+.payment-upload-btn:hover {
+    background: #7a4a7d;
+    color: white;
+    text-decoration: none;
+}
+
+.form-note {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
 .total-amount {
     font-size: 1.2rem;
     font-weight: bold;
