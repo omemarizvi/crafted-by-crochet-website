@@ -199,6 +199,14 @@ class CartModal {
             this.modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             console.log('Cart modal opened');
+            
+            // Debug: Check if checkout button exists
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            console.log('Checkout button found:', !!checkoutBtn);
+            if (checkoutBtn) {
+                console.log('Checkout button display:', checkoutBtn.style.display);
+                console.log('Checkout button visibility:', checkoutBtn.style.visibility);
+            }
         }
     }
 
@@ -215,11 +223,19 @@ class CartModal {
         const cartTotal = document.getElementById('cartTotal');
         const cartEmpty = document.getElementById('cartEmpty');
 
+        console.log('Updating cart display:', {
+            cartItems: !!cartItems,
+            cartTotal: !!cartTotal,
+            cartEmpty: !!cartEmpty,
+            itemsCount: this.shoppingCart ? this.shoppingCart.items.length : 0
+        });
+
         if (!this.shoppingCart || !this.shoppingCart.items.length) {
             if (cartItems) cartItems.innerHTML = '';
             if (cartTotal) {
                 const totalAmount = cartTotal.querySelector('#totalAmount');
                 if (totalAmount) totalAmount.textContent = '0.00';
+                cartTotal.style.display = 'block'; // Ensure it's visible
             }
             if (cartEmpty) cartEmpty.style.display = 'block';
             return;
@@ -250,6 +266,7 @@ class CartModal {
         if (cartTotal) {
             const totalAmount = cartTotal.querySelector('#totalAmount');
             if (totalAmount) totalAmount.textContent = this.shoppingCart.getTotal().toFixed(2);
+            cartTotal.style.display = 'block'; // Ensure it's visible
         }
     }
 
