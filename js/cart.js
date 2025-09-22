@@ -208,6 +208,15 @@ class CartModal {
                 console.log('Checkout button display:', checkoutBtn.style.display);
                 console.log('Checkout button visibility:', checkoutBtn.style.visibility);
                 console.log('Checkout button parent:', checkoutBtn.parentElement);
+                
+                // Force the button to be visible
+                checkoutBtn.style.display = 'block';
+                checkoutBtn.style.visibility = 'visible';
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.style.position = 'static';
+                console.log('Forced checkout button to be visible');
+            } else {
+                console.log('ERROR: Checkout button not found in DOM!');
             }
             
             // Debug: Check cart total section
