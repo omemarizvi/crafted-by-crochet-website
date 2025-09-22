@@ -628,6 +628,37 @@ class AdminManager {
                 return;
             }
             
+            // Check if Firebase app is initialized but window.firebase is not set
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0 && !window.firebase) {
+                console.log('Firebase app exists but window.firebase not set, setting it up...');
+                const app = firebase.app();
+                const db = firebase.firestore();
+                const auth = firebase.auth();
+                const storage = firebase.storage();
+                
+                window.firebase = {
+                    app: app,
+                    db: db,
+                    auth: auth,
+                    storage: storage
+                };
+                
+                console.log('window.firebase set up successfully');
+                
+                // Now reinitialize the service
+                if (window.firebaseService) {
+                    const serviceResult = await window.firebaseService.reinitialize();
+                    if (serviceResult) {
+                        this.showToast('Firebase service initialized successfully!');
+                        console.log('Firebase Service initialized successfully');
+                    } else {
+                        this.showToast('Firebase service initialization failed.');
+                        console.log('Firebase Service initialization failed');
+                    }
+                }
+                return;
+            }
+            
             // First, try to initialize Firebase configuration
             if (typeof window.initializeFirebase === 'function') {
                 const result = await window.initializeFirebase();

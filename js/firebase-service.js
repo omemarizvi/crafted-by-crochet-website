@@ -23,6 +23,7 @@ class FirebaseService {
             console.log('Firebase object available:', typeof window.firebase !== 'undefined');
             console.log('Firebase.db available:', window.firebase && window.firebase.db ? 'Yes' : 'No');
             console.log('Global firebase available:', typeof firebase !== 'undefined');
+            console.log('Firebase apps count:', typeof firebase !== 'undefined' && firebase.apps ? firebase.apps.length : 'N/A');
             
             // Try multiple ways to get the database
             let db = null;
@@ -35,16 +36,21 @@ class FirebaseService {
             // Method 2: Try to get it directly from global firebase
             else if (typeof firebase !== 'undefined' && firebase.firestore) {
                 try {
-                    db = firebase.firestore();
-                    console.log('Found database via firebase.firestore()');
-                    // Also set window.firebase if it's not set
-                    if (!window.firebase) {
-                        window.firebase = {
-                            app: firebase.app(),
-                            db: db,
-                            auth: firebase.auth(),
-                            storage: firebase.storage()
-                        };
+                    // Check if Firebase app is initialized first
+                    if (firebase.apps && firebase.apps.length > 0) {
+                        db = firebase.firestore();
+                        console.log('Found database via firebase.firestore()');
+                        // Also set window.firebase if it's not set
+                        if (!window.firebase) {
+                            window.firebase = {
+                                app: firebase.app(),
+                                db: db,
+                                auth: firebase.auth(),
+                                storage: firebase.storage()
+                            };
+                        }
+                    } else {
+                        console.log('Firebase app not initialized yet, skipping direct firestore call');
                     }
                 } catch (error) {
                     console.log('Error getting firestore directly:', error);
