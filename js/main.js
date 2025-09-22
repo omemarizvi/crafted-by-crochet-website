@@ -178,7 +178,10 @@ class HomePageManager {
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image" data-product-name="${product.name}" data-product-image="${product.image}">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48rect width=\"200\" height=\"200\" fill=\"#f0f0f0\"/><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dy=\".3em\" fill=\"#999\">No Image</text></svg>'" style="cursor: pointer;">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="cursor: pointer;">
+                    <div class="no-image-placeholder" style="display: none; width: 100%; height: 100%; background: #f0f0f0; align-items: center; justify-content: center; color: #999; font-size: 14px;">
+                        No Image
+                    </div>
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
