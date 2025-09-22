@@ -113,8 +113,7 @@ class HomePageManager {
         // Filter by search query (show all if search is empty)
         if (this.searchQuery && this.searchQuery.length > 0) {
             filteredProducts = filteredProducts.filter(product =>
-                product.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                product.description.toLowerCase().includes(this.searchQuery.toLowerCase())
+                product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
             );
         }
 
@@ -126,17 +125,24 @@ class HomePageManager {
         const productsGrid = document.getElementById('productsGrid');
         const noProducts = document.getElementById('noProducts');
         
+        console.log('Rendering products:', this.products.length, 'products');
+        console.log('Products to render:', this.products);
+        console.log('ProductsGrid element:', productsGrid);
+        
         if (this.products.length === 0) {
-            productsGrid.style.display = 'none';
-            noProducts.style.display = 'block';
+            console.log('No products to display, showing no products message');
+            if (productsGrid) productsGrid.style.display = 'none';
+            if (noProducts) noProducts.style.display = 'block';
         } else {
-            productsGrid.style.display = 'grid';
-            noProducts.style.display = 'none';
-            
-            productsGrid.innerHTML = this.products.map(product => this.createProductCard(product)).join('');
-            
-            // Add click event listeners to product cards
-            this.attachProductCardListeners();
+            console.log('Displaying products in grid');
+            if (productsGrid) {
+                productsGrid.style.display = 'grid';
+                productsGrid.innerHTML = this.products.map(product => this.createProductCard(product)).join('');
+                
+                // Add click event listeners to product cards
+                this.attachProductCardListeners();
+            }
+            if (noProducts) noProducts.style.display = 'none';
         }
     }
 
