@@ -700,6 +700,40 @@ to {
     border: 1px solid #ddd;
 }
 
+/* Payment Disclaimer Styles */
+.payment-disclaimer {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid #8B5A8C;
+}
+
+.payment-disclaimer h3 {
+    color: #8B5A8C;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.disclaimer-content p {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.disclaimer-content ul {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+}
+
+.disclaimer-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.disclaimer-content strong {
+    color: #8B5A8C;
+}
+
 .total-amount {
     font-size: 1.2rem;
     font-weight: bold;

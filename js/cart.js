@@ -421,31 +421,13 @@ class CartModal {
         };
 
         // Validate form
-        if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.transferImage) {
-            alert('Please fill in all required fields and upload payment screenshot.');
+        if (!formData.name || !formData.email || !formData.phone || !formData.address) {
+            alert('Please fill in all required fields.');
             return;
         }
 
         // Generate order ID
         const orderId = Date.now().toString();
-        
-        // Convert image to base64
-        let imageBase64 = null;
-        if (formData.transferImage) {
-            try {
-                imageBase64 = await this.convertImageToBase64(formData.transferImage);
-                console.log('Payment screenshot converted to base64');
-                
-                // Store payment screenshot in localStorage as backup
-                localStorage.setItem(`payment_screenshot_${orderId}`, imageBase64);
-                console.log('Payment screenshot stored in localStorage with ID:', orderId);
-            } catch (error) {
-                console.error('Error converting image to base64:', error);
-                alert('Error processing payment screenshot. Please try again.');
-                if (placeOrderBtn) placeOrderBtn.disabled = false;
-                return;
-            }
-        }
 
         // Create order data
         const orderData = {
@@ -453,7 +435,6 @@ class CartModal {
             items: this.shoppingCart.items,
             total: this.shoppingCart.getTotal(),
             timestamp: new Date().toISOString(),
-            paymentScreenshot: imageBase64,
             orderId: orderId
         };
 
@@ -488,7 +469,7 @@ class CartModal {
                 `${item.name} x${item.quantity} - Rs ${item.price.toFixed(2)}`
             ).join('\n');
 
-            // Create simple email content to avoid corruption issues
+            // Create email content with payment instructions
             const emailContent = `New Order Received! 🛍️
 
 CUSTOMER DETAILS:
@@ -504,18 +485,28 @@ TOTAL AMOUNT: Rs ${orderData.total.toFixed(2)}
 
 ORDER TIME: ${new Date().toLocaleString()}
 
-PAYMENT: Transfer screenshot uploaded
-
 Order ID: ${orderData.orderId}
 
-PAYMENT SCREENSHOT:
-✅ Payment screenshot has been uploaded by the customer.
-The image is stored in the system with Order ID: ${orderData.orderId}
+PAYMENT INSTRUCTIONS FOR CUSTOMER:
+✅ Order confirmed! Please follow these steps to complete your payment:
 
-To view the payment screenshot:
-1. Contact the customer at: ${orderData.customer.email}
-2. Reference Order ID: ${orderData.orderId}
-3. Ask them to share the payment screenshot again
+1. BANK TRANSFER DETAILS:
+   - Account Name: Crafted by Crochet
+   - Account Number: [Your Bank Account Number]
+   - Bank: [Your Bank Name]
+   - Amount: Rs ${orderData.total.toFixed(2)}
+   - Reference: Order-${orderData.orderId}
+
+2. UPLOAD PAYMENT PROOF:
+   📎 Google Form: https://forms.gle/[YOUR_GOOGLE_FORM_ID]
+   - Upload your payment screenshot
+   - Enter Order ID: ${orderData.orderId}
+   - Enter your email: ${orderData.customer.email}
+
+3. ORDER DISPATCH:
+   ⏰ Your order will be dispatched within 2-3 business days after payment confirmation.
+
+📞 Need help? Contact us at: craftedbycrochet@gmail.com
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
