@@ -355,12 +355,17 @@ class CartModal {
         // Only set up event listeners once
         if (this.checkoutFormSetup) return;
         this.checkoutFormSetup = true;
+        console.log('Setting up checkout form event listeners');
 
         const checkoutForm = document.getElementById('checkoutForm');
         const closeBtn = document.getElementById('closeCheckoutModal');
         
+        console.log('Checkout form found:', !!checkoutForm);
+        console.log('Close button found:', !!closeBtn);
+        
         if (checkoutForm) {
             checkoutForm.addEventListener('submit', (e) => this.handleCheckoutSubmit(e));
+            console.log('Submit event listener added to checkout form');
         }
         
         if (closeBtn) {
@@ -377,31 +382,16 @@ class CartModal {
             });
         }
 
-        // Image preview functionality
-        const transferImage = document.getElementById('transferImage');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
-        
-        if (transferImage && imagePreview && previewImg) {
-            transferImage.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        previewImg.src = e.target.result;
-                        imagePreview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
     }
 
     async handleCheckoutSubmit(e) {
         e.preventDefault();
+        console.log('handleCheckoutSubmit called');
         
         // Prevent multiple submissions
         const placeOrderBtn = document.querySelector('#checkoutForm button[type="submit"]');
+        console.log('Place order button found:', !!placeOrderBtn);
+        
         if (placeOrderBtn && placeOrderBtn.disabled) {
             console.log('Order already being processed, ignoring duplicate submission');
             return;
@@ -409,6 +399,7 @@ class CartModal {
         
         if (placeOrderBtn) {
             placeOrderBtn.disabled = true;
+            console.log('Button disabled, processing order...');
         }
         
         // Get form data
@@ -416,13 +407,13 @@ class CartModal {
             name: document.getElementById('customerName').value,
             email: document.getElementById('customerEmail').value,
             phone: document.getElementById('customerPhone').value,
-            address: document.getElementById('shippingAddress').value,
-            transferImage: document.getElementById('transferImage').files[0]
+            address: document.getElementById('shippingAddress').value
         };
 
         // Validate form
         if (!formData.name || !formData.email || !formData.phone || !formData.address) {
             alert('Please fill in all required fields.');
+            if (placeOrderBtn) placeOrderBtn.disabled = false;
             return;
         }
 
