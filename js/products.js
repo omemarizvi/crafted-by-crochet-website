@@ -7,24 +7,38 @@ class ProductManager {
         this.loadProducts();
     }
 
-    // Load products from Firebase or fallback to localStorage
+    // Load products from Firebase, IndexedDB, or fallback to localStorage
     async loadProducts() {
-        if (this.useFirebase && window.firebaseService) {
+        if (this.useFirebase && window.firebaseService && window.firebaseService.initialized) {
             try {
                 console.log('Loading products from Firebase...');
                 this.products = await window.firebaseService.getProducts();
                 console.log('Products loaded from Firebase:', this.products.length);
                 // Also save to localStorage as backup
                 this.saveProducts();
+                return;
             } catch (error) {
                 console.error('Error loading products from Firebase:', error);
-                // Fallback to localStorage
-                this.products = this.loadProductsFromLocalStorage();
+                console.log('Falling back to alternative database...');
             }
-        } else {
-            console.log('Firebase not available, loading from localStorage...');
-            this.products = this.loadProductsFromLocalStorage();
         }
+        
+        // Try IndexedDB if available
+        if (window.simpleDBService && window.simpleDBService.initialized) {
+            try {
+                console.log('Loading products from IndexedDB...');
+                this.products = await window.simpleDBService.getProducts();
+                console.log('Products loaded from IndexedDB:', this.products.length);
+                return;
+            } catch (error) {
+                console.error('Error loading products from IndexedDB:', error);
+                console.log('Falling back to localStorage...');
+            }
+        }
+        
+        // Final fallback to localStorage
+        console.log('Loading products from localStorage...');
+        this.products = this.loadProductsFromLocalStorage();
     }
 
     // Load products from localStorage as fallback
@@ -70,26 +84,38 @@ class ProductManager {
 
     // Add new product
     async addProduct(productData) {
-        if (this.useFirebase && window.firebaseService) {
+        // Try Firebase first
+        if (this.useFirebase && window.firebaseService && window.firebaseService.initialized) {
             try {
                 console.log('Adding new product to Firebase:', productData);
-                
-                // Add product to Firebase (image will be converted to base64)
                 const newProduct = await window.firebaseService.addProduct(productData);
-                
                 this.products.push(newProduct);
                 this.saveProducts(); // Save to localStorage as backup
                 console.log('Product added successfully to Firebase:', newProduct);
                 return newProduct;
             } catch (error) {
                 console.error('Error adding product to Firebase:', error);
-                // Fallback to localStorage
-                return this.addProductToLocalStorage(productData);
+                console.log('Falling back to alternative database...');
             }
-        } else {
-            console.log('Firebase not available, adding to localStorage...');
-            return this.addProductToLocalStorage(productData);
         }
+        
+        // Try IndexedDB if available
+        if (window.simpleDBService && window.simpleDBService.initialized) {
+            try {
+                console.log('Adding new product to IndexedDB:', productData);
+                const newProduct = await window.simpleDBService.addProduct(productData);
+                this.products.push(newProduct);
+                console.log('Product added successfully to IndexedDB:', newProduct);
+                return newProduct;
+            } catch (error) {
+                console.error('Error adding product to IndexedDB:', error);
+                console.log('Falling back to localStorage...');
+            }
+        }
+        
+        // Final fallback to localStorage
+        console.log('Adding to localStorage...');
+        return this.addProductToLocalStorage(productData);
     }
 
     // Add product to localStorage as fallback

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test</title>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <div id="status">Testing...</div>
+    <div id="details"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_9k2e6vfL7vsDQKWCkkLQkgxZGHhq9AU",
+            authDomain: "crafted-by-crochet.firebaseapp.com",
+            projectId: "crafted-by-crochet",
+            storageBucket: "crafted-by-crochet.firebasestorage.app",
+            messagingSenderId: "95807589273",
+            appId: "1:95807589273:web:e5582bc1aeb000b986a108",
+            measurementId: "G-JD0XZWXH7X"
+        };
+
+        function updateStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.style.color = isError ? 'red' : 'green';
+            console.log(message);
+        }
+
+        function addDetail(message) {
+            const detailsDiv = document.getElementById('details');
+            detailsDiv.innerHTML += '<br>' + message;
+            console.log(message);
+        }
+
+        async function testFirebase() {
+            try {
+                updateStatus('Starting Firebase test...');
+                addDetail('1. Checking if Firebase SDK is loaded...');
+                
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase SDK not loaded');
+                }
+                addDetail('✅ Firebase SDK loaded');
+
+                addDetail('2. Initializing Firebase app...');
+                const app = firebase.initializeApp(firebaseConfig);
+                addDetail('✅ Firebase app initialized');
+
+                addDetail('3. Getting Firestore database...');
+                const db = firebase.firestore();
+                addDetail('✅ Firestore database obtained');
+
+                addDetail('4. Testing database connection...');
+                // Try to read from a test collection
+                const testCollection = db.collection('test');
+                const snapshot = await testCollection.limit(1).get();
+                addDetail('✅ Database connection successful');
+
+                addDetail('5. Testing write operation...');
+                const testDoc = await testCollection.add({
+                    test: true,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                addDetail('✅ Write operation successful');
+
+                updateStatus('🎉 Firebase is working perfectly!');
+                addDetail('Firebase is properly configured and accessible.');
+
+            } catch (error) {
+                updateStatus('❌ Firebase test failed: ' + error.message, true);
+                addDetail('Error details: ' + error.toString());
+                addDetail('Stack trace: ' + error.stack);
+                
+                // Check specific error types
+                if (error.code) {
+                    addDetail('Error code: ' + error.code);
+                }
+                if (error.message.includes('permission')) {
+                    addDetail('This looks like a Firestore security rules issue.');
+                    addDetail('Check Firestore security rules in Firebase Console.');
+                }
+            }
+        }
+
+        // Run test when page loads
+        window.addEventListener('load', testFirebase);
+    </script>
+</body>
+</html>

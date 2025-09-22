@@ -550,47 +550,57 @@ class AdminManager {
             console.log('=== CHECKING DATABASE CONTENTS ===');
             console.log('Firebase Service initialized:', window.firebaseService ? window.firebaseService.initialized : false);
             console.log('Firebase available:', typeof window.firebase !== 'undefined');
+            console.log('SimpleDB Service initialized:', window.simpleDBService ? window.simpleDBService.initialized : false);
+            console.log('IndexedDB supported:', 'indexedDB' in window);
             
+            let products = [];
+            let source = '';
+            
+            // Try Firebase first
             if (window.firebaseService && window.firebaseService.initialized) {
-                // Get products from Firebase
-                const products = await window.firebaseService.getProducts();
-                console.log('Total products in Firebase database:', products.length);
-                
-                products.forEach((product, index) => {
-                    console.log(`Product ${index + 1}:`, {
-                        id: product.id,
-                        name: product.name,
-                        category: product.category,
-                        price: product.price,
-                        stock: product.stock,
-                        createdAt: product.createdAt,
-                        updatedAt: product.updatedAt,
-                        hasImage: !!product.image
-                    });
-                });
-                
-                // Show in toast as well
-                this.showToast(`Firebase database contains ${products.length} products. Check console for details.`);
-                return products;
-            } else {
-                console.log('Firebase not available, checking localStorage...');
-                const products = window.productManager.getAllProducts();
-                console.log('Total products in localStorage:', products.length);
-                
-                products.forEach((product, index) => {
-                    console.log(`Product ${index + 1}:`, {
-                        id: product.id,
-                        name: product.name,
-                        category: product.category,
-                        price: product.price,
-                        stock: product.stock,
-                        hasImage: !!product.image
-                    });
-                });
-                
-                this.showToast(`LocalStorage contains ${products.length} products. Firebase not available. Check console for details.`);
-                return products;
+                try {
+                    products = await window.firebaseService.getProducts();
+                    source = 'Firebase';
+                    console.log(`✅ Using Firebase - ${products.length} products`);
+                } catch (error) {
+                    console.log('❌ Firebase failed:', error.message);
+                }
             }
+            
+            // Try IndexedDB if Firebase failed
+            if (products.length === 0 && window.simpleDBService && window.simpleDBService.initialized) {
+                try {
+                    products = await window.simpleDBService.getProducts();
+                    source = 'IndexedDB';
+                    console.log(`✅ Using IndexedDB - ${products.length} products`);
+                } catch (error) {
+                    console.log('❌ IndexedDB failed:', error.message);
+                }
+            }
+            
+            // Fallback to localStorage
+            if (products.length === 0) {
+                products = window.productManager.getAllProducts();
+                source = 'localStorage';
+                console.log(`⚠️ Using localStorage - ${products.length} products`);
+            }
+            
+            console.log(`Total products in ${source}:`, products.length);
+            
+            products.forEach((product, index) => {
+                console.log(`Product ${index + 1}:`, {
+                    id: product.id,
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    stock: product.stock,
+                    hasImage: !!product.image,
+                    source: source
+                });
+            });
+            
+            this.showToast(`${source} database contains ${products.length} products. Check console for details.`);
+            return products;
         } catch (error) {
             console.error('Error checking database:', error);
             this.showToast('Error checking database. Check console for details.');
