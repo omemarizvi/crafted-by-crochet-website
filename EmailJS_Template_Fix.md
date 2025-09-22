@@ -24,7 +24,7 @@ In the template editor, you need to set:
 
 **To Email:** `craftedbycrochet@gmail.com` (hardcoded)
 
-**Template Content:**
+**Template Content (Plain Text):**
 ```
 Subject: New Order - {{customer_name}} - {{order_time}}
 
@@ -43,16 +43,46 @@ TOTAL AMOUNT: {{total_amount}}
 
 ORDER TIME: {{order_time}}
 
-PAYMENT: Transfer screenshot attached
+PAYMENT: Transfer screenshot uploaded
 
 PAYMENT SCREENSHOT:
-{{payment_screenshot}}
+The customer has uploaded a payment screenshot. Please contact them directly to verify payment.
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
 
 Best regards,
 DIY Crafts Website
+```
+
+**Template Content (HTML - For Image Display):**
+```html
+<h2>New Order Received! 🛍️</h2>
+
+<h3>CUSTOMER DETAILS:</h3>
+<p><strong>Name:</strong> {{customer_name}}</p>
+<p><strong>Email:</strong> {{customer_email}}</p>
+<p><strong>Phone:</strong> {{customer_phone}}</p>
+<p><strong>Address:</strong> {{customer_address}}</p>
+
+<h3>ORDER DETAILS:</h3>
+<p>{{order_details}}</p>
+
+<h3>TOTAL AMOUNT:</h3>
+<p><strong>Rs {{total_amount}}</strong></p>
+
+<h3>ORDER TIME:</h3>
+<p>{{order_time}}</p>
+
+<h3>PAYMENT:</h3>
+<p>Transfer screenshot uploaded</p>
+
+<h3>PAYMENT SCREENSHOT:</h3>
+<img src="{{payment_screenshot}}" alt="Payment Screenshot" style="max-width: 500px; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+
+<hr>
+<p>Please contact the customer to confirm the order and arrange delivery.</p>
+<p>Best regards,<br>DIY Crafts Website</p>
 ```
 
 ### 4. Template Variables to Include:

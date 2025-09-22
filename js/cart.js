@@ -28,8 +28,8 @@ class ShoppingCart {
         
         console.log('Cart items after add:', this.items);
         this.saveCart();
-        this.updateCartDisplay();
-        this.showToast(`${product.name} added to cart!`);
+            this.updateCartDisplay();
+            this.showToast(`${product.name} added to cart!`);
     }
 
     // Remove item from cart
@@ -39,10 +39,10 @@ class ShoppingCart {
             const removedItem = this.items.splice(index, 1)[0];
             this.saveCart();
             this.updateCartDisplay();
-            if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
-                window.cartModal.updateCartDisplay();
-            }
-            this.showToast(`${removedItem.name} removed from cart!`);
+                if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
+                    window.cartModal.updateCartDisplay();
+                }
+                this.showToast(`${removedItem.name} removed from cart!`);
             return removedItem;
         }
         return null;
@@ -57,10 +57,10 @@ class ShoppingCart {
             } else {
                 item.quantity = quantity;
                 this.saveCart();
-                this.updateCartDisplay();
-                if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
-                    window.cartModal.updateCartDisplay();
-                }
+                    this.updateCartDisplay();
+                    if (window.cartModal && window.cartModal.modal && window.cartModal.modal.style.display === 'block') {
+                        window.cartModal.updateCartDisplay();
+                    }
             }
         }
     }
@@ -89,7 +89,7 @@ class ShoppingCart {
             localStorage.setItem('diyCraftsCart', JSON.stringify(this.items));
             console.log('Cart saved to localStorage');
         } catch (error) {
-            console.error('Error saving cart:', error);
+                console.error('Error saving cart:', error);
         }
     }
 
@@ -114,7 +114,7 @@ class ShoppingCart {
     updateCartDisplay() {
         const cartCountElement = document.getElementById('cartCount');
         if (cartCountElement) {
-            const totalItems = this.getTotalItems();
+        const totalItems = this.getTotalItems();
             cartCountElement.textContent = totalItems;
             cartCountElement.style.display = totalItems > 0 ? 'block' : 'none';
             console.log('Updating cart display - total items:', totalItems, 'cart count element:', !!cartCountElement);
@@ -150,7 +150,7 @@ class ShoppingCart {
                     toast.parentNode.removeChild(toast);
                 }
             }, 300);
-        }, 3000);
+            }, 3000);
     }
 }
 
@@ -380,11 +380,11 @@ class CartModal {
         
         if (transferImage && imagePreview && previewImg) {
             transferImage.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        previewImg.src = e.target.result;
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                    previewImg.src = e.target.result;
                         imagePreview.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
@@ -483,7 +483,7 @@ PAYMENT: Transfer screenshot attached`;
                 emailContent += `
 
 PAYMENT SCREENSHOT:
-${orderData.paymentScreenshot}
+The customer has uploaded a payment screenshot. Please check the email attachment or contact the customer directly to verify payment.
 
 ---
 Please contact the customer to confirm the order and arrange delivery.
@@ -544,7 +544,7 @@ DIY Crafts Website`;
             alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
 
             if (checkoutBtn) checkoutBtn.textContent = originalText;
-
+            
         } catch (error) {
             console.error('Error sending order email:', error);
             alert('Order submitted, but there was an issue sending the email. Please contact craftedbycrochet@gmail.com directly.');
@@ -566,5 +566,5 @@ window.cartModal = new CartModal();
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Cart system initialized');
-    window.cartModal.init();
+        window.cartModal.init();
 });
