@@ -630,12 +630,12 @@ class AdminManager {
             
             // First, try to initialize Firebase configuration
             if (typeof window.initializeFirebase === 'function') {
-                const result = window.initializeFirebase();
+                const result = await window.initializeFirebase();
                 if (result) {
                     console.log('Firebase configuration initialized successfully');
                     
                     // Wait a moment for the global object to be set
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await new Promise(resolve => setTimeout(resolve, 200));
                     
                     // Then reinitialize the Firebase Service
                     if (window.firebaseService) {

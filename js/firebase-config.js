@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (this will be called after Firebase scripts are loaded)
-function initializeFirebase() {
+async function initializeFirebase() {
     try {
         console.log('=== FIREBASE INITIALIZATION ===');
         console.log('Attempting to initialize Firebase...');
@@ -48,31 +48,41 @@ function initializeFirebase() {
             console.log('Initializing Firebase for the first time...');
             console.log('Config:', firebaseConfig);
             
-            const app = firebase.initializeApp(firebaseConfig);
-            console.log('Firebase app initialized:', app);
-            
-            // Initialize Firestore
-            const db = firebase.firestore();
-            console.log('Firestore database initialized:', db);
-            
-            // Initialize other services
-            const auth = firebase.auth();
-            const storage = firebase.storage();
-            
-            // Make Firebase available globally
-            window.firebase = {
-                app: app,
-                db: db,
-                auth: auth,
-                storage: storage
-            };
-            
-            console.log('Firebase initialized successfully!');
-            console.log('window.firebase object created:', !!window.firebase);
-            console.log('window.firebase.db exists:', !!window.firebase.db);
-            console.log('window.firebase.db type:', typeof window.firebase.db);
-            console.log('Firebase app name:', window.firebase.app.name);
-            return true;
+            try {
+                const app = firebase.initializeApp(firebaseConfig);
+                console.log('Firebase app initialized:', app);
+                console.log('App name:', app.name);
+                
+                // Wait a moment for the app to be fully initialized
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Initialize Firestore
+                const db = firebase.firestore();
+                console.log('Firestore database initialized:', db);
+                
+                // Initialize other services
+                const auth = firebase.auth();
+                const storage = firebase.storage();
+                
+                // Make Firebase available globally
+                window.firebase = {
+                    app: app,
+                    db: db,
+                    auth: auth,
+                    storage: storage
+                };
+                
+                console.log('Firebase initialized successfully!');
+                console.log('window.firebase object created:', !!window.firebase);
+                console.log('window.firebase.db exists:', !!window.firebase.db);
+                console.log('window.firebase.db type:', typeof window.firebase.db);
+                console.log('Firebase app name:', window.firebase.app.name);
+                console.log('Firebase apps count:', firebase.apps.length);
+                return true;
+            } catch (initError) {
+                console.error('Error during Firebase app initialization:', initError);
+                throw initError;
+            }
         }
     } catch (error) {
         console.error('Error initializing Firebase:', error);
@@ -83,9 +93,11 @@ function initializeFirebase() {
 }
 
 // Auto-initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Wait a bit for Firebase scripts to load
-    setTimeout(initializeFirebase, 100);
+    setTimeout(async () => {
+        await initializeFirebase();
+    }, 100);
 });
 
 // Also make the function globally available
