@@ -734,32 +734,6 @@ to {
     color: #8B5A8C;
 }
 
-/* Embedded Payment Form Styles */
-.embedded-payment-form {
-    background: #fff;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
-    border: 1px solid #ddd;
-}
-
-.embedded-payment-form h3 {
-    color: #8B5A8C;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.embedded-payment-form iframe {
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-    .embedded-payment-form iframe {
-        height: 700px; /* Slightly taller on mobile for better usability */
-    }
-}
 
 .total-amount {
     font-size: 1.2rem;

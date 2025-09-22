@@ -497,11 +497,11 @@ PAYMENT INSTRUCTIONS FOR CUSTOMER:
    - Amount: Rs ${orderData.total.toFixed(2)}
    - Reference: Order-${orderData.orderId}
 
-2. UPLOAD PAYMENT PROOF:
-   📎 You can upload your payment screenshot directly in the checkout form below
-   - Use the embedded form on the website
-   - Enter Order ID: ${orderData.orderId}
-   - Enter your email: ${orderData.customer.email}
+2. PAYMENT CONFIRMATION:
+   📧 After making the transfer, reply to this email with:
+   - Your payment screenshot
+   - Bank transfer reference number
+   - Any additional notes
 
 3. ORDER DISPATCH:
    ⏰ Your order will be dispatched within 2-3 business days after payment confirmation.
