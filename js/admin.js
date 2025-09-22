@@ -543,6 +543,59 @@ class AdminManager {
             }, 3000);
         }
     }
+
+    // Debug function to check database contents
+    async checkDatabaseContents() {
+        try {
+            console.log('=== CHECKING DATABASE CONTENTS ===');
+            console.log('Firebase Service initialized:', window.firebaseService ? window.firebaseService.initialized : false);
+            console.log('Firebase available:', typeof window.firebase !== 'undefined');
+            
+            if (window.firebaseService && window.firebaseService.initialized) {
+                // Get products from Firebase
+                const products = await window.firebaseService.getProducts();
+                console.log('Total products in Firebase database:', products.length);
+                
+                products.forEach((product, index) => {
+                    console.log(`Product ${index + 1}:`, {
+                        id: product.id,
+                        name: product.name,
+                        category: product.category,
+                        price: product.price,
+                        stock: product.stock,
+                        createdAt: product.createdAt,
+                        updatedAt: product.updatedAt,
+                        hasImage: !!product.image
+                    });
+                });
+                
+                // Show in toast as well
+                this.showToast(`Firebase database contains ${products.length} products. Check console for details.`);
+                return products;
+            } else {
+                console.log('Firebase not available, checking localStorage...');
+                const products = window.productManager.getAllProducts();
+                console.log('Total products in localStorage:', products.length);
+                
+                products.forEach((product, index) => {
+                    console.log(`Product ${index + 1}:`, {
+                        id: product.id,
+                        name: product.name,
+                        category: product.category,
+                        price: product.price,
+                        stock: product.stock,
+                        hasImage: !!product.image
+                    });
+                });
+                
+                this.showToast(`LocalStorage contains ${products.length} products. Firebase not available. Check console for details.`);
+                return products;
+            }
+        } catch (error) {
+            console.error('Error checking database:', error);
+            this.showToast('Error checking database. Check console for details.');
+        }
+    }
 }
 
 // Create global admin instance

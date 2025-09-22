@@ -1,23 +1,35 @@
 // Firebase Service for Product Management
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  orderBy,
-  where
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-// Removed Firebase Storage imports - using Firestore for images instead
+// Using traditional Firebase SDK (not modular)
 
 class FirebaseService {
     constructor() {
-        this.db = window.firebase.db;
+        this.db = null;
         this.productsCollection = 'products';
         this.cartsCollection = 'carts';
         this.sessionId = this.getOrCreateSessionId();
+        this.initialized = false;
+        this.init();
+    }
+
+    async init() {
+        // Wait for Firebase to be initialized
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds max wait
+        
+        while (attempts < maxAttempts && !this.initialized) {
+            if (window.firebase && window.firebase.db) {
+                this.db = window.firebase.db;
+                this.initialized = true;
+                console.log('Firebase Service initialized successfully!');
+                break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
+        if (!this.initialized) {
+            console.error('Firebase Service failed to initialize after 5 seconds');
+        }
     }
 
     // Generate or retrieve session ID for cart persistence
@@ -49,6 +61,10 @@ class FirebaseService {
   // Add new product
   async addProduct(productData) {
     try {
+      if (!this.initialized || !this.db) {
+        throw new Error('Firebase not initialized');
+      }
+      
       console.log('Adding product to Firebase:', productData);
       
       // Convert image file to base64 if provided
@@ -57,8 +73,8 @@ class FirebaseService {
         imageData = await this.convertImageToBase64(productData.imageFile);
       }
       
-      // Add product to Firestore
-      const docRef = await addDoc(collection(this.db, this.productsCollection), {
+      // Add product to Firestore using traditional SDK
+      const docRef = await this.db.collection(this.productsCollection).add({
         name: productData.name,
         category: productData.category,
         price: productData.price,
@@ -84,10 +100,15 @@ class FirebaseService {
   // Get all products
   async getProducts() {
     try {
+      if (!this.initialized || !this.db) {
+        throw new Error('Firebase not initialized');
+      }
+      
       console.log('Loading products from Firebase...');
       
-      const q = query(collection(this.db, this.productsCollection), orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await this.db.collection(this.productsCollection)
+        .orderBy('createdAt', 'desc')
+        .get();
       
       const products = [];
       querySnapshot.forEach((doc) => {
@@ -116,8 +137,8 @@ class FirebaseService {
         imageData = await this.convertImageToBase64(productData.imageFile);
       }
       
-      const productRef = doc(this.db, this.productsCollection, productId);
-      await updateDoc(productRef, {
+      const productRef = this.db.collection(this.productsCollection).doc(productId);
+      await productRef.update({
         ...productData,
         image: imageData,
         updatedAt: new Date().toISOString()
@@ -136,7 +157,7 @@ class FirebaseService {
     try {
       console.log('Deleting product from Firebase:', productId);
       
-      await deleteDoc(doc(this.db, this.productsCollection, productId));
+      await this.db.collection(this.productsCollection).doc(productId).delete();
       
       console.log('Product deleted successfully');
       return true;
@@ -162,9 +183,9 @@ class FirebaseService {
     try {
       console.log('Loading cart from Firebase for session:', this.sessionId);
       
-      const q = query(collection(this.db, this.cartsCollection), 
-                     where('sessionId', '==', this.sessionId));
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await this.db.collection(this.cartsCollection)
+        .where('sessionId', '==', this.sessionId)
+        .get();
       
       if (!querySnapshot.empty) {
         const cartDoc = querySnapshot.docs[0];
@@ -186,9 +207,9 @@ class FirebaseService {
     try {
       console.log('Saving cart to Firebase:', cartItems);
       
-      const q = query(collection(this.db, this.cartsCollection), 
-                     where('sessionId', '==', this.sessionId));
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await this.db.collection(this.cartsCollection)
+        .where('sessionId', '==', this.sessionId)
+        .get();
       
       const cartData = {
         sessionId: this.sessionId,
@@ -199,11 +220,11 @@ class FirebaseService {
       if (!querySnapshot.empty) {
         // Update existing cart
         const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(this.db, this.cartsCollection, cartDoc.id), cartData);
+        await this.db.collection(this.cartsCollection).doc(cartDoc.id).update(cartData);
         console.log('Cart updated in Firebase');
       } else {
         // Create new cart
-        await addDoc(collection(this.db, this.cartsCollection), cartData);
+        await this.db.collection(this.cartsCollection).add(cartData);
         console.log('Cart created in Firebase');
       }
       
@@ -220,13 +241,13 @@ class FirebaseService {
     try {
       console.log('Clearing cart from Firebase');
       
-      const q = query(collection(this.db, this.cartsCollection), 
-                     where('sessionId', '==', this.sessionId));
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await this.db.collection(this.cartsCollection)
+        .where('sessionId', '==', this.sessionId)
+        .get();
       
       if (!querySnapshot.empty) {
         const cartDoc = querySnapshot.docs[0];
-        await deleteDoc(doc(this.db, this.cartsCollection, cartDoc.id));
+        await this.db.collection(this.cartsCollection).doc(cartDoc.id).delete();
         console.log('Cart cleared from Firebase');
       }
       
