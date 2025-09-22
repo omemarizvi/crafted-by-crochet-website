@@ -1,79 +1,14 @@
 // Products Data and Management
 class ProductManager {
     constructor() {
-        this.products = [];
         this.categories = ['all', 'flowers', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
-        this.useFirebase = true; // Set to true when Firebase is configured
         
-        // Clear old products and initialize with default products
-        localStorage.removeItem('diyCraftsProducts'); // Clear old data
+        // Initialize with default products only
         this.products = this.getDefaultProducts();
         console.log('Products initialized with defaults:', this.products.length);
         console.log('Default products:', this.products);
-        
-        // Save default products to localStorage immediately
-        this.saveProducts();
-        
-        // Then try to load from database (but keep defaults if nothing found)
-        this.loadProducts();
     }
 
-    // Load products from Firebase, IndexedDB, or fallback to localStorage
-    async loadProducts() {
-        if (this.useFirebase && window.firebaseService && window.firebaseService.initialized) {
-            try {
-                console.log('Loading products from Firebase...');
-                this.products = await window.firebaseService.getProducts();
-                console.log('Products loaded from Firebase:', this.products.length);
-                // Also save to localStorage as backup
-                this.saveProducts();
-                return;
-            } catch (error) {
-                console.error('Error loading products from Firebase:', error);
-                console.log('Falling back to alternative database...');
-            }
-        }
-        
-        // Try IndexedDB if available
-        if (window.simpleDBService && window.simpleDBService.initialized) {
-            try {
-                console.log('Loading products from IndexedDB...');
-                this.products = await window.simpleDBService.getProducts();
-                console.log('Products loaded from IndexedDB:', this.products.length);
-                return;
-            } catch (error) {
-                console.error('Error loading products from IndexedDB:', error);
-                console.log('Falling back to localStorage...');
-            }
-        }
-        
-        // Final fallback to localStorage
-        console.log('Loading products from localStorage...');
-        const storedProducts = this.loadProductsFromLocalStorage();
-        
-        // If no products found anywhere, keep default products
-        if (storedProducts.length === 0) {
-            console.log('No products found in storage, keeping default products');
-            // Save default products to localStorage
-            this.saveProducts();
-        } else {
-            console.log('Found products in localStorage, replacing defaults');
-            console.log('Stored products:', storedProducts);
-            this.products = storedProducts;
-        }
-        
-        console.log('Final products array:', this.products.length, 'products');
-        console.log('Final products:', this.products);
-    }
-
-    // Load products from localStorage as fallback
-    loadProductsFromLocalStorage() {
-        const stored = localStorage.getItem('diyCraftsProducts');
-        if (stored) {
-            return JSON.parse(stored);
-        }
-        return [];
-    }
 
     // Get default products
     getDefaultProducts() {

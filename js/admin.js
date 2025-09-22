@@ -96,9 +96,8 @@ class AdminManager {
         if (adminDashboard) adminDashboard.style.display = 'none';
     }
 
-    async loadDashboard() {
-        // Ensure products are loaded from Firebase database
-        await window.productManager.loadProducts();
+    loadDashboard() {
+        // Products are already loaded in constructor
         this.updateAnalytics();
         this.loadItems();
         this.createTestOrderIfNeeded();

@@ -63,9 +63,8 @@ class HomePageManager {
         }
     }
 
-    async loadProducts() {
-        // Wait for products to load from database
-        await window.productManager.loadProducts();
+    loadProducts() {
+        // Get products directly from product manager
         this.products = window.productManager.getAllProducts();
         console.log('HomePage loaded products:', this.products.length);
         this.filterProducts(); // Use filterProducts to ensure proper filtering
