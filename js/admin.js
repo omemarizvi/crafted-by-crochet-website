@@ -176,7 +176,6 @@ class AdminManager {
                     <div class="item-category">${this.formatCategory(product.category)}</div>
                     <div class="item-price">Rs ${product.price.toFixed(2)}</div>
                     <div class="item-stock ${stockClass}">${stockText}</div>
-                    <div class="item-description">${product.description}</div>
                     <div class="item-actions">
                         <button class="btn btn-primary" onclick="adminManager.editItem(${product.id})">Edit</button>
                         <button class="btn btn-secondary" onclick="adminManager.deleteItem(${product.id})">Delete</button>
@@ -226,7 +225,6 @@ class AdminManager {
         document.getElementById('itemCategory').value = product.category;
         document.getElementById('itemPrice').value = product.price;
         document.getElementById('itemStock').value = product.stock;
-        document.getElementById('itemDescription').value = product.description;
         
         // Handle image display for editing
         if (product.image) {
@@ -300,9 +298,8 @@ class AdminManager {
         const category = document.getElementById('itemCategory').value;
         const price = document.getElementById('itemPrice').value;
         const stock = document.getElementById('itemStock').value;
-        const description = document.getElementById('itemDescription').value.trim();
         
-        if (!name || !category || !price || !stock || !description) {
+        if (!name || !category || !price || !stock) {
             this.showToast('Please fill in all required fields');
             return;
         }
@@ -317,7 +314,6 @@ class AdminManager {
             category: category,
             price: parseFloat(price),
             stock: parseInt(stock),
-            description: description,
             image: imageData,
             imageFile: imageFile // Pass the file for Firebase upload
         };

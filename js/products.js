@@ -71,57 +71,27 @@ class ProductManager {
         return [
             {
                 id: 1,
-                name: 'Crocheted Rose',
+                name: 'Rose',
                 category: 'flowers',
-                price: 1500,
+                price: 1000,
                 stock: 0, // Made to order
-                description: 'Beautiful hand-crocheted red rose, perfect for special occasions or home decoration.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmY2NjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5Dcm9jaGV0ZWQgUm9zZTwvdGV4dD48L3N2Zz4='
+                image: 'images/products/rose.jpg'
             },
             {
                 id: 2,
                 name: 'Sunflower Keychain',
                 category: 'keychains',
-                price: 800,
+                price: 500,
                 stock: 0,
-                description: 'Cheerful yellow sunflower keychain to brighten your day.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZmYwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5TdW5mbG93ZXIgS2V5Y2hhaW48L3RleHQ+PC9zdmc+'
+                image: 'images/products/sunflower-keychain.jpg'
             },
             {
                 id: 3,
-                name: 'Crocheted Headband',
-                category: 'accessories',
-                price: 1200,
-                stock: 0,
-                description: 'Stylish crocheted headband perfect for any outfit.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5Dcm9jaGV0ZWQgSGVhZGJhbmQ8L3RleHQ+PC9zdmc+'
-            },
-            {
-                id: 4,
-                name: 'Teddy Bear',
-                category: 'stuffed-toys',
-                price: 2500,
-                stock: 0,
-                description: 'Soft and cuddly crocheted teddy bear, perfect companion for children.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Jyb3duIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNHB4Ij5UZWRkeSBCZWFyPC90ZXh0Pjwvc3ZnPg=='
-            },
-            {
-                id: 5,
-                name: 'Flower Earrings',
-                category: 'jewellery',
-                price: 1000,
-                stock: 0,
-                description: 'Delicate crocheted flower earrings, handmade with love.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmY2NmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5GbG93ZXIgRWFycmluZ3M8L3RleHQ+PC9zdmc+'
-            },
-            {
-                id: 6,
-                name: 'Daisy Bouquet',
+                name: 'Sunflower Pot',
                 category: 'flowers',
-                price: 2000,
+                price: 1500,
                 stock: 0,
-                description: 'Beautiful bouquet of white and yellow daisies, perfect for any celebration.',
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZmZmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzMzMyIgZm9udC1zaXplPSIxNHB4Ij5EYWlzeSBCb3VxdWV0PC90ZXh0Pjwvc3ZnPg=='
+                image: 'images/products/sunflower-pot.jpg'
             }
         ];
     }
