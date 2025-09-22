@@ -49,14 +49,25 @@ async function initializeFirebase() {
             console.log('Config:', firebaseConfig);
             
             try {
+                console.log('About to call firebase.initializeApp...');
+                console.log('Firebase object:', typeof firebase);
+                console.log('Firebase.initializeApp:', typeof firebase.initializeApp);
+                console.log('Firebase config:', firebaseConfig);
+                
                 const app = firebase.initializeApp(firebaseConfig);
-                console.log('Firebase app initialized:', app);
+                console.log('Firebase app initialized successfully:', app);
                 console.log('App name:', app.name);
+                console.log('App options:', app.options);
+                
+                // Verify the app was created
+                console.log('Firebase apps after initialization:', firebase.apps.length);
+                console.log('Firebase apps:', firebase.apps);
                 
                 // Wait a moment for the app to be fully initialized
                 await new Promise(resolve => setTimeout(resolve, 100));
                 
                 // Initialize Firestore
+                console.log('Initializing Firestore...');
                 const db = firebase.firestore();
                 console.log('Firestore database initialized:', db);
                 
@@ -81,6 +92,10 @@ async function initializeFirebase() {
                 return true;
             } catch (initError) {
                 console.error('Error during Firebase app initialization:', initError);
+                console.error('Error name:', initError.name);
+                console.error('Error message:', initError.message);
+                console.error('Error code:', initError.code);
+                console.error('Error stack:', initError.stack);
                 throw initError;
             }
         }

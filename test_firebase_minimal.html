@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Firebase Test</title>
+</head>
+<body>
+    <h1>Minimal Firebase Test</h1>
+    <div id="status">Testing...</div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        function updateStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.style.color = isError ? 'red' : 'green';
+            console.log(message);
+        }
+
+        async function testMinimalFirebase() {
+            try {
+                updateStatus('Starting minimal Firebase test...');
+                
+                // Test 1: Check if Firebase SDK is loaded
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase SDK not loaded');
+                }
+                updateStatus('✅ Firebase SDK loaded');
+
+                // Test 2: Check Firebase functions
+                console.log('Firebase object:', typeof firebase);
+                console.log('Firebase.initializeApp:', typeof firebase.initializeApp);
+                console.log('Firebase.apps:', firebase.apps);
+                
+                if (typeof firebase.initializeApp !== 'function') {
+                    throw new Error('firebase.initializeApp is not a function');
+                }
+                updateStatus('✅ Firebase functions available');
+
+                // Test 3: Try to initialize Firebase
+                const config = {
+                    apiKey: "AIzaSyA_9k2e6vfL7vsDQKWCkkLQkgxZGHhq9AU",
+                    authDomain: "crafted-by-crochet.firebaseapp.com",
+                    projectId: "crafted-by-crochet",
+                    storageBucket: "crafted-by-crochet.firebasestorage.app",
+                    messagingSenderId: "95807589273",
+                    appId: "1:95807589273:web:e5582bc1aeb000b986a108",
+                    measurementId: "G-JD0XZWXH7X"
+                };
+
+                updateStatus('Initializing Firebase app...');
+                const app = firebase.initializeApp(config);
+                console.log('App initialized:', app);
+                console.log('App name:', app.name);
+                console.log('Apps count after init:', firebase.apps.length);
+                
+                updateStatus('✅ Firebase app initialized');
+
+                // Test 4: Try to get Firestore
+                updateStatus('Getting Firestore...');
+                const db = firebase.firestore();
+                console.log('Firestore:', db);
+                
+                updateStatus('🎉 All tests passed! Firebase is working correctly.');
+
+            } catch (error) {
+                updateStatus('❌ Test failed: ' + error.message, true);
+                console.error('Error details:', error);
+            }
+        }
+
+        // Run test when page loads
+        window.addEventListener('load', testMinimalFirebase);
+    </script>
+</body>
+</html>
