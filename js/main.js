@@ -28,9 +28,6 @@ class HomePageManager {
             cartBtn.addEventListener('click', () => this.openCart());
         }
 
-        // Product image modal
-        console.log('About to initialize product image modal...');
-        this.initProductImageModal();
 
         // Custom Order button
         const customOrderBtn = document.getElementById('customOrderBtn');
@@ -154,48 +151,8 @@ class HomePageManager {
         console.log('Found product cards:', productCards.length);
         
         productCards.forEach((card, index) => {
-            // Handle clicking on product image - add listener to both container and img
-            const productImage = card.querySelector('.product-image');
-            const imgElement = card.querySelector('.product-image img');
-            
-            if (productImage && imgElement) {
-                console.log(`Adding image click listener to card ${index}`);
-                
-                // Add listener to the img element directly
-                imgElement.addEventListener('click', (e) => {
-                    console.log('IMG ELEMENT CLICKED!');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const productName = productImage.dataset.productName;
-                    const productImageSrc = productImage.dataset.productImage;
-                    console.log('Product data:', { productName, productImageSrc });
-                    this.openProductImageModal(productName, productImageSrc);
-                    return false;
-                });
-                
-                // Also add listener to the container as backup
-                productImage.addEventListener('click', (e) => {
-                    console.log('PRODUCT IMAGE CONTAINER CLICKED!');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const productName = productImage.dataset.productName;
-                    const productImageSrc = productImage.dataset.productImage;
-                    console.log('Product data:', { productName, productImageSrc });
-                    this.openProductImageModal(productName, productImageSrc);
-                    return false;
-                });
-            } else {
-                console.log(`No product image found for card ${index}`, { productImage: !!productImage, imgElement: !!imgElement });
-            }
-            
-            // Handle clicking on the rest of the card (but not the image)
+            // Handle clicking on the entire product card
             card.addEventListener('click', (e) => {
-                // Check if the click was on the image container or img
-                if (e.target.closest('.product-image') || e.target.tagName === 'IMG') {
-                    console.log('Click was on image, ignoring card click');
-                    return;
-                }
-                
                 e.preventDefault();
                 const productId = parseInt(card.dataset.productId);
                 console.log('Product card clicked, ID:', productId);
@@ -209,7 +166,7 @@ class HomePageManager {
         
         return `
             <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image" data-product-name="${product.name}" data-product-image="${product.image}">
+                <div class="product-image">
                     <img src="${product.image}" alt="${product.name}">
                 </div>
                 <div class="product-info">
@@ -402,58 +359,6 @@ class HomePageManager {
         }
     }
 
-    // Initialize product image modal
-    initProductImageModal() {
-        console.log('Initializing product image modal...');
-        const closeBtn = document.getElementById('closeProductImageModal');
-        const modal = document.getElementById('productImageModal');
-        
-        console.log('Modal elements found:', { closeBtn: !!closeBtn, modal: !!modal });
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.closeProductImageModal());
-            console.log('Close button listener added');
-        }
-        
-        if (modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.closeProductImageModal();
-                }
-            });
-            console.log('Modal click listener added');
-        }
-    }
-
-    // Open product image modal
-    openProductImageModal(productName, imageSrc) {
-        console.log('Opening image modal for:', productName, imageSrc);
-        const modal = document.getElementById('productImageModal');
-        const title = document.getElementById('productImageTitle');
-        const img = document.getElementById('productImageFull');
-        
-        console.log('Modal elements:', { modal: !!modal, title: !!title, img: !!img });
-        
-        if (modal && title && img) {
-            title.textContent = productName;
-            img.src = imageSrc;
-            img.alt = `${productName} - Full Size`;
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            console.log('Image modal opened successfully');
-        } else {
-            console.error('Could not find modal elements');
-        }
-    }
-
-    // Close product image modal
-    closeProductImageModal() {
-        const modal = document.getElementById('productImageModal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    }
 }
 
 // Product Modal Management

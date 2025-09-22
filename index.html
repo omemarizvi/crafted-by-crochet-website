@@ -61,16 +61,16 @@
 
     <!-- Product Detail Modal -->
     <div class="modal" id="productModal">
-        <div class="modal-content">
+        <div class="modal-content product-modal-content">
             <span class="close" id="closeModal">&times;</span>
             <div class="modal-body">
-                <div class="product-image">
+                <div class="product-modal-image">
                     <img id="modalImage" src="" alt="">
                 </div>
                 <div class="product-details">
-                    <h2 id="modalTitle"></h2>
-                    <div class="product-price" id="modalPrice"></div>
-                    <div class="product-category" id="modalCategory"></div>
+                    <h2 id="modalTitle" class="product-modal-title"></h2>
+                    <div class="product-price product-modal-price" id="modalPrice"></div>
+                    <div class="product-category product-modal-category" id="modalCategory"></div>
                     <div class="product-description" id="modalDescription"></div>
                     <div class="quantity-selector">
                         <label for="quantityInput">Quantity:</label>
@@ -114,20 +114,6 @@
         </div>
     </div>
 
-    <!-- Product Image Modal -->
-    <div class="modal" id="productImageModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="productImageTitle">Product Image</h2>
-                <button class="close-btn" id="closeProductImageModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="product-image-full">
-                    <img id="productImageFull" src="" alt="Product Image">
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Checkout Modal -->
     <div class="modal" id="checkoutModal">

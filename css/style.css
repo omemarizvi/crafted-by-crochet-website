@@ -427,21 +427,86 @@ body {
     backdrop-filter: blur(5px);
 }
 
-/* Product Image Modal Styles */
-.product-image-full {
+/* Enhanced Product Modal Styles */
+.product-modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.product-modal-image {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    max-height: 70vh;
-    overflow-y: auto;
+    min-height: 400px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
 }
 
-.product-image-full img {
+.product-modal-image img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
     object-fit: contain;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.product-modal-title {
+    font-size: 1.8rem !important;
+    margin-bottom: 1rem;
+    color: #2C1810;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.product-modal-price {
+    font-size: 1.4rem !important;
+    margin-bottom: 0.8rem;
+}
+
+.product-modal-category {
+    font-size: 1rem !important;
+    margin-bottom: 1.5rem;
+}
+
+/* Mobile responsive for product modal */
+@media (max-width: 768px) {
+    .product-modal-content {
+        flex-direction: column;
+        width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .product-modal-image {
+        min-height: 300px;
+        max-height: 50vh;
+    }
+    
+    .product-modal-image img {
+        max-height: 40vh;
+    }
+    
+    .product-modal-title {
+        font-size: 1.5rem !important;
+    }
+    
+    .product-modal-price {
+        font-size: 1.2rem !important;
+    }
 }
 
 .modal-content {
