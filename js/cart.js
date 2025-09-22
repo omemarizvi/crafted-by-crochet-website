@@ -613,28 +613,27 @@ class CheckoutModal {
         this.submitOrder(formData);
     }
 
-    submitOrder(orderData) {
-        // Generate unique order ID
-        const orderId = Date.now();
-        orderData.id = orderId;
-        
-        // Save order to localStorage for analytics
-        this.saveOrderToStorage(orderData);
-        
-        // Send order to Google Sheets
-        this.sendOrderToGoogleSheets(orderData);
-        
-        // Show success message
-        window.shoppingCart.showToast('Order placed successfully! We will contact you soon at ' + orderData.email);
-        
-        // Clear the cart
-        window.shoppingCart.clearCart();
-        
-        // Close the checkout modal
-        this.close();
-        
-        // Notify admin that new order was placed
-        window.dispatchEvent(new CustomEvent('newOrderPlaced'));
+    async submitOrder(orderData) {
+        try {
+            // Use the new order service to create the order
+            const order = await window.orderService.createOrder(orderData);
+            
+            // Show success message
+            window.shoppingCart.showToast(`Order placed successfully! Order ID: ${order.id}. We will contact you soon at ${orderData.customerEmail}`);
+            
+            // Clear the cart
+            window.shoppingCart.clearCart();
+            
+            // Close the checkout modal
+            this.close();
+            
+            // Notify admin that new order was placed
+            window.dispatchEvent(new CustomEvent('newOrderPlaced'));
+            
+        } catch (error) {
+            console.error('Error submitting order:', error);
+            window.shoppingCart.showToast('Error placing order. Please try again or contact us directly.');
+        }
     }
 
     sendOrderToEmail(orderData) {
