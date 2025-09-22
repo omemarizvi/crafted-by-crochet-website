@@ -612,11 +612,30 @@ class AdminManager {
         try {
             console.log('=== MANUAL FIREBASE INITIALIZATION ===');
             
+            // Check if Firebase is already working
+            if (window.firebase && window.firebase.db) {
+                console.log('Firebase already working, just reinitializing service...');
+                if (window.firebaseService) {
+                    const serviceResult = await window.firebaseService.reinitialize();
+                    if (serviceResult) {
+                        this.showToast('Firebase service reinitialized successfully!');
+                        console.log('Firebase Service reinitialized successfully');
+                    } else {
+                        this.showToast('Firebase service reinitialization failed.');
+                        console.log('Firebase Service reinitialization failed');
+                    }
+                }
+                return;
+            }
+            
             // First, try to initialize Firebase configuration
-            if (typeof initializeFirebase === 'function') {
-                const result = initializeFirebase();
+            if (typeof window.initializeFirebase === 'function') {
+                const result = window.initializeFirebase();
                 if (result) {
                     console.log('Firebase configuration initialized successfully');
+                    
+                    // Wait a moment for the global object to be set
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     
                     // Then reinitialize the Firebase Service
                     if (window.firebaseService) {
