@@ -596,6 +596,30 @@ class AdminManager {
             this.showToast('Error checking database. Check console for details.');
         }
     }
+
+    // Manual Firebase initialization function
+    initializeFirebase() {
+        try {
+            console.log('=== MANUAL FIREBASE INITIALIZATION ===');
+            
+            if (typeof initializeFirebase === 'function') {
+                const result = initializeFirebase();
+                if (result) {
+                    this.showToast('Firebase initialized successfully!');
+                    console.log('Firebase initialization successful');
+                } else {
+                    this.showToast('Firebase initialization failed. Check console for details.');
+                    console.log('Firebase initialization failed');
+                }
+            } else {
+                this.showToast('Firebase initialization function not found.');
+                console.error('initializeFirebase function not available');
+            }
+        } catch (error) {
+            console.error('Error during manual Firebase initialization:', error);
+            this.showToast('Error initializing Firebase. Check console for details.');
+        }
+    }
 }
 
 // Create global admin instance

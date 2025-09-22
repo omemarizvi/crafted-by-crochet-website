@@ -15,28 +15,44 @@ const firebaseConfig = {
 // Initialize Firebase (this will be called after Firebase scripts are loaded)
 function initializeFirebase() {
     try {
-        // Check if Firebase is available
-        if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
-            firebase.initializeApp(firebaseConfig);
-            
-            // Initialize Firestore
-            const db = firebase.firestore();
-            
-            // Make Firebase available globally
-            window.firebase = {
-                app: firebase.app(),
-                db: db,
-                auth: firebase.auth(),
-                storage: firebase.storage()
-            };
-            
-            console.log('Firebase initialized successfully!');
-            return true;
-        } else if (typeof firebase !== 'undefined') {
-            console.log('Firebase already initialized');
-            return true;
+        console.log('Attempting to initialize Firebase...');
+        console.log('Firebase object available:', typeof firebase !== 'undefined');
+        
+        if (typeof firebase !== 'undefined') {
+            // Check if already initialized
+            if (firebase.apps && firebase.apps.length > 0) {
+                console.log('Firebase already initialized');
+                const db = firebase.firestore();
+                window.firebase = {
+                    app: firebase.app(),
+                    db: db,
+                    auth: firebase.auth(),
+                    storage: firebase.storage()
+                };
+                return true;
+            } else {
+                // Initialize Firebase
+                console.log('Initializing Firebase with config:', firebaseConfig);
+                firebase.initializeApp(firebaseConfig);
+                
+                // Initialize Firestore
+                const db = firebase.firestore();
+                
+                // Make Firebase available globally
+                window.firebase = {
+                    app: firebase.app(),
+                    db: db,
+                    auth: firebase.auth(),
+                    storage: firebase.storage()
+                };
+                
+                console.log('Firebase initialized successfully!');
+                console.log('Firebase app:', window.firebase.app);
+                console.log('Firestore database:', window.firebase.db);
+                return true;
+            }
         } else {
-            console.error('Firebase not loaded');
+            console.error('Firebase SDK not loaded. Make sure Firebase scripts are included in HTML.');
             return false;
         }
     } catch (error) {

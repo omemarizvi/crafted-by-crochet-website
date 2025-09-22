@@ -98,11 +98,36 @@ class ProductManager {
             id: this.getNextId(),
             ...productData
         };
+        
+        // Compress image if it's too large (basic compression)
+        if (newProduct.image && newProduct.image.length > 100000) { // ~100KB
+            console.log('Image too large, applying basic compression...');
+            newProduct.image = this.basicImageCompression(newProduct.image);
+        }
+        
         console.log('Adding new product to localStorage:', newProduct);
         this.products.push(newProduct);
-        this.saveProducts();
-        console.log('Products after adding:', this.products);
-        return newProduct;
+        
+        try {
+            this.saveProducts();
+            console.log('Products after adding:', this.products);
+            return newProduct;
+        } catch (error) {
+            if (error.name === 'QuotaExceededError') {
+                console.error('LocalStorage quota exceeded. Clearing old data and retrying...');
+                this.clearOldData();
+                try {
+                    this.saveProducts();
+                    console.log('Products saved after clearing old data');
+                    return newProduct;
+                } catch (retryError) {
+                    console.error('Still unable to save after clearing old data:', retryError);
+                    throw new Error('Unable to save product. Please try with a smaller image or contact support.');
+                }
+            } else {
+                throw error;
+            }
+        }
     }
 
     // Update product
@@ -226,6 +251,88 @@ class ProductManager {
     // Get out of stock products
     getOutOfStockProducts() {
         return this.products.filter(product => product.stock === 0);
+    }
+
+    // Basic image compression (synchronous)
+    basicImageCompression(base64Image) {
+        try {
+            // Simple string manipulation to reduce size
+            // Remove data URL prefix and decode
+            const base64Data = base64Image.split(',')[1];
+            
+            // If it's still too large, return a placeholder
+            if (base64Data.length > 50000) { // ~50KB
+                console.log('Image still too large, using placeholder');
+                return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSIgZmlsbD0iIzk5OSI+SW1hZ2UgVG9vIExhcmdlPC90ZXh0Pjwvc3ZnPg==';
+            }
+            
+            return base64Image;
+        } catch (error) {
+            console.error('Error compressing image:', error);
+            return base64Image;
+        }
+    }
+
+    // Advanced image compression (asynchronous)
+    async compressImage(base64Image, maxWidth = 400, quality = 0.7) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Calculate new dimensions
+                let { width, height } = img;
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw and compress
+                ctx.drawImage(img, 0, 0, width, height);
+                const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                resolve(compressedBase64);
+            };
+            img.src = base64Image;
+        }).catch(() => {
+            // If compression fails, return original
+            return base64Image;
+        });
+    }
+
+    // Clear old data to free up space
+    clearOldData() {
+        console.log('Clearing old data to free up localStorage space...');
+        
+        // Remove images from older products (keep only basic info)
+        const productsWithoutImages = this.products.map(product => ({
+            id: product.id,
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            stock: product.stock,
+            description: product.description,
+            image: null // Remove image to save space
+        }));
+        
+        this.products = productsWithoutImages;
+        
+        // Clear other localStorage data that might be taking up space
+        const keysToCheck = ['diyCraftsCart', 'diyCraftsOrders', 'cartSessionId'];
+        keysToCheck.forEach(key => {
+            try {
+                const data = localStorage.getItem(key);
+                if (data && data.length > 50000) { // If data is larger than ~50KB
+                    console.log(`Clearing large data from ${key}`);
+                    localStorage.removeItem(key);
+                }
+            } catch (error) {
+                console.log(`Error checking ${key}:`, error);
+            }
+        });
     }
 }
 
