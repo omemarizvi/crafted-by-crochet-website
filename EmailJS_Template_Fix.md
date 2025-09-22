@@ -57,33 +57,70 @@ DIY Crafts Website
 
 **Template Content (HTML - For Image Display):**
 ```html
-<h2>New Order Received! 🛍️</h2>
-
-<h3>CUSTOMER DETAILS:</h3>
-<p><strong>Name:</strong> {{customer_name}}</p>
-<p><strong>Email:</strong> {{customer_email}}</p>
-<p><strong>Phone:</strong> {{customer_phone}}</p>
-<p><strong>Address:</strong> {{customer_address}}</p>
-
-<h3>ORDER DETAILS:</h3>
-<p>{{order_details}}</p>
-
-<h3>TOTAL AMOUNT:</h3>
-<p><strong>Rs {{total_amount}}</strong></p>
-
-<h3>ORDER TIME:</h3>
-<p>{{order_time}}</p>
-
-<h3>PAYMENT:</h3>
-<p>Transfer screenshot uploaded</p>
-
-<h3>PAYMENT SCREENSHOT:</h3>
-<img src="{{payment_screenshot}}" alt="Payment Screenshot" style="max-width: 500px; height: auto; border: 1px solid #ddd; border-radius: 8px;">
-
-<hr>
-<p>Please contact the customer to confirm the order and arrange delivery.</p>
-<p>Best regards,<br>DIY Crafts Website</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .header { background-color: #8B5A8C; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .section { margin-bottom: 20px; }
+        .screenshot { max-width: 100%; height: auto; border: 2px solid #ddd; border-radius: 8px; margin: 10px 0; }
+        .order-id { background-color: #f0f0f0; padding: 10px; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛍️ New Order Received!</h1>
+    </div>
+    
+    <div class="content">
+        <div class="section">
+            <h2>CUSTOMER DETAILS:</h2>
+            <p><strong>Name:</strong> {{customer_name}}</p>
+            <p><strong>Email:</strong> {{customer_email}}</p>
+            <p><strong>Phone:</strong> {{customer_phone}}</p>
+            <p><strong>Address:</strong> {{customer_address}}</p>
+        </div>
+        
+        <div class="section">
+            <h2>ORDER DETAILS:</h2>
+            <p>{{order_details}}</p>
+        </div>
+        
+        <div class="section">
+            <h2>TOTAL AMOUNT:</h2>
+            <p><strong>Rs {{total_amount}}</strong></p>
+        </div>
+        
+        <div class="section">
+            <h2>ORDER TIME:</h2>
+            <p>{{order_time}}</p>
+        </div>
+        
+        {{#if payment_screenshot}}
+        <div class="section">
+            <h2>PAYMENT SCREENSHOT:</h2>
+            <p>✅ Payment screenshot attached below:</p>
+            <div class="order-id">Order ID: {{order_id}}</div>
+            <img src="{{payment_screenshot}}" alt="Payment Screenshot" class="screenshot">
+        </div>
+        {{/if}}
+        
+        <hr>
+        <p>Please contact the customer to confirm the order and arrange delivery.</p>
+        <p><strong>Best regards,<br>DIY Crafts Website</strong></p>
+    </div>
+</body>
+</html>
 ```
+
+**Alternative Simple HTML Template:**
+```html
+{{html_content}}
+```
+
+**Note:** The code now sends both `{{message}}` (plain text) and `{{html_content}}` (HTML with embedded image). You can use either template approach.
 
 ### 4. Template Variables to Include:
 Make sure these variables are defined in your template:
@@ -94,7 +131,10 @@ Make sure these variables are defined in your template:
 - `{{order_details}}`
 - `{{total_amount}}`
 - `{{order_time}}`
-- `{{payment_screenshot}}` (Base64 encoded image)
+- `{{order_id}}` (Unique order identifier)
+- `{{payment_screenshot}}` (Base64 encoded image data URI)
+- `{{html_content}}` (Complete HTML email content with embedded image)
+- `{{message}}` (Plain text email content)
 
 ### 5. Save the Template
 Click "Save" after making changes.
