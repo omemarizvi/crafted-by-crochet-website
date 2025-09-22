@@ -1,108 +1,96 @@
 # EmailJS Setup Guide for Order Notifications
 
-## Overview
-EmailJS is a free service that allows you to send emails directly from client-side JavaScript without needing a backend server. Perfect for your crochet website's order notifications!
+This guide will help you set up EmailJS to automatically send order notifications to `craftedbycrochet@gmail.com` when customers place orders.
 
 ## Step 1: Create EmailJS Account
+
 1. Go to [https://www.emailjs.com/](https://www.emailjs.com/)
 2. Sign up for a free account
 3. Verify your email address
 
-## Step 2: Set Up Email Service
-1. **Add Email Service:**
-   - Go to "Email Services" in your EmailJS dashboard
-   - Click "Add New Service"
-   - Choose your email provider (Gmail, Outlook, etc.)
-   - Follow the setup instructions for your email provider
-   - Note down your **Service ID**
+## Step 2: Add Email Service
+
+1. In your EmailJS dashboard, go to **Email Services**
+2. Click **Add New Service**
+3. Choose your email provider (Gmail, Outlook, etc.)
+4. Follow the setup instructions for your provider
+5. Note down your **Service ID** (e.g., `service_xxxxxxx`)
 
 ## Step 3: Create Email Template
-1. **Create Template:**
-   - Go to "Email Templates" in your EmailJS dashboard
-   - Click "Create New Template"
-   - Use this template for order notifications:
 
+1. Go to **Email Templates**
+2. Click **Create New Template**
+3. Use this template content:
+
+**Template ID**: `order_notification` (or any name you prefer)
+
+**Subject**: `New Order - {{order_date}}`
+
+**Content**:
 ```
-Subject: New Order Received - Order #{{order_id}}
-
-Dear Admin,
-
-You have received a new order for your crochet items:
+New Order Received!
 
 Order Details:
-- Order ID: {{order_id}}
-- Date: {{order_date}}
-- Customer: {{customer_name}}
-- Email: {{customer_email}}
-- Phone: {{customer_phone}}
-- Shipping Address: {{shipping_address}}
+{{order_details}}
 
-Items Ordered:
-{{order_items}}
+Total: {{total_amount}}
 
-Total Amount: Rs {{total_amount}}
-Payment Method: {{payment_method}}
+Order Time: {{order_time}}
 
-Payment Screenshot: {{payment_screenshot}}
-
-Please process this order and contact the customer if needed.
+Please contact the customer to confirm the order and arrange delivery.
 
 Best regards,
-Your Crochet Website
+DIY Crafts Website
 ```
 
-2. **Save the template** and note down your **Template ID**
+4. Save the template and note down the **Template ID**
 
-## Step 4: Get Public Key
-1. Go to "Account" → "General"
-2. Copy your **Public Key**
+## Step 4: Get Your Public Key
+
+1. Go to **Account** → **General**
+2. Find your **Public Key** (starts with `user_`)
 
 ## Step 5: Update Your Website
-1. **Add EmailJS Script to HTML:**
-   Add this to both `index.html` and `admin.html` before the closing `</body>` tag:
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your public key
-</script>
+1. Open `js/cart.js`
+2. Find these lines and replace with your actual values:
+
+```javascript
+// Replace these with your actual EmailJS credentials
+emailjs.init('YOUR_EMAILJS_PUBLIC_KEY');  // Replace with your Public Key
+await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);  // Replace with your Service ID and Template ID
 ```
 
-2. **Update Order Service:**
-   In `js/order-service.js`, replace these placeholders:
-   - `YOUR_SERVICE_ID` → Your EmailJS Service ID
-   - `YOUR_TEMPLATE_ID` → Your EmailJS Template ID  
-   - `YOUR_PUBLIC_KEY` → Your EmailJS Public Key
+3. Save the file and push to GitHub
 
-## Step 6: Test the Setup
-1. Place a test order on your website
-2. Check your email for the notification
-3. Verify the payment screenshot is included
+## Step 6: Test the System
 
-## Free Plan Limits
-- **200 emails per month** (perfect for a small business)
-- **2 email templates**
-- **1 email service**
-
-## Benefits
-✅ **Free** - No monthly costs  
-✅ **Easy setup** - No backend server needed  
-✅ **Reliable** - Professional email delivery  
-✅ **Secure** - Your email credentials stay safe  
-✅ **Automatic** - Emails sent when orders are placed  
-
-## Alternative: Firebase Functions (Advanced)
-If you need more emails or want server-side processing, you can use Firebase Functions with Nodemailer, but EmailJS is perfect for your current needs.
+1. Visit your live website
+2. Add items to cart
+3. Proceed to checkout
+4. Check if you receive an email at `craftedbycrochet@gmail.com`
 
 ## Troubleshooting
-- **Emails not sending:** Check your Service ID, Template ID, and Public Key
-- **Template variables not working:** Make sure variable names match exactly
-- **Images not showing:** Payment screenshots will be URLs, not embedded images
-- **Spam folder:** Check your spam folder for test emails
 
-## Next Steps
-1. Set up EmailJS account
-2. Configure email service and template
-3. Update your website with the credentials
-4. Test with a sample order
-5. Go live with automatic order notifications!
+- **No emails received**: Check spam folder
+- **Template errors**: Verify template variables match exactly
+- **Service errors**: Ensure email service is properly configured
+- **Public key issues**: Double-check the public key format
+
+## Free Plan Limits
+
+EmailJS free plan includes:
+- 200 emails per month
+- Basic templates
+- Standard support
+
+This should be sufficient for a small craft business.
+
+## Alternative: Manual Order Processing
+
+If you prefer not to use EmailJS, the system will still work with manual order processing:
+- Customers can place orders
+- You'll see order details in the alert popup
+- You can manually contact customers for confirmation
+
+The website will continue to function normally even without EmailJS configured.
