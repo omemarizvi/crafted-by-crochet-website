@@ -28,6 +28,9 @@ class HomePageManager {
             cartBtn.addEventListener('click', () => this.openCart());
         }
 
+        // Product image modal
+        this.initProductImageModal();
+
         // Custom Order button
         const customOrderBtn = document.getElementById('customOrderBtn');
         if (customOrderBtn) {
@@ -162,8 +165,8 @@ class HomePageManager {
         
         return `
             <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48rect width="200" height="200" fill="#f0f0f0"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#999">No Image</text></svg>'">
+                <div class="product-image" onclick="event.stopPropagation(); window.homePageManager.openProductImageModal('${product.name}', '${product.image}')">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48rect width="200" height="200" fill="#f0f0f0"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#999">No Image</text></svg>'" style="cursor: pointer;">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
@@ -352,6 +355,48 @@ class HomePageManager {
             });
         } else {
             console.error('Contact modal element not found!');
+        }
+    }
+
+    // Initialize product image modal
+    initProductImageModal() {
+        const closeBtn = document.getElementById('closeProductImageModal');
+        const modal = document.getElementById('productImageModal');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeProductImageModal());
+        }
+        
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeProductImageModal();
+                }
+            });
+        }
+    }
+
+    // Open product image modal
+    openProductImageModal(productName, imageSrc) {
+        const modal = document.getElementById('productImageModal');
+        const title = document.getElementById('productImageTitle');
+        const img = document.getElementById('productImageFull');
+        
+        if (modal && title && img) {
+            title.textContent = productName;
+            img.src = imageSrc;
+            img.alt = `${productName} - Full Size`;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Close product image modal
+    closeProductImageModal() {
+        const modal = document.getElementById('productImageModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     }
 }
