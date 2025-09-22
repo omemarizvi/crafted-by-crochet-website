@@ -736,12 +736,20 @@ class AdminManager {
 }
 
 // Create global admin instance
+console.log('Creating admin manager...');
 window.adminManager = new AdminManager();
+console.log('Admin manager created:', !!window.adminManager);
 
 // Make debug functions globally accessible
+console.log('Creating global functions...');
 window.checkDatabaseContents = () => window.adminManager.checkDatabaseContents();
 window.initializeFirebase = () => window.adminManager.initializeFirebase();
 window.testFirebaseDirect = () => window.adminManager.testFirebaseDirect();
+console.log('Global functions created:', {
+    checkDatabaseContents: typeof window.checkDatabaseContents,
+    initializeFirebase: typeof window.initializeFirebase,
+    testFirebaseDirect: typeof window.testFirebaseDirect
+});
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async function() {

@@ -119,3 +119,4 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Also make the function globally available
 window.initializeFirebase = initializeFirebase;
+console.log('Firebase config script loaded, initializeFirebase function available:', typeof window.initializeFirebase);
