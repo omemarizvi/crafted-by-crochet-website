@@ -21,7 +21,7 @@ body {
 
 /* Header Styles */
 .header {
-    background: linear-gradient(135deg, #8B5A8C 0%, #D4A5A5 50%, #F7E7CE 100%);
+    background: linear-gradient(135deg, #8B5A8C 100%, #D4A5A5 50%, #F7E7CE 0%);
     color: #2C1810;
     padding: 1.5rem 0;
     box-shadow: 0 4px 20px rgba(139, 90, 140, 0.15);
@@ -271,7 +271,7 @@ body {
 
 /* Main Content */
 .main-content {
-    padding: 2rem 0;
+    padding: 3rem 0;
     min-height: calc(100vh - 200px);
 }
 
@@ -280,6 +280,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
+    margin-top: 2rem;
     margin-bottom: 2rem;
 }
 
