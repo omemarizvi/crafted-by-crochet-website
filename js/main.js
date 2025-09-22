@@ -390,9 +390,12 @@ class HomePageManager {
 
     // Open product image modal
     openProductImageModal(productName, imageSrc) {
+        console.log('Opening image modal for:', productName, imageSrc);
         const modal = document.getElementById('productImageModal');
         const title = document.getElementById('productImageTitle');
         const img = document.getElementById('productImageFull');
+        
+        console.log('Modal elements:', { modal: !!modal, title: !!title, img: !!img });
         
         if (modal && title && img) {
             title.textContent = productName;
@@ -400,6 +403,9 @@ class HomePageManager {
             img.alt = `${productName} - Full Size`;
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
+            console.log('Image modal opened successfully');
+        } else {
+            console.error('Could not find modal elements');
         }
     }
 
