@@ -598,15 +598,30 @@ class AdminManager {
     }
 
     // Manual Firebase initialization function
-    initializeFirebase() {
+    async initializeFirebase() {
         try {
             console.log('=== MANUAL FIREBASE INITIALIZATION ===');
             
+            // First, try to initialize Firebase configuration
             if (typeof initializeFirebase === 'function') {
                 const result = initializeFirebase();
                 if (result) {
-                    this.showToast('Firebase initialized successfully!');
-                    console.log('Firebase initialization successful');
+                    console.log('Firebase configuration initialized successfully');
+                    
+                    // Then reinitialize the Firebase Service
+                    if (window.firebaseService) {
+                        const serviceResult = await window.firebaseService.reinitialize();
+                        if (serviceResult) {
+                            this.showToast('Firebase initialized successfully!');
+                            console.log('Firebase Service reinitialized successfully');
+                        } else {
+                            this.showToast('Firebase configuration OK, but service failed. Check console.');
+                            console.log('Firebase Service reinitialization failed');
+                        }
+                    } else {
+                        this.showToast('Firebase configuration OK, but service not available.');
+                        console.log('Firebase Service not available');
+                    }
                 } else {
                     this.showToast('Firebase initialization failed. Check console for details.');
                     console.log('Firebase initialization failed');

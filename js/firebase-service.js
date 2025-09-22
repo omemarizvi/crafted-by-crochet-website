@@ -12,24 +12,44 @@ class FirebaseService {
     }
 
     async init() {
+        console.log('Firebase Service: Starting initialization...');
+        
         // Wait for Firebase to be initialized
         let attempts = 0;
-        const maxAttempts = 50; // 5 seconds max wait
+        const maxAttempts = 100; // 10 seconds max wait
         
         while (attempts < maxAttempts && !this.initialized) {
+            console.log(`Firebase Service: Attempt ${attempts + 1}/${maxAttempts}`);
+            console.log('Firebase object available:', typeof window.firebase !== 'undefined');
+            console.log('Firebase.db available:', window.firebase && window.firebase.db ? 'Yes' : 'No');
+            
             if (window.firebase && window.firebase.db) {
                 this.db = window.firebase.db;
                 this.initialized = true;
                 console.log('Firebase Service initialized successfully!');
                 break;
             }
+            
             await new Promise(resolve => setTimeout(resolve, 100));
             attempts++;
         }
         
         if (!this.initialized) {
-            console.error('Firebase Service failed to initialize after 5 seconds');
+            console.error('Firebase Service failed to initialize after 10 seconds');
+            console.log('Final state check:');
+            console.log('- window.firebase:', typeof window.firebase);
+            console.log('- window.firebase.db:', window.firebase && window.firebase.db ? 'Available' : 'Not available');
+            console.log('- Firebase scripts loaded:', typeof firebase !== 'undefined');
         }
+    }
+
+    // Manual re-initialization function
+    async reinitialize() {
+        console.log('Firebase Service: Manual re-initialization requested...');
+        this.initialized = false;
+        this.db = null;
+        await this.init();
+        return this.initialized;
     }
 
     // Generate or retrieve session ID for cart persistence
