@@ -163,23 +163,20 @@
                         <h3>Payment Process</h3>
                         <div class="disclaimer-content">
                             <p><strong>📧 Payment Instructions:</strong></p>
-                            <p>After placing your order, you will receive an email with:</p>
-                            <ul>
-                                <li>✅ Bank account details for transfer</li>
-                                <li>✅ Exact amount to pay</li>
-                                <li>✅ Payment reference number</li>
-                                <li>✅ Google Form link to upload payment screenshot</li>
-                            </ul>
-                            <p><strong>⚠️ Important:</strong> Your order will be dispatched only after payment confirmation.</p>
-                            
-                            <div class="payment-form-link">
-                                <p><strong>💳 Upload Payment Screenshot:</strong></p>
-                                <a href="https://forms.gle/YOUR_GOOGLE_FORM_ID" target="_blank" class="payment-upload-btn">
-                                    📎 Upload Payment Proof
-                                </a>
-                                <p class="form-note">Click here to upload your payment screenshot after making the transfer</p>
-                            </div>
+                            <p>After placing your order, you will receive an email with payment details. Once you've made the payment, upload your screenshot below:</p>
                         </div>
+                    </div>
+                    
+                    <div class="embedded-payment-form">
+                        <h3>Upload Payment Screenshot</h3>
+                        <iframe src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true" 
+                                width="100%" 
+                                height="600" 
+                                frameborder="0" 
+                                marginheight="0" 
+                                marginwidth="0">
+                            Loading payment form...
+                        </iframe>
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-full">Place Order</button>

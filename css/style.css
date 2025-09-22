@@ -734,37 +734,31 @@ to {
     color: #8B5A8C;
 }
 
-.payment-form-link {
-    margin-top: 1rem;
-    padding: 1rem;
+/* Embedded Payment Form Styles */
+.embedded-payment-form {
     background: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
     border: 1px solid #ddd;
 }
 
-.payment-upload-btn {
-    display: inline-block;
-    background: #8B5A8C;
-    color: white;
-    padding: 12px 24px;
-    text-decoration: none;
+.embedded-payment-form h3 {
+    color: #8B5A8C;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.embedded-payment-form iframe {
     border-radius: 6px;
-    font-weight: bold;
-    margin: 0.5rem 0;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.payment-upload-btn:hover {
-    background: #7a4a7d;
-    color: white;
-    text-decoration: none;
-}
-
-.form-note {
-    font-size: 0.9rem;
-    color: #666;
-    font-style: italic;
-    margin-top: 0.5rem;
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    .embedded-payment-form iframe {
+        height: 700px; /* Slightly taller on mobile for better usability */
+    }
 }
 
 .total-amount {

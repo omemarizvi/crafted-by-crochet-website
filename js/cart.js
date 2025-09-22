@@ -498,8 +498,8 @@ PAYMENT INSTRUCTIONS FOR CUSTOMER:
    - Reference: Order-${orderData.orderId}
 
 2. UPLOAD PAYMENT PROOF:
-   📎 Google Form: https://forms.gle/[YOUR_GOOGLE_FORM_ID]
-   - Upload your payment screenshot
+   📎 You can upload your payment screenshot directly in the checkout form below
+   - Use the embedded form on the website
    - Enter Order ID: ${orderData.orderId}
    - Enter your email: ${orderData.customer.email}
 
