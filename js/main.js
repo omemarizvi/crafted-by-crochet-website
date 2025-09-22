@@ -159,18 +159,26 @@ class HomePageManager {
                 console.log(`Adding image click listener to card ${index}`);
                 productImage.addEventListener('click', (e) => {
                     console.log('Product image clicked!');
+                    e.preventDefault();
                     e.stopPropagation();
                     const productName = productImage.dataset.productName;
                     const productImageSrc = productImage.dataset.productImage;
                     console.log('Product data:', { productName, productImageSrc });
                     this.openProductImageModal(productName, productImageSrc);
+                    return false;
                 });
             } else {
                 console.log(`No product image found for card ${index}`);
             }
             
-            // Handle clicking on the rest of the card
+            // Handle clicking on the rest of the card (but not the image)
             card.addEventListener('click', (e) => {
+                // Check if the click was on the image container
+                if (e.target.closest('.product-image')) {
+                    console.log('Click was on image, ignoring card click');
+                    return;
+                }
+                
                 e.preventDefault();
                 const productId = parseInt(card.dataset.productId);
                 console.log('Product card clicked, ID:', productId);
