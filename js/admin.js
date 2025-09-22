@@ -625,6 +625,10 @@ class AdminManager {
 // Create global admin instance
 window.adminManager = new AdminManager();
 
+// Make debug functions globally accessible
+window.checkDatabaseContents = () => window.adminManager.checkDatabaseContents();
+window.initializeFirebase = () => window.adminManager.initializeFirebase();
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Admin Dashboard initializing...');
