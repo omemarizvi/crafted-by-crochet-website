@@ -21,7 +21,7 @@ body {
 
 /* Header Styles */
 .header {
-    background: linear-gradient(135deg, #8B5A8C 100%, #D4A5A5 50%, #F7E7CE 0%);
+    background: linear-gradient(135deg, #F7E7CE 0%, #D4A5A5 50%, #8B5A8C 100%);
     color: #2C1810;
     padding: 1.5rem 0;
     box-shadow: 0 4px 20px rgba(139, 90, 140, 0.15);
@@ -280,7 +280,6 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    margin-top: 2rem;
     margin-bottom: 2rem;
 }
 
@@ -326,6 +325,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 15px;
 }
 
 .product-image img {
@@ -941,6 +941,7 @@ to {
     
     .product-image {
         height: 180px;
+        padding: 12px;
     }
     
     .category-filters {
