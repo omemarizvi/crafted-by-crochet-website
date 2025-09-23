@@ -18,11 +18,13 @@
     <!-- Header -->
         <header class="header">
             <div class="container">
-                <div class="logo">
+            <div class="logo">
+                <a href="index.html" class="logo-link">
                     <div class="logo-img-wrapper">
                         <img src="images/logo/logo.png" alt="Crafted by Crochet Logo" class="logo-img" loading="eager">
                     </div>
-                </div>
+                </a>
+            </div>
                 <div class="header-title">
                     <span class="logo-text">Crafted by Crochet</span>
                 </div>
@@ -73,25 +75,27 @@
         <div class="modal-content product-modal-content">
             <span class="close" id="closeModal">&times;</span>
             <div class="modal-body">
-                <div class="product-modal-image">
-                    <img id="modalImage" src="" alt="">
-                </div>
-                <div class="product-details">
-                    <h2 id="modalTitle" class="product-modal-title"></h2>
-                    <div class="product-price product-modal-price" id="modalPrice"></div>
-                    <div class="product-category product-modal-category" id="modalCategory"></div>
-                    <div class="product-description" id="modalDescription"></div>
-                    <div class="quantity-selector">
-                        <label for="quantityInput">Quantity:</label>
-                        <div class="quantity-controls">
-                            <button type="button" id="quantityDecrease" class="quantity-btn">-</button>
-                            <input type="number" id="quantityInput" value="1" min="1" max="10">
-                            <button type="button" id="quantityIncrease" class="quantity-btn">+</button>
-                        </div>
+                <div class="product-modal-layout">
+                    <div class="product-modal-image">
+                        <img id="modalImage" src="" alt="">
                     </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
-                        <button class="btn btn-outline" id="contactSellerBtn">Contact Seller</button>
+                    <div class="product-details">
+                        <h2 id="modalTitle" class="product-modal-title"></h2>
+                        <div class="product-price product-modal-price" id="modalPrice"></div>
+                        <div class="product-category product-modal-category" id="modalCategory"></div>
+                        <div class="product-description" id="modalDescription"></div>
+                        <div class="quantity-selector">
+                            <label for="quantityInput">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button type="button" id="quantityDecrease" class="quantity-btn">-</button>
+                                <input type="number" id="quantityInput" value="1" min="1" max="10">
+                                <button type="button" id="quantityIncrease" class="quantity-btn">+</button>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
+                            <button class="btn btn-outline" id="contactSellerBtn">Contact Seller</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,70 +128,14 @@
     </div>
 
 
-    <!-- Checkout Modal -->
-    <div class="modal" id="checkoutModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Checkout</h2>
-                <span class="close" id="closeCheckoutModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="checkoutForm">
-                    <div class="form-group">
-                        <label for="customerName">Full Name *</label>
-                        <input type="text" id="customerName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customerEmail">Email *</label>
-                        <input type="email" id="customerEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customerPhone">Contact Number *</label>
-                        <input type="tel" id="customerPhone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="shippingAddress">Shipping Address *</label>
-                        <textarea id="shippingAddress" rows="3" required></textarea>
-                    </div>
-                    
-                    <div class="order-summary">
-                        <h3>Order Summary</h3>
-                        <div id="checkoutItems">
-                            <!-- Order items will be populated here -->
-                        </div>
-                        <div class="order-total">
-                            <strong>Total: Rs <span id="checkoutTotalDisplay">0.00</span></strong>
-                        </div>
-                    </div>
-                    
-                    <div class="bank-details">
-                        <h3>Payment Instructions</h3>
-                        <div class="bank-info">
-                            <p><strong>Payment Method:</strong> Bank Transfer Only</p>
-                            <p><strong>Amount:</strong> Rs <span id="checkoutTotal">0.00</span></p>
-                            <p><strong>Payment Instructions:</strong></p>
-                            <p>After placing your order, you will receive an email with:</p>
-                            <ul>
-                                <li>✅ Bank account details</li>
-                                <li>✅ Exact amount to transfer</li>
-                                <li>✅ Payment reference number</li>
-                                <li>✅ Instructions for payment confirmation</li>
-                            </ul>
-                            <p><strong>Contact:</strong> craftedbycrochet@gmail.com</p>
-                        </div>
-                    </div>
-                    
-                    
-                    <button type="submit" class="btn btn-primary btn-full">Place Order</button>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <div class="footer-left">
+                    <p class="copyright">© Crafted by Crochet</p>
+                </div>
                 <div class="contact-links">
                     <a href="mailto:craftedbycrochet@gmail.com" class="contact-link" title="Email Us">
                         <i class="fas fa-envelope"></i>
@@ -203,57 +151,6 @@
         </div>
     </footer>
 
-    <!-- Contact Seller Modal -->
-    <div class="modal" id="contactModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>🧶 Contact Crafted by Crochet</h2>
-                <span class="close" id="closeContactModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="contact-card">
-                    <div class="contact-intro">
-                        <p>Get in touch with us for custom orders, questions, or to learn more about our handmade crochet items!</p>
-                    </div>
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Email Us</h4>
-                                <p>craftedbycrochet@gmail.com</p>
-                                <a href="mailto:craftedbycrochet@gmail.com" class="contact-btn">Send Email</a>
-                            </div>
-                        </div>
-                        <div class="contact-method">
-                            <div class="contact-icon">
-                                <i class="fab fa-instagram"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Follow Us</h4>
-                                <p>@crafted_by_crochet</p>
-                                <a href="https://instagram.com/crafted_by_crochet" target="_blank" class="contact-btn">View Instagram</a>
-                            </div>
-                        </div>
-                        <div class="contact-method">
-                            <div class="contact-icon">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>WhatsApp</h4>
-                                <p>+923372065123</p>
-                                <a href="https://wa.me/923372065123" target="_blank" class="contact-btn">Chat on WhatsApp</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contact-note">
-                        <p><strong>Custom Orders Welcome!</strong> We love creating unique pieces just for you. Contact us to discuss your ideas and get a personalized quote.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Success Message -->
     <div class="toast" id="toast">

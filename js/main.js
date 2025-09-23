@@ -289,32 +289,13 @@ class HomePageManager {
     }
 
     showCustomOrderModal() {
-        // Show contact modal for custom orders
-        this.showContactModal();
+        // Redirect to contact page for custom orders
+        window.location.href = 'contact.html';
     }
 
     contactSeller(product) {
-        // Show contact modal
-        this.showContactModal();
-    }
-
-    showContactModal() {
-        const modal = document.getElementById('contactModal');
-        if (modal) {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            console.log('Contact modal should now be visible');
-        } else {
-            console.error('Contact modal not found!');
-        }
-    }
-
-    closeContactModal() {
-        const modal = document.getElementById('contactModal');
-        if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        // Redirect to contact page
+        window.location.href = 'contact.html';
     }
 
     openCart() {
@@ -331,33 +312,6 @@ class HomePageManager {
         }
     }
 
-    initContactModal() {
-        // Close contact modal
-        const closeBtn = document.getElementById('closeContactModal');
-        console.log('Contact modal close button found:', closeBtn);
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                console.log('Close contact modal clicked');
-                this.closeContactModal();
-            });
-        } else {
-            console.error('Contact modal close button not found!');
-        }
-
-        // Close on outside click
-        const modal = document.getElementById('contactModal');
-        console.log('Contact modal element found:', modal);
-        if (modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    console.log('Contact modal outside click');
-                    this.closeContactModal();
-                }
-            });
-        } else {
-            console.error('Contact modal element not found!');
-        }
-    }
 
 }
 
@@ -407,7 +361,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize modals after DOM is ready
     window.homePageManager.initProductModal();
-    window.homePageManager.initContactModal();
     window.productModal.init();
     
     // Cart modals are initialized in cart.js

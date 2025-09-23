@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Crafted by Crochet</title>
+    <link rel="icon" type="image/png" href="images/logo/logo.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Complete your order for handmade crochet items from Crafted by Crochet.">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-img-wrapper">
+                        <img src="images/logo/logo.png" alt="Crafted by Crochet Logo" class="logo-img" loading="eager">
+                    </div>
+                </a>
+            </div>
+            <div class="header-title">
+                <span class="logo-text">Crafted by Crochet</span>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Shop</a>
+                <button class="cart-btn" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="checkout-page">
+                <div class="checkout-header">
+                    <h1>🛒 Checkout</h1>
+                    <p>Complete your order for handmade crochet items</p>
+                </div>
+
+                <div class="checkout-layout">
+                    <!-- Order Summary -->
+                    <div class="order-summary-section">
+                        <h2>Order Summary</h2>
+                        <div class="order-summary" id="orderSummary">
+                            <!-- Order items will be loaded here -->
+                        </div>
+                        <div class="order-total">
+                            <strong>Total: <span id="totalAmount">$0.00</span></strong>
+                        </div>
+                    </div>
+
+                    <!-- Customer Information Form -->
+                    <div class="customer-info-section">
+                        <h2>Customer Information</h2>
+                        <form id="checkoutForm" class="checkout-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="customerName">Full Name *</label>
+                                    <input type="text" id="customerName" name="customerName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerPhone">Phone Number *</label>
+                                    <input type="tel" id="customerPhone" name="customerPhone" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="customerEmail">Email Address *</label>
+                                <input type="email" id="customerEmail" name="customerEmail" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="deliveryAddress">Delivery Address *</label>
+                                <textarea id="deliveryAddress" name="deliveryAddress" rows="3" required placeholder="Please provide your complete delivery address"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="specialInstructions">Special Instructions (Optional)</label>
+                                <textarea id="specialInstructions" name="specialInstructions" rows="2" placeholder="Any special delivery instructions or requests"></textarea>
+                            </div>
+
+                            <!-- Payment Information -->
+                            <div class="payment-section">
+                                <h3>Payment Information</h3>
+                                <div class="payment-disclaimer">
+                                    <h4>Payment Instructions</h4>
+                                    <div class="disclaimer-content">
+                                        <p><strong>Payment Method:</strong> Bank Transfer Only</p>
+                                        <p><strong>Payment Process:</strong></p>
+                                        <ul>
+                                            <li>After placing your order, you will receive a confirmation email with our bank account details</li>
+                                            <li>Complete the bank transfer for the exact order amount and reply to the email with the payment screenshot to confirm your order</li>
+                                        </ul>
+                                        <p>For any queries, you can email us at: <strong>craftedbycrochet@gmail.com</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">Continue Shopping</button>
+                                <button type="submit" class="btn btn-primary" id="placeOrderBtn">Place Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p class="copyright">© Crafted by Crochet</p>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:craftedbycrochet@gmail.com" class="contact-link" title="Email Us">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://instagram.com/crafted_by_crochet" target="_blank" class="contact-link" title="Follow on Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/923372065123" target="_blank" class="contact-link" title="Chat on WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

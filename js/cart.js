@@ -296,9 +296,9 @@ class CartModal {
             return;
         }
 
-        // Close cart modal and open checkout modal
+        // Close cart modal and redirect to checkout page
         this.close();
-        this.openCheckoutModal();
+        window.location.href = 'checkout.html';
     }
 
     openCheckoutModal() {
