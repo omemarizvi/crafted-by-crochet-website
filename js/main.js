@@ -167,7 +167,7 @@ class HomePageManager {
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
