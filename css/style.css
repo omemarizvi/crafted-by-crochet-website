@@ -546,12 +546,12 @@ body {
 
 .product-modal-price {
     font-size: 1.4rem !important;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .product-modal-category {
     font-size: 1rem !important;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 /* Mobile responsive for product modal */
@@ -602,16 +602,17 @@ body {
     .product-modal-price {
         font-size: 1.2rem !important;
         text-align: center;
+        margin-bottom: 1rem;
     }
     
     .product-modal-category {
         text-align: center;
-        margin: 0 auto 0.5rem auto;
+        margin: 0 auto 0.75rem auto;
     }
     
     .quantity-selector {
         justify-content: center;
-        margin: 0.5rem auto;
+        margin: 0.75rem auto;
     }
     
     .product-actions {
