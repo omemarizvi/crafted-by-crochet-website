@@ -22,6 +22,12 @@ class HomePageManager {
             btn.addEventListener('click', (e) => this.handleCategoryFilter(e));
         });
 
+        // Mobile category dropdown
+        const categorySelect = document.getElementById('categorySelect');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', (e) => this.handleCategoryDropdown(e));
+        }
+
         // Cart button
         const cartBtn = document.getElementById('cartBtn');
         if (cartBtn) {
@@ -87,6 +93,30 @@ class HomePageManager {
         
         // Update current category
         this.currentCategory = e.target.dataset.category;
+        
+        // Clear search when "All" is selected to show all products
+        if (this.currentCategory === 'all') {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                this.searchQuery = '';
+            }
+        }
+        
+        this.filterProducts();
+    }
+
+    handleCategoryDropdown(e) {
+        const category = e.target.value;
+        this.currentCategory = category;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-category') === category) {
+                btn.classList.add('active');
+            }
+        });
         
         // Clear search when "All" is selected to show all products
         if (this.currentCategory === 'all') {
