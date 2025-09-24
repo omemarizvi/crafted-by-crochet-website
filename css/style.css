@@ -1368,23 +1368,24 @@ to {
     
     /* Mobile cart modal specific styles */
     #cartModal .modal-content {
-        width: 95vw;
+        width: 100vw;
         max-height: 90vh;
-        margin: 5% auto;
-        padding: 1rem;
+        margin: 0;
+        padding: 1rem 0;
+        border-radius: 0;
     }
     
     #cartModal .cart-items {
         max-height: 50vh;
         overflow-y: auto;
-        padding: 0.5rem;
+        padding: 0;
     }
     
     #cartModal .cart-item {
         flex-direction: row;
         align-items: center;
         text-align: left;
-        padding: 1rem 0.5rem;
+        padding: 1rem 1rem;
         gap: 0.75rem;
     }
     
@@ -1417,14 +1418,14 @@ to {
     
     #cartModal .cart-total {
         text-align: center;
-        padding: 1rem 0.5rem;
+        padding: 1rem;
         margin: 1rem 0;
     }
     
     #cartModal .cart-actions {
         flex-direction: column;
         gap: 0.75rem;
-        padding: 0 0.5rem;
+        padding: 0 1rem;
     }
     
     #cartModal .cart-actions .btn {
