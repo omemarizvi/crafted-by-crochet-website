@@ -1345,12 +1345,13 @@ to {
         transition: all 0.3s ease;
     }
     
-    .category-select:focus {
+    .category-select:focus,
+    .category-select:active {
         outline: none;
         border-color: #8B5A8C;
         box-shadow: 0 0 0 4px rgba(139, 90, 140, 0.1);
-        background: white;
-        color: #2C1810;
+        background: rgba(255,255,255,0.15);
+        color: #F7E7CE;
     }
     
     .category-select option {
@@ -1379,22 +1380,23 @@ to {
     }
     
     #cartModal .cart-item {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        text-align: center;
+        text-align: left;
         padding: 1rem 0.5rem;
-        gap: 0.5rem;
+        gap: 0.75rem;
     }
     
     #cartModal .cart-item-image {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto;
+        width: 70px;
+        height: 70px;
+        flex-shrink: 0;
+        margin: 0;
     }
     
     #cartModal .cart-item-details {
         width: 100%;
-        text-align: center;
+        text-align: left;
     }
     
     #cartModal .cart-item-name {
@@ -1408,8 +1410,8 @@ to {
     }
     
     #cartModal .quantity-controls {
-        justify-content: center;
-        margin: 0.5rem auto;
+        justify-content: flex-start;
+        margin: 0.5rem 0;
     }
     
     #cartModal .cart-total {
