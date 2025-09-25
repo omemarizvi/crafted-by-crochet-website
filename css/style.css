@@ -220,7 +220,7 @@ body {
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(15px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    color: #F7E7CE;
+    color: #8B5A8C;
 }
 
 .search-bar input:focus {
@@ -228,11 +228,12 @@ body {
     border-color: #8B5A8C;
     box-shadow: 0 0 0 4px rgba(139, 90, 140, 0.1);
     background: white;
+    color: #8B5A8C;
     transform: translateY(-2px);
 }
 
 .search-bar input::placeholder {
-    color: rgba(247, 231, 206, 0.7);
+    color: rgba(139, 90, 140, 0.6);
     font-weight: 400;
 }
 
