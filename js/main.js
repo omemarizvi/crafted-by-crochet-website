@@ -3,6 +3,7 @@ class HomePageManager {
     constructor() {
         this.currentCategory = 'all';
         this.searchQuery = '';
+        this.currentSort = '';
         this.products = [];
         
         this.initEventListeners();
@@ -26,6 +27,12 @@ class HomePageManager {
         const categorySelect = document.getElementById('categorySelect');
         if (categorySelect) {
             categorySelect.addEventListener('change', (e) => this.handleCategoryDropdown(e));
+        }
+
+        // Sort functionality
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => this.handleSortChange(e));
         }
 
         // Cart button
@@ -133,6 +140,11 @@ class HomePageManager {
         this.filterProducts();
     }
 
+    handleSortChange(e) {
+        this.currentSort = e.target.value;
+        this.filterProducts();
+    }
+
     filterProducts() {
         let filteredProducts = window.productManager.getAllProducts();
 
@@ -148,6 +160,11 @@ class HomePageManager {
             filteredProducts = filteredProducts.filter(product =>
                 product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
             );
+        }
+
+        // Sort products if sort option is selected
+        if (this.currentSort && this.currentSort !== '') {
+            filteredProducts = window.productManager.sortProducts(filteredProducts, this.currentSort);
         }
 
         this.products = filteredProducts;

@@ -18,7 +18,8 @@ class ProductManager {
                 category: 'flowers',
                 price: 1000,
                 stock: 0, // Made to order
-                image: 'images/products/rose.jpg'
+                image: 'images/products/rose.jpg',
+                popularity: 95 // High popularity
             },
             {
                 id: 2,
@@ -26,7 +27,8 @@ class ProductManager {
                 category: 'keychains',
                 price: 500,
                 stock: 0,
-                image: 'images/products/sunflower-keychain.jpg'
+                image: 'images/products/sunflower-keychain.jpg',
+                popularity: 88
             },
             {
                 id: 3,
@@ -34,7 +36,8 @@ class ProductManager {
                 category: 'flowers',
                 price: 1500,
                 stock: 0,
-                image: 'images/products/sunflower-pot.jpg'
+                image: 'images/products/sunflower-pot.jpg',
+                popularity: 75
             },
             {
                 id: 4,
@@ -42,7 +45,8 @@ class ProductManager {
                 category: 'flowers',
                 price: 1000,
                 stock: 0,
-                image: 'images/products/sunflower.jpg'
+                image: 'images/products/sunflower.jpg',
+                popularity: 92
             },
             {
                 id: 5,
@@ -50,7 +54,8 @@ class ProductManager {
                 category: 'bouquets',
                 price: 4000,
                 stock: 0,
-                image: 'images/products/roses-bouquet.jpg'
+                image: 'images/products/roses-bouquet.jpg',
+                popularity: 98
             },
             {
                 id: 6,
@@ -58,7 +63,8 @@ class ProductManager {
                 category: 'bouquets',
                 price: 5000,
                 stock: 0,
-                image: 'images/products/tulips-lavendar-bouquet.jpg'
+                image: 'images/products/tulips-lavendar-bouquet.jpg',
+                popularity: 85
             },
             {
                 id: 7,
@@ -66,7 +72,8 @@ class ProductManager {
                 category: 'bouquets',
                 price: 2000,
                 stock: 0,
-                image: 'images/products/daisies-bouquet.jpg'
+                image: 'images/products/daisies-bouquet.jpg',
+                popularity: 80
             }
         ];
     }
@@ -105,7 +112,8 @@ class ProductManager {
             category: productData.category,
             price: parseFloat(productData.price),
             stock: parseInt(productData.stock),
-            image: productData.image
+            image: productData.image,
+            popularity: parseInt(productData.popularity) || 50 // Default popularity if not provided
         };
 
         this.products.push(newProduct);
@@ -178,6 +186,24 @@ class ProductManager {
         this.products = this.getDefaultProducts();
         this.saveProducts();
         console.log('Products reset to defaults');
+    }
+
+    // Sort products by different criteria
+    sortProducts(products, sortBy) {
+        const sortedProducts = [...products]; // Create a copy to avoid mutating original array
+        
+        switch (sortBy) {
+            case 'price-low-high':
+                return sortedProducts.sort((a, b) => a.price - b.price);
+            case 'price-high-low':
+                return sortedProducts.sort((a, b) => b.price - a.price);
+            case 'popularity':
+                return sortedProducts.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+            case 'alphabetical':
+                return sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+            default:
+                return sortedProducts; // Return unsorted if no valid sort option
+        }
     }
 
     // Get product statistics
