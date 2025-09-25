@@ -220,20 +220,20 @@ body {
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(15px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    color: #8B5A8C;
+    color: #F7E7CE;
 }
 
 .search-bar input:focus {
     outline: none;
     border-color: #8B5A8C;
     box-shadow: 0 0 0 4px rgba(139, 90, 140, 0.1);
-    background: white;
-    color: #8B5A8C;
+    background: rgba(232, 220, 198, 0.9);
+    color: #F7E7CE;
     transform: translateY(-2px);
 }
 
 .search-bar input::placeholder {
-    color: rgba(139, 90, 140, 0.6);
+    color: rgba(247, 231, 206, 0.7);
     font-weight: 400;
 }
 
@@ -242,7 +242,7 @@ body {
     right: 1.5rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #8B5A8C;
+    color: #F7E7CE;
     font-size: 1.2rem;
     transition: all 0.3s ease;
 }
