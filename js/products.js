@@ -1,7 +1,7 @@
 // Products Data and Management
 class ProductManager {
     constructor() {
-        this.categories = ['all', 'flowers', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
+        this.categories = ['all', 'flowers', 'bouquets', 'keychains', 'accessories', 'stuffed-toys', 'jewellery'];
         
         // Initialize with default products only
         this.products = this.getDefaultProducts();
@@ -43,6 +43,22 @@ class ProductManager {
                 price: 1000,
                 stock: 0,
                 image: 'images/products/sunflower.jpg'
+            },
+            {
+                id: 5,
+                name: 'Rose Bouquet',
+                category: 'bouquets',
+                price: 4000,
+                stock: 0,
+                image: 'images/products/roses-bouquet.jpg'
+            },
+            {
+                id: 6,
+                name: 'Tulip and Lavender Bouquet',
+                category: 'bouquets',
+                price: 5000,
+                stock: 0,
+                image: 'images/products/tulips-lavendar-bouquet.jpg'
             }
         ];
     }
