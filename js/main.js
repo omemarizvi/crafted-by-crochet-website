@@ -40,6 +40,9 @@ class HomePageManager {
         if (customOrderBtn) {
             customOrderBtn.addEventListener('click', () => this.showCustomOrderModal());
         }
+
+        // Mobile drawer functionality
+        this.initMobileDrawer();
     }
 
     initProductModal() {
@@ -321,6 +324,51 @@ class HomePageManager {
     showCustomOrderModal() {
         // Redirect to contact page for custom orders
         window.location.href = 'contact.html';
+    }
+
+    initMobileDrawer() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const drawerClose = document.getElementById('drawerClose');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerCustomOrderBtn = document.getElementById('drawerCustomOrderBtn');
+
+        // Open drawer
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileDrawer.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+        }
+
+        // Close drawer
+        const closeDrawer = () => {
+            mobileDrawer.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        };
+
+        if (drawerClose) {
+            drawerClose.addEventListener('click', closeDrawer);
+        }
+
+        if (drawerOverlay) {
+            drawerOverlay.addEventListener('click', closeDrawer);
+        }
+
+        // Handle drawer custom order button
+        if (drawerCustomOrderBtn) {
+            drawerCustomOrderBtn.addEventListener('click', () => {
+                closeDrawer();
+                this.showCustomOrderModal();
+            });
+        }
+
+        // Close drawer on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileDrawer.classList.contains('active')) {
+                closeDrawer();
+            }
+        });
     }
 
     contactSeller(product) {
