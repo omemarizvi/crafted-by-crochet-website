@@ -252,12 +252,46 @@ body {
     transform: translateY(-50%) scale(1.1);
 }
 
-.category-filters {
+/* Desktop Category Dropdown */
+.category-dropdown-desktop {
     display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
+    gap: 0.75rem;
     margin-top: 1rem;
+}
+
+.category-label {
+    color: #F7E7CE;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.category-select-desktop {
+    padding: 0.5rem 1rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    color: #F7E7CE;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.category-select-desktop:focus {
+    outline: none;
+    border-color: #d78e8d;
+    box-shadow: 0 0 0 4px rgba(215, 142, 141, 0.1);
+    background: rgba(255,255,255,0.2);
+}
+
+.category-select-desktop option {
+    background: #2C1810;
+    color: #F7E7CE;
+    padding: 0.5rem;
 }
 
 /* Sort Options */
@@ -306,52 +340,6 @@ body {
     display: none;
 }
 
-.filter-btn {
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
-    border: 2px solid rgba(255,255,255,0.3);
-    color: #F7E7CE;
-    padding: 0.75rem 1.5rem;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 600;
-    font-size: 0.95rem;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.filter-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(215, 142, 141, 0.1), transparent);
-    transition: left 0.5s;
-}
-
-.filter-btn:hover::before {
-    left: 100%;
-}
-
-.filter-btn:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
-    border-color: rgba(255,255,255,0.4);
-    color: #F7E7CE;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.filter-btn.active {
-    background: linear-gradient(135deg, #d78e8d 0%, #c47a7a 100%);
-    border-color: #d78e8d;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(215, 142, 141, 0.3);
-}
 
 /* Main Content */
 .main-content {
@@ -1517,7 +1505,7 @@ to {
         padding: 8px;
     }
     
-    .category-filters {
+    .category-dropdown-desktop {
         display: none;
     }
     

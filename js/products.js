@@ -78,6 +78,33 @@ class ProductManager {
                 stock: 0,
                 image: 'images/products/daisies-bouquet.jpg',
                 popularity: 80
+            },
+            {
+                id: 8,
+                name: 'Jasmine Gajra',
+                category: 'accessories',
+                price: 1000,
+                stock: 0,
+                image: 'images/products/jasmine-gajra.jpg',
+                popularity: 75
+            },
+            {
+                id: 9,
+                name: 'Puffy Flower Keychain',
+                category: 'keychains',
+                price: 300,
+                stock: 0,
+                image: 'images/products/puffy-flower-keychain.jpg',
+                popularity: 70
+            },
+            {
+                id: 10,
+                name: 'Simple Flower Keychain',
+                category: 'keychains',
+                price: 200,
+                stock: 0,
+                image: 'images/products/simple-flower-keychain.jpg',
+                popularity: 65
             }
         ];
     }

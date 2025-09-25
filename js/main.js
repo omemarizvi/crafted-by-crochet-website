@@ -17,11 +17,11 @@ class HomePageManager {
             searchInput.addEventListener('input', (e) => this.handleSearch(e));
         }
 
-        // Category filters
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => this.handleCategoryFilter(e));
-        });
+        // Desktop category dropdown
+        const categorySelectDesktop = document.getElementById('categorySelectDesktop');
+        if (categorySelectDesktop) {
+            categorySelectDesktop.addEventListener('change', (e) => this.handleCategoryDropdown(e));
+        }
 
         // Mobile category dropdown
         const categorySelect = document.getElementById('categorySelect');
@@ -92,41 +92,20 @@ class HomePageManager {
         this.filterProducts();
     }
 
-    handleCategoryFilter(e) {
-        // Remove active class from all buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // Add active class to clicked button
-        e.target.classList.add('active');
-        
-        // Update current category
-        this.currentCategory = e.target.dataset.category;
-        
-        // Clear search when "All" is selected to show all products
-        if (this.currentCategory === 'all') {
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.value = '';
-                this.searchQuery = '';
-            }
-        }
-        
-        this.filterProducts();
-    }
 
     handleCategoryDropdown(e) {
         const category = e.target.value;
         this.currentCategory = category;
         
-        // Update active button
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-category') === category) {
-                btn.classList.add('active');
-            }
-        });
+        // Sync both dropdowns
+        const desktopSelect = document.getElementById('categorySelectDesktop');
+        const mobileSelect = document.getElementById('categorySelect');
+        
+        if (e.target === desktopSelect && mobileSelect) {
+            mobileSelect.value = category;
+        } else if (e.target === mobileSelect && desktopSelect) {
+            desktopSelect.value = category;
+        }
         
         // Clear search when "All" is selected to show all products
         if (this.currentCategory === 'all') {
