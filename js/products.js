@@ -59,6 +59,14 @@ class ProductManager {
                 price: 5000,
                 stock: 0,
                 image: 'images/products/tulips-lavendar-bouquet.jpg'
+            },
+            {
+                id: 7,
+                name: 'Daisies Bouquet',
+                category: 'bouquets',
+                price: 2000,
+                stock: 0,
+                image: 'images/products/daisies-bouquet.jpg'
             }
         ];
     }
