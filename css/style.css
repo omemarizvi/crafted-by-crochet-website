@@ -252,13 +252,21 @@ body {
     transform: translateY(-50%) scale(1.1);
 }
 
+/* Filter and Sort Container */
+.filter-sort-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
 /* Desktop Category Dropdown */
 .category-dropdown-desktop {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.75rem;
-    margin-top: 1rem;
 }
 
 .category-label {
@@ -298,9 +306,7 @@ body {
 .sort-options {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.75rem;
-    margin-top: 1rem;
 }
 
 .sort-label {
@@ -336,8 +342,47 @@ body {
     padding: 0.5rem;
 }
 
+/* Mobile Filters */
+.mobile-filters {
+    display: none;
+}
+
 .category-dropdown-mobile {
     display: none;
+}
+
+.sort-dropdown-mobile {
+    display: none;
+}
+
+.sort-select-mobile {
+    width: 100%;
+    padding: 0.75rem 3.5rem 0.75rem 1rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    color: #F7E7CE;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.sort-select-mobile:focus,
+.sort-select-mobile:active {
+    outline: none;
+    border-color: #d78e8d;
+    box-shadow: 0 0 0 4px rgba(215, 142, 141, 0.1);
+    background: rgba(255,255,255,0.15);
+    color: #F7E7CE;
+}
+
+.sort-select-mobile option {
+    background: #2C1810;
+    color: #F7E7CE;
+    padding: 0.5rem;
 }
 
 
@@ -1505,24 +1550,21 @@ to {
         padding: 8px;
     }
     
-    .category-dropdown-desktop {
+    .filter-sort-container {
         display: none;
     }
     
-    .sort-options {
-        flex-direction: column;
-        gap: 0.5rem;
+    .mobile-filters {
+        display: block;
         margin-top: 1rem;
-    }
-    
-    .sort-select {
-        width: 100%;
-        min-width: auto;
     }
     
     .category-dropdown-mobile {
         display: block;
-        margin-top: 1rem;
+    }
+    
+    .sort-dropdown-mobile {
+        display: block;
     }
     
     .category-select {

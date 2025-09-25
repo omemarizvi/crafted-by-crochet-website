@@ -77,43 +77,56 @@
                 <input type="text" id="searchInput" placeholder="Search products...">
                 <i class="fas fa-search"></i>
             </div>
-            <!-- Desktop Category Dropdown -->
-            <div class="category-dropdown-desktop">
-                <label for="categorySelectDesktop" class="category-label">Category:</label>
-                <select id="categorySelectDesktop" class="category-select-desktop">
-                    <option value="all">All Categories</option>
-                    <option value="flowers">Flowers</option>
-                    <option value="bouquets">Bouquets</option>
-                    <option value="keychains">Keychains</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="stuffed-toys">Stuffed Toys</option>
-                    <option value="jewellery">Jewellery</option>
-                </select>
+            <!-- Filter and Sort Options -->
+            <div class="filter-sort-container">
+                <div class="category-dropdown-desktop">
+                    <label for="categorySelectDesktop" class="category-label">Category:</label>
+                    <select id="categorySelectDesktop" class="category-select-desktop">
+                        <option value="all">All Categories</option>
+                        <option value="flowers">Flowers</option>
+                        <option value="bouquets">Bouquets</option>
+                        <option value="keychains">Keychains</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="stuffed-toys">Stuffed Toys</option>
+                        <option value="jewellery">Jewellery</option>
+                    </select>
+                </div>
+                
+                <div class="sort-options">
+                    <label for="sortSelect" class="sort-label">Sort by:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="">Default</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                        <option value="popularity">Popularity</option>
+                        <option value="alphabetical">Alphabetical</option>
+                    </select>
+                </div>
             </div>
             
-            <!-- Sort Options -->
-            <div class="sort-options">
-                <label for="sortSelect" class="sort-label">Sort by:</label>
-                <select id="sortSelect" class="sort-select">
-                    <option value="">Default</option>
-                    <option value="price-low-high">Price: Low to High</option>
-                    <option value="price-high-low">Price: High to Low</option>
-                    <option value="popularity">Popularity</option>
-                    <option value="alphabetical">Alphabetical</option>
-                </select>
-            </div>
-            
-            <!-- Mobile Category Dropdown -->
-            <div class="category-dropdown-mobile">
-                <select id="categorySelect" class="category-select">
-                    <option value="all">All Categories</option>
-                    <option value="flowers">Flowers</option>
-                    <option value="bouquets">Bouquets</option>
-                    <option value="keychains">Keychains</option>
-                    <option value="accessories">Accessories</option>
-                    <option value="stuffed-toys">Stuffed Toys</option>
-                    <option value="jewellery">Jewellery</option>
-                </select>
+            <!-- Mobile Category and Sort Dropdowns -->
+            <div class="mobile-filters">
+                <div class="category-dropdown-mobile">
+                    <select id="categorySelect" class="category-select">
+                        <option value="all">All Categories</option>
+                        <option value="flowers">Flowers</option>
+                        <option value="bouquets">Bouquets</option>
+                        <option value="keychains">Keychains</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="stuffed-toys">Stuffed Toys</option>
+                        <option value="jewellery">Jewellery</option>
+                    </select>
+                </div>
+                
+                <div class="sort-dropdown-mobile">
+                    <select id="sortSelectMobile" class="sort-select-mobile">
+                        <option value="">Default</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                        <option value="popularity">Popularity</option>
+                        <option value="alphabetical">Alphabetical</option>
+                    </select>
+                </div>
             </div>
         </div>
     </section>

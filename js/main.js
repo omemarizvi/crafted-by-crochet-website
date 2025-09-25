@@ -35,6 +35,12 @@ class HomePageManager {
             sortSelect.addEventListener('change', (e) => this.handleSortChange(e));
         }
 
+        // Mobile sort functionality
+        const sortSelectMobile = document.getElementById('sortSelectMobile');
+        if (sortSelectMobile) {
+            sortSelectMobile.addEventListener('change', (e) => this.handleSortChange(e));
+        }
+
         // Cart button
         const cartBtn = document.getElementById('cartBtn');
         if (cartBtn) {
@@ -121,6 +127,17 @@ class HomePageManager {
 
     handleSortChange(e) {
         this.currentSort = e.target.value;
+        
+        // Sync both sort dropdowns
+        const desktopSortSelect = document.getElementById('sortSelect');
+        const mobileSortSelect = document.getElementById('sortSelectMobile');
+        
+        if (e.target === desktopSortSelect && mobileSortSelect) {
+            mobileSortSelect.value = this.currentSort;
+        } else if (e.target === mobileSortSelect && desktopSortSelect) {
+            desktopSortSelect.value = this.currentSort;
+        }
+        
         this.filterProducts();
     }
 
