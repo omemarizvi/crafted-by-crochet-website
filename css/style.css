@@ -1434,6 +1434,7 @@ to {
     .mobile-menu-btn {
         display: inline-flex !important;
         order: 3;
+        font-size: 1.2rem !important;
     }
     
     .cart-btn {
@@ -1441,13 +1442,13 @@ to {
     }
     
     .logo-img {
-        height: 50px !important;
-        width: 50px !important;
-        max-width: 50px !important;
+        height: 45px !important;
+        width: 45px !important;
+        max-width: 45px !important;
     }
     
     .logo-text {
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
     }
     
     .cart-btn {
