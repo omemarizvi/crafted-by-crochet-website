@@ -295,11 +295,11 @@ body {
 }
 
 .filter-btn:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
-    border-color: rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
+    border-color: rgba(255,255,255,0.4);
     color: #F7E7CE;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .filter-btn.active {
@@ -1524,14 +1524,6 @@ to {
 
 
 
-.filter-btn:hover,
-.filter-btn.active {
-    background: linear-gradient(135deg, #8B5A8C 0%, #D4A5A5 100%);
-    border-color: #8B5A8C;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 90, 140, 0.3);
-}
 
 /* Contact Modal Styles */
 .contact-card {
