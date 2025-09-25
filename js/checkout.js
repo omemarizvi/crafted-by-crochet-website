@@ -118,6 +118,11 @@ class CheckoutManager {
             // Send order email
             await this.sendOrderEmail(orderData);
             
+            // Track order for popularity updates
+            if (window.productManager) {
+                window.productManager.trackOrder(orderData.items);
+            }
+            
             // Clear cart and redirect
             this.shoppingCart.clearCart();
             this.showToast('Order placed successfully! You will receive a confirmation email shortly.', 'success');

@@ -93,6 +93,10 @@
                     <i class="fas fa-list"></i>
                     View Orders
                 </button>
+                <button class="btn btn-secondary" id="viewPopularityBtn">
+                    <i class="fas fa-chart-line"></i>
+                    Popularity Stats
+                </button>
             </div>
         </div>
     </section>
@@ -162,6 +166,38 @@
                     <button type="button" class="btn btn-secondary" id="cancelItemBtn">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Popularity Statistics Section -->
+<div class="popularity-stats-section" id="popularityStatsSection" style="display: none;">
+    <div class="container">
+        <div class="section-header">
+            <h2>Product Popularity Statistics</h2>
+            <button class="btn btn-secondary" id="closePopularityBtn">
+                <i class="fas fa-times"></i>
+                Close
+            </button>
+        </div>
+        
+        <div class="popularity-stats-grid" id="popularityStatsGrid">
+            <!-- Popularity statistics will be loaded here -->
+        </div>
+        
+        <div class="popularity-summary">
+            <div class="summary-card">
+                <h3>Total Orders</h3>
+                <p id="totalOrderCount">0</p>
+            </div>
+            <div class="summary-card">
+                <h3>Most Popular Product</h3>
+                <p id="mostPopularProduct">-</p>
+            </div>
+            <div class="summary-card">
+                <h3>Average Popularity</h3>
+                <p id="averagePopularity">0</p>
+            </div>
         </div>
     </div>
 </div>

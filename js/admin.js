@@ -33,6 +33,16 @@ class AdminManager {
             viewOrdersBtn.addEventListener('click', () => this.toggleOrdersView());
         }
 
+        const viewPopularityBtn = document.getElementById('viewPopularityBtn');
+        if (viewPopularityBtn) {
+            viewPopularityBtn.addEventListener('click', () => this.showPopularityStats());
+        }
+
+        const closePopularityBtn = document.getElementById('closePopularityBtn');
+        if (closePopularityBtn) {
+            closePopularityBtn.addEventListener('click', () => this.hidePopularityStats());
+        }
+
         // Item form
         this.initItemForm();
         
@@ -545,6 +555,88 @@ class AdminManager {
                 toast.classList.remove('show');
             }, 3000);
         }
+    }
+
+    // Popularity Statistics Methods
+    showPopularityStats() {
+        const popularitySection = document.getElementById('popularityStatsSection');
+        if (popularitySection) {
+            this.loadPopularityStats();
+            popularitySection.style.display = 'block';
+            this.currentView = 'popularity';
+        }
+    }
+
+    hidePopularityStats() {
+        const popularitySection = document.getElementById('popularityStatsSection');
+        if (popularitySection) {
+            popularitySection.style.display = 'none';
+            this.currentView = 'dashboard';
+        }
+    }
+
+    loadPopularityStats() {
+        if (!window.productManager) {
+            console.error('Product manager not available');
+            return;
+        }
+
+        const stats = window.productManager.getPopularityStats();
+        this.renderPopularityStats(stats);
+    }
+
+    renderPopularityStats(stats) {
+        const statsGrid = document.getElementById('popularityStatsGrid');
+        const totalOrderCount = document.getElementById('totalOrderCount');
+        const mostPopularProduct = document.getElementById('mostPopularProduct');
+        const averagePopularity = document.getElementById('averagePopularity');
+
+        if (!statsGrid) return;
+
+        // Sort products by popularity (highest first)
+        const sortedProducts = stats.products.sort((a, b) => b.popularity - a.popularity);
+
+        // Render product statistics
+        statsGrid.innerHTML = sortedProducts.map(product => `
+            <div class="popularity-card">
+                <div class="product-info">
+                    <h4>${product.name}</h4>
+                    <div class="popularity-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Popularity:</span>
+                            <span class="metric-value popularity-${this.getPopularityLevel(product.popularity)}">${product.popularity}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Orders:</span>
+                            <span class="metric-value">${product.orderCount}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="popularity-bar">
+                    <div class="popularity-fill" style="width: ${product.popularity}%"></div>
+                </div>
+            </div>
+        `).join('');
+
+        // Update summary statistics
+        if (totalOrderCount) {
+            totalOrderCount.textContent = stats.totalOrders;
+        }
+
+        if (mostPopularProduct && sortedProducts.length > 0) {
+            mostPopularProduct.textContent = sortedProducts[0].name;
+        }
+
+        if (averagePopularity) {
+            const avg = Math.round(stats.products.reduce((sum, p) => sum + p.popularity, 0) / stats.products.length);
+            averagePopularity.textContent = avg;
+        }
+    }
+
+    getPopularityLevel(popularity) {
+        if (popularity >= 80) return 'high';
+        if (popularity >= 60) return 'medium';
+        return 'low';
     }
 }
 

@@ -5,6 +5,10 @@ class ProductManager {
         
         // Initialize with default products only
         this.products = this.getDefaultProducts();
+        
+        // Update popularity based on existing orders
+        this.updatePopularityFromOrders();
+        
         console.log('Products initialized with defaults:', this.products.length);
         console.log('Default products:', this.products);
     }
@@ -204,6 +208,96 @@ class ProductManager {
             default:
                 return sortedProducts; // Return unsorted if no valid sort option
         }
+    }
+
+    // Track order and update product popularity
+    trackOrder(orderItems) {
+        console.log('Tracking order for popularity update:', orderItems);
+        
+        // Load current order counts
+        const orderCounts = this.getOrderCounts();
+        
+        // Update order counts for each item in the order
+        orderItems.forEach(item => {
+            const productId = item.id;
+            orderCounts[productId] = (orderCounts[productId] || 0) + item.quantity;
+        });
+        
+        // Save updated order counts
+        this.saveOrderCounts(orderCounts);
+        
+        // Recalculate popularity for all products
+        this.updatePopularityFromOrders();
+        
+        console.log('Order tracking completed, popularity updated');
+    }
+
+    // Get order counts from localStorage
+    getOrderCounts() {
+        try {
+            const savedCounts = localStorage.getItem('diyCraftsOrderCounts');
+            return savedCounts ? JSON.parse(savedCounts) : {};
+        } catch (error) {
+            console.error('Error loading order counts:', error);
+            return {};
+        }
+    }
+
+    // Save order counts to localStorage
+    saveOrderCounts(orderCounts) {
+        try {
+            localStorage.setItem('diyCraftsOrderCounts', JSON.stringify(orderCounts));
+            console.log('Order counts saved to localStorage');
+        } catch (error) {
+            console.error('Error saving order counts:', error);
+        }
+    }
+
+    // Update product popularity based on order counts
+    updatePopularityFromOrders() {
+        const orderCounts = this.getOrderCounts();
+        const totalOrders = Object.values(orderCounts).reduce((sum, count) => sum + count, 0);
+        
+        if (totalOrders === 0) {
+            console.log('No orders yet, keeping default popularity');
+            return;
+        }
+
+        // Update popularity for each product
+        this.products.forEach(product => {
+            const orderCount = orderCounts[product.id] || 0;
+            
+            if (orderCount > 0) {
+                // Calculate popularity based on order frequency
+                // Base popularity (50) + order-based boost (up to 50 points)
+                const orderBoost = Math.min(50, (orderCount / totalOrders) * 100);
+                product.popularity = Math.round(50 + orderBoost);
+            } else {
+                // Keep default popularity for products with no orders
+                product.popularity = product.popularity || 50;
+            }
+        });
+
+        // Save updated products
+        this.saveProducts();
+        console.log('Product popularity updated based on orders');
+    }
+
+    // Get popularity statistics
+    getPopularityStats() {
+        const orderCounts = this.getOrderCounts();
+        const totalOrders = Object.values(orderCounts).reduce((sum, count) => sum + count, 0);
+        
+        return {
+            totalOrders,
+            orderCounts,
+            products: this.products.map(product => ({
+                id: product.id,
+                name: product.name,
+                popularity: product.popularity,
+                orderCount: orderCounts[product.id] || 0
+            }))
+        };
     }
 
     // Get product statistics
