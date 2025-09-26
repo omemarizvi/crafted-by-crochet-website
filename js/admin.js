@@ -49,6 +49,9 @@ class AdminManager {
         // Modal management
         this.initModals();
         
+        // Mobile drawer buttons
+        this.initMobileDrawerButtons();
+        
         // Listen for new orders
         window.addEventListener('newOrderPlaced', () => {
             this.updateAnalytics();
@@ -191,7 +194,7 @@ class AdminManager {
                 <div class="item-info">
                     <div class="item-name">${product.name}</div>
                     <div class="item-category">${this.formatCategory(product.category)}</div>
-                    <div class="item-price">Rs ${product.price.toFixed(2)}</div>
+                    <div class="item-price">Rs ${product.price}</div>
                     <div class="item-stock ${stockClass}">${stockText}</div>
                     <div class="item-actions">
                         <button class="btn btn-primary" onclick="adminManager.editItem(${product.id})">Edit</button>
@@ -503,11 +506,11 @@ class AdminManager {
                         <div class="order-item">
                             <span class="item-name">${item.name}</span>
                             <span class="item-quantity">Qty: ${item.quantity}</span>
-                            <span class="item-total">Rs ${(item.price * item.quantity).toFixed(2)}</span>
+                            <span class="item-total">Rs ${(item.price * item.quantity)}</span>
                         </div>
                     `).join('')}
                 </div>
-                <div class="order-total">Total: Rs ${order.total.toFixed(2)}</div>
+                <div class="order-total">Total: Rs ${order.total}</div>
                 ${order.transferImage && order.transferImage !== 'Not provided' ? `
                     <div class="order-screenshot">
                         <strong>Payment Screenshot:</strong>
@@ -637,6 +640,49 @@ class AdminManager {
         if (popularity >= 80) return 'high';
         if (popularity >= 60) return 'medium';
         return 'low';
+    }
+
+    initMobileDrawerButtons() {
+        // Mobile drawer button event listeners
+        const drawerAddItemBtn = document.getElementById('drawerAddItemBtn');
+        if (drawerAddItemBtn) {
+            drawerAddItemBtn.addEventListener('click', () => {
+                this.showAddItemForm();
+                this.closeMobileDrawer();
+            });
+        }
+
+        const drawerViewOrdersBtn = document.getElementById('drawerViewOrdersBtn');
+        if (drawerViewOrdersBtn) {
+            drawerViewOrdersBtn.addEventListener('click', () => {
+                this.toggleOrdersView();
+                this.closeMobileDrawer();
+            });
+        }
+
+        const drawerPopularityBtn = document.getElementById('drawerPopularityBtn');
+        if (drawerPopularityBtn) {
+            drawerPopularityBtn.addEventListener('click', () => {
+                this.showPopularityStats();
+                this.closeMobileDrawer();
+            });
+        }
+
+        const drawerLogoutBtn = document.getElementById('drawerLogoutBtn');
+        if (drawerLogoutBtn) {
+            drawerLogoutBtn.addEventListener('click', () => {
+                this.handleLogout();
+                this.closeMobileDrawer();
+            });
+        }
+    }
+
+    closeMobileDrawer() {
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        if (mobileDrawer) {
+            mobileDrawer.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 }
 

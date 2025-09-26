@@ -473,7 +473,7 @@ body {
 }
 
 .product-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: #2C1810;
@@ -482,14 +482,10 @@ body {
 }
 
 .product-price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #d78e8d;
+    color: #2C1810;
     margin-bottom: 0.5rem;
-    background: linear-gradient(45deg, #d78e8d, #D4A5A5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .product-category {

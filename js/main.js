@@ -217,7 +217,7 @@ class HomePageManager {
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
-                    <div class="product-price">Rs ${product.price.toFixed(2)}</div>
+                    <div class="product-price">Rs ${product.price}</div>
                     <div class="product-category">${this.formatCategory(product.category)}</div>
                 </div>
             </div>
@@ -257,7 +257,7 @@ class HomePageManager {
             // Set product details
             if (modalImage) modalImage.src = product.image;
             if (modalTitle) modalTitle.textContent = product.name;
-            if (modalPrice) modalPrice.textContent = `Rs ${product.price.toFixed(2)}`;
+            if (modalPrice) modalPrice.textContent = `Rs ${product.price}`;
             if (modalCategory) modalCategory.textContent = this.formatCategory(product.category);
             if (modalDescription) modalDescription.textContent = product.description;
 

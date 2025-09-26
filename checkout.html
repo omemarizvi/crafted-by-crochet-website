@@ -26,14 +26,43 @@
                 </a>
             </div>
             <div class="header-actions">
-                <a href="index.html" class="btn btn-secondary">Back to Shop</a>
+                <!-- Desktop buttons -->
+                <div class="desktop-buttons">
+                    <a href="index.html" class="btn btn-secondary">Back to Shop</a>
+                </div>
+                
+                <!-- Cart button (always visible) -->
                 <button class="cart-btn" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
                 </button>
+                
+                <!-- Mobile menu button (rightmost on mobile) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-overlay" id="drawerOverlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Menu</h3>
+                <button class="drawer-close" id="drawerClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="drawer-body">
+                <a href="index.html" class="drawer-item">
+                    <i class="fas fa-home"></i>
+                    <span>Back to Shop</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -52,7 +81,7 @@
                             <!-- Order items will be loaded here -->
                         </div>
                         <div class="order-total">
-                            <strong>Total: <span id="totalAmount">$0.00</span></strong>
+                            <strong>Total: <span id="totalAmount">$0</span></strong>
                         </div>
                     </div>
 
@@ -83,7 +112,7 @@
                             
                             <div class="form-group">
                                 <label for="specialInstructions">Special Instructions (Optional)</label>
-                                <textarea id="specialInstructions" name="specialInstructions" rows="2" placeholder="Any special delivery instructions or requests"></textarea>
+                                <textarea id="specialInstructions" name="specialInstructions" rows="3" placeholder="If you want to specify colors, have any preferences or special instructions for delivery, please specify here"></textarea>
                             </div>
 
                             <!-- Payment Information -->
@@ -148,5 +177,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/checkout.js"></script>
+    <script src="js/mobile-drawer.js"></script>
 </body>
 </html>

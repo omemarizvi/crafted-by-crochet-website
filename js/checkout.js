@@ -39,7 +39,7 @@ class CheckoutManager {
 
         if (!this.shoppingCart || this.shoppingCart.items.length === 0) {
             orderSummary.innerHTML = '<p class="empty-cart">Your cart is empty. <a href="index.html">Continue shopping</a></p>';
-            totalAmount.textContent = '$0.00';
+            totalAmount.textContent = '$0';
             cartCount.textContent = '0';
             return;
         }
@@ -56,16 +56,16 @@ class CheckoutManager {
                         <img src="${item.image}" alt="${item.name}" onerror="this.src='images/products/default.jpg'">
                         <div>
                             <strong>${item.name}</strong>
-                            <div>Qty: ${item.quantity} × Rs ${item.price.toFixed(2)}</div>
+                            <div>Qty: ${item.quantity} × Rs ${item.price}</div>
                         </div>
                     </div>
-                    <div class="checkout-item-total">Rs ${(item.price * item.quantity).toFixed(2)}</div>
+                    <div class="checkout-item-total">Rs ${(item.price * item.quantity)}</div>
                 </div>
             `;
         });
 
         orderSummary.innerHTML = summaryHTML;
-        totalAmount.textContent = `Rs ${this.shoppingCart.getTotal().toFixed(2)}`;
+        totalAmount.textContent = `Rs ${this.shoppingCart.getTotal()}`;
     }
 
     initEventListeners() {
@@ -168,7 +168,7 @@ class CheckoutManager {
             customer_address: orderData.deliveryAddress,
             special_instructions: orderData.specialInstructions || 'None',
             order_details: this.formatOrderItems(orderData.items),
-            total_amount: `Rs ${orderData.total.toFixed(2)}`,
+            total_amount: `Rs ${orderData.total}`,
             order_time: new Date().toLocaleString(),
             order_id: orderData.orderNumber,
             message: emailContent
@@ -192,7 +192,7 @@ class CheckoutManager {
 
     formatEmailContent(orderData) {
         const orderItems = this.formatOrderItems(orderData.items);
-        const totalAmount = `Rs ${orderData.total.toFixed(2)}`;
+        const totalAmount = `Rs ${orderData.total}`;
         const orderTime = new Date().toLocaleString();
         
         return `New Order Received! 🛍️
@@ -237,7 +237,7 @@ PAYMENT INSTRUCTIONS FOR CUSTOMER:
 
     formatOrderItems(items) {
         return items.map(item => 
-            `${item.name} (Qty: ${item.quantity}) - Rs ${(item.price * item.quantity).toFixed(2)}`
+            `${item.name} (Qty: ${item.quantity}) - Rs ${(item.price * item.quantity)}`
         ).join('\n');
     }
 

@@ -42,9 +42,44 @@
             </div>
             <div class="admin-actions">
                 <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+                <!-- Mobile menu button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-overlay" id="drawerOverlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Admin Menu</h3>
+                <button class="drawer-close" id="drawerClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="drawer-body">
+                <button class="drawer-item" id="drawerAddItemBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add New Item</span>
+                </button>
+                <button class="drawer-item" id="drawerViewOrdersBtn">
+                    <i class="fas fa-list"></i>
+                    <span>View Orders</span>
+                </button>
+                <button class="drawer-item" id="drawerPopularityBtn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Popularity Stats</span>
+                </button>
+                <button class="drawer-item" id="drawerLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Analytics Section -->
     <section class="analytics-section">
@@ -218,5 +253,6 @@
 <!-- Main Application Scripts -->
 <script src="js/products.js"></script>
 <script src="js/admin.js"></script>
+<script src="js/mobile-drawer.js"></script>
 </body>
 </html>

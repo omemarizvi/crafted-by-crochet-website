@@ -254,7 +254,7 @@ class CartModal {
             if (cartItems) cartItems.innerHTML = '';
             if (cartTotal) {
                 const totalAmount = cartTotal.querySelector('#totalAmount');
-                if (totalAmount) totalAmount.textContent = '0.00';
+                if (totalAmount) totalAmount.textContent = '0';
                 cartTotal.style.display = 'block'; // Ensure it's visible
             }
             if (cartEmpty) cartEmpty.style.display = 'block';
@@ -271,7 +271,7 @@ class CartModal {
                     </div>
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">Rs ${item.price.toFixed(2)}</div>
+                        <div class="cart-item-price">Rs ${item.price}</div>
                     </div>
                     <div class="cart-item-controls">
                         <button class="quantity-btn" onclick="shoppingCart.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
@@ -285,7 +285,7 @@ class CartModal {
 
         if (cartTotal) {
             const totalAmount = cartTotal.querySelector('#totalAmount');
-            if (totalAmount) totalAmount.textContent = this.shoppingCart.getTotal().toFixed(2);
+            if (totalAmount) totalAmount.textContent = this.shoppingCart.getTotal();
             cartTotal.style.display = 'block'; // Ensure it's visible
         }
     }
@@ -309,7 +309,7 @@ class CartModal {
         
         if (checkoutModal && checkoutTotal && checkoutTotalDisplay && checkoutItems) {
             // Update totals in checkout modal
-            const total = this.shoppingCart.getTotal().toFixed(2);
+            const total = this.shoppingCart.getTotal();
             checkoutTotal.textContent = total;
             checkoutTotalDisplay.textContent = total;
             
@@ -321,11 +321,11 @@ class CartModal {
                         <div>
                             <strong>${item.name}</strong>
                             <div>Quantity: ${item.quantity}</div>
-                            <div>Rs ${item.price.toFixed(2)} each</div>
+                            <div>Rs ${item.price} each</div>
                         </div>
                     </div>
                     <div class="checkout-item-total">
-                        Rs ${(item.price * item.quantity).toFixed(2)}
+                        Rs ${(item.price * item.quantity)}
                     </div>
                 </div>
             `).join('');
@@ -460,7 +460,7 @@ class CartModal {
             if (placeOrderBtn) placeOrderBtn.textContent = 'Processing Order...';
 
             const orderSummary = orderData.items.map(item => 
-                `${item.name} x${item.quantity} - Rs ${item.price.toFixed(2)}`
+                `${item.name} x${item.quantity} - Rs ${item.price}`
             ).join('\n');
 
             // Create email content with payment instructions
@@ -475,7 +475,7 @@ Address: ${orderData.customer.address}
 ORDER DETAILS:
 ${orderSummary}
 
-TOTAL AMOUNT: Rs ${orderData.total.toFixed(2)}
+TOTAL AMOUNT: Rs ${orderData.total}
 
 ORDER TIME: ${new Date().toLocaleString()}
 
@@ -488,7 +488,7 @@ PAYMENT INSTRUCTIONS FOR CUSTOMER:
    - Account Name: Crafted by Crochet
    - Account Number: [Your Bank Account Number]
    - Bank: [Your Bank Name]
-   - Amount: Rs ${orderData.total.toFixed(2)}
+   - Amount: Rs ${orderData.total}
    - Reference: Order-${orderData.orderId}
 
 2. PAYMENT CONFIRMATION:
@@ -520,7 +520,7 @@ DIY Crafts Website`;
                         subject: `New Order - ${orderData.customer.name} - ${new Date().toLocaleDateString()}`,
                         message: emailContent,
                         order_details: orderSummary,
-                        total_amount: `Rs ${orderData.total.toFixed(2)}`,
+                        total_amount: `Rs ${orderData.total}`,
                         order_time: new Date().toLocaleString(),
                         customer_name: orderData.customer.name,
                         customer_email: orderData.customer.email,
@@ -539,7 +539,7 @@ DIY Crafts Website`;
                     console.log('Order email sent successfully');
                     
                     // Show success message with customer name
-                    alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\n✅ Email notification sent to craftedbycrochet@gmail.com\n\nYou will receive a confirmation email shortly.`);
+                    alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total}\n\n✅ Email notification sent to craftedbycrochet@gmail.com\n\nYou will receive a confirmation email shortly.`);
                     return; // Exit early on success
                     
                 } catch (emailError) {
@@ -549,7 +549,7 @@ DIY Crafts Website`;
             }
 
             // Fallback if EmailJS fails
-            alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total.toFixed(2)}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
+            alert(`Order placed successfully!\n\nThank you ${orderData.customer.name}!\n\nOrder Total: Rs ${orderData.total}\n\nPlease contact craftedbycrochet@gmail.com to confirm your order.`);
 
             if (placeOrderBtn) placeOrderBtn.textContent = originalText;
             

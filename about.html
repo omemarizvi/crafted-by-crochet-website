@@ -26,15 +26,48 @@
                 </a>
             </div>
             <div class="header-actions">
-                <a href="index.html" class="btn btn-secondary">Back to Shop</a>
-                <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+                <!-- Desktop buttons -->
+                <div class="desktop-buttons">
+                    <a href="index.html" class="btn btn-secondary">Back to Shop</a>
+                    <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+                </div>
+                
+                <!-- Cart button (always visible) -->
                 <button class="cart-btn" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
                 </button>
+                
+                <!-- Mobile menu button (rightmost on mobile) -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-overlay" id="drawerOverlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Menu</h3>
+                <button class="drawer-close" id="drawerClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="drawer-body">
+                <a href="index.html" class="drawer-item">
+                    <i class="fas fa-home"></i>
+                    <span>Back to Shop</span>
+                </a>
+                <a href="contact.html" class="drawer-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact Us</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -168,7 +201,7 @@
                 </div>
                 <div class="cart-total" id="cartTotal">
                     <div class="total-amount">
-                        Total: Rs <span id="totalAmount">0.00</span>
+                        Total: Rs <span id="totalAmount">0</span>
                     </div>
                     <div class="cart-actions">
                         <button class="btn btn-outline" id="clearCartBtn">Clear Cart</button>
@@ -182,5 +215,6 @@
     <!-- Scripts -->
     <script src="js/cart.js"></script>
     <script src="js/contact.js"></script>
+    <script src="js/mobile-drawer.js"></script>
 </body>
 </html>
