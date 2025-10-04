@@ -72,7 +72,7 @@ class ProductManager {
             },
             {
                 id: 7,
-                name: 'Daisies Bouquet',
+                name: 'Daisy Bouquet',
                 category: 'bouquets',
                 price: 2000,
                 stock: 0,
